@@ -16,10 +16,16 @@ namespace fs = std::filesystem;
 string path = ".\\input";
 string outputPath = ".\\output";
 
-int createRandomNumber(int randomFrom, int randomTo){
-  srand(time(0));
+int createRandomNumber(int seed, int randomTo){
+  srand((time(0)-(time(0)/2))*seed);
   int randomNumber = rand();
-  int anotherRandomNumber = randomFrom + rand() % randomTo;
+  int anotherRandomNumber{};
+  if(randomTo>1){
+
+    anotherRandomNumber = rand() % randomTo;
+  }else {
+    anotherRandomNumber=0;
+  }
   return anotherRandomNumber;
 }
 
@@ -54,11 +60,14 @@ private:
 class Question
 {
 public:
-  Question(string q_name,string q_author,string q_description,string q_taxonomy,string q_task,
+  Question(int Id,string q_name,string q_author,string q_description,string q_additionalText, string q_code,string q_taxonomy,string q_task,
     string q_correctAnswer, string q_wrongAnswerOne, string q_wrongAnswerTwo, string q_wrongAnswerThree){
+      questionId=Id;
       name=q_name;
       author=q_author;
       description=q_description;
+      additionalText = q_additionalText;
+      code = q_code;
       taxonomy=q_taxonomy;
       task=q_task;
       correctAnswer=q_correctAnswer;
@@ -68,9 +77,12 @@ public:
     }
 
 void outputQuestion(){
-  cout << "Name: " << name << endl
+  cout << "Id: " << questionId << endl
+      << "Name: " << name << endl
       << "Author: " << author << endl
       << "Description: " << description << endl
+      << "Additional Text: " << additionalText << endl
+      << "Code: " << code << endl
       << "Taxonomy: " << taxonomy << endl
       << "Task: " << task << endl
       << "Correct: " << correctAnswer << endl
@@ -82,7 +94,8 @@ void outputQuestion(){
 
 
 private:
-  string name{}, author{}, description{}, taxonomy{}, task{}, correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
+  int questionId;
+  string name{}, author{}, description{},code{}, additionalText{}, taxonomy{}, task{}, correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
 };
 
 
@@ -97,12 +110,10 @@ int main() {
     int currentQuestionId{ 1 };
     vector <Question> questions;
 
-
     //Aktivieren wenn gebraucht.
-    /*
     cout << "Please input, how many versions should be generated: ";
     cin >> numberOfExams;
-
+/*
     cout << "Please input the question pool id: ";
     cin >> examId;
     */
@@ -113,6 +124,7 @@ int main() {
     {
         ifstream readFromFile;
         string name{}, author{}, date{}, version{}, description{}, taxonomy{}, task{};
+        string code{}, additionalText{};
         vector<Parameter> parameters{};
         vector<string> correctAnswers{};
         vector<string> wrongAnswers{};
@@ -146,6 +158,16 @@ int main() {
                     }
                     else if (txtFromFile == "@DESCRIPTION") {
                         getline(readFromFile, description);
+                    }
+                    else if (txtFromFile == "@ADDITIONALTEXT") {
+                        getline(readFromFile, additionalText);
+                    }
+                    else if (txtFromFile == "@CODE") {
+                      string tempLine{};
+                        while(readFromFile.peek() != '@'){
+                          getline(readFromFile, tempLine);
+                          code +=tempLine;
+                        }
                     }
                     else if (txtFromFile == "@TAXONOMY") {
                         getline(readFromFile, taxonomy);
@@ -288,6 +310,8 @@ int main() {
                                     temp += is.get();
                                 }
                                 tempTwo=temp;
+                                tempOne[1]=tempOne[1]-1;
+                                tempTwo[1]=tempTwo[1]-1;
                                 exclusions.push_back(make_pair(tempOne,tempTwo));
                               }
                           }
@@ -304,12 +328,88 @@ int main() {
             }
             readFromFile.close();
         }
+
+        //Combinatorics
+        vector<tuple<int,int,int,int>> possibleCombinations;
+        for(int i =0;i<correctAnswers.size();++i){
+          for(int j=0;j<wrongAnswers.size();++j){
+            for(int k=0;k<wrongAnswers.size();++k){
+              for(int l=0;l<wrongAnswers.size();++l){
+                possibleCombinations.push_back(make_tuple(i,j,k,l));
+              }
+            }
+          }
+        }
+
+        //Delete Where same answers
+        possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[](const tuple<int,int,int,int>& n) -> bool{
+          return get<1>(n) == get<2>(n);
+        }),possibleCombinations.end());
+
+        possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[](const tuple<int,int,int,int>& n) -> bool{
+          return get<1>(n) == get<3>(n);
+        }),possibleCombinations.end());
+
+        possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[](const tuple<int,int,int,int>& n) -> bool{
+          return get<2>(n) == get<3>(n);
+        }),possibleCombinations.end());
+
+        //Delete based on Exclusions
+        if(exclusions.size() != 0){
+          for (pair n : exclusions) {
+            string firstInPair (1,n.first[1]);
+            string secondInPair(1,n.second[1]);
+              if(n.first[0] == 'c'){
+                possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
+                  return (get<0>(n) == stoi(firstInPair) && stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n));
+                }),possibleCombinations.end());
+              }else{
+                possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
+                  return (get<1>(n) == stoi(firstInPair) && stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n));
+                }),possibleCombinations.end());
+                possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
+                  return (get<2>(n) == stoi(firstInPair) && stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n));
+                }),possibleCombinations.end());
+                possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
+                  return (get<3>(n) == stoi(firstInPair) && stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n));
+                }),possibleCombinations.end());
+              }
+            }
+          }
+
+        //TODO Potentiell könnte man hier noch allgemein Duplikate innerhalb des Vectors entfernen.
+
+        cout << "Tuples:" << endl;
+        for (tuple n : possibleCombinations) {
+            cout << "\t"<< get<0>(n) << "\t"<< get<1>(n) << "\t"<< get<2>(n) << "\t"<< get<3>(n) << endl;
+        }
+        cout << "Size of possibleCombinations: " << possibleCombinations.size() << endl;
+
         //TODO Create Questions
         for(int i=0;i<numberOfExams; ++i){
 
 
-          //questions.push_back(Question );
+          //cout << "Trying to Generate Question Number: "<< currentQuestionId << endl;
+          string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
+          int correct{},first{}, second{}, third{};
+
+          /*
+          createRandomNumber(currentQuestionId,correctAnswers.size());
+          correctAnswer=correctAnswers[correct];
+          wrongAnswerOne = wrongAnswers[first];
+          wrongAnswerTwo = wrongAnswers[second];
+          wrongAnswerThree = wrongAnswers[third];
+          */
+
+
+          Question q(currentQuestionId, name, author, description,additionalText, code, taxonomy,task,correctAnswer,wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
+          ++currentQuestionId;
+        //  q.outputQuestion();
+          questions.push_back(q);
+
         }
+
+
 
         //TODO Fill in Parameters
     }

@@ -26,7 +26,7 @@ The entirety of all computable functions is not known.
 Some numbers cannot be computed, for example, irrational numbers.
 The speed of light imposes a fundamental bareer for its construction.
 Because of its simple construction, in many cases the algorithms would become too complex.
-Its design and constr uction would be too expensive.
+Its design and construction would be too expensive.
 It cannot be sufficiently miniaturized.
 @EXCLUSIONS
-w1 excludes w3
+c1 excludes w3
