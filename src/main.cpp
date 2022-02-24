@@ -101,8 +101,6 @@ private:
 
 
 
-
-
 int main() {
 
     int examId{};
@@ -335,7 +333,7 @@ int main() {
           for(int j=0;j<wrongAnswers.size();++j){
             for(int k=0;k<wrongAnswers.size();++k){
               for(int l=0;l<wrongAnswers.size();++l){
-                possibleCombinations.push_back(make_tuple(i,j,k,l));
+                possibleCombinations.push_back(make_tuple(i, j, k, l));                        
               }
             }
           }
@@ -377,7 +375,26 @@ int main() {
             }
           }
 
+       //vector<int> duplikates;
+
+        //test hinzufügen ob schon drin in duplikates? oben als funktion
+        
         //TODO Potentiell könnte man hier noch allgemein Duplikate innerhalb des Vectors entfernen.
+        for (auto pos = 0; pos != possibleCombinations.size(); ++pos) {
+            //auto comb = possibleCombinations[pos];
+            for (auto pos2 = pos+1; pos2 < possibleCombinations.size(); ++pos2) {
+                if ((pos != pos2) && (get<1>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2])|| get<2>(possibleCombinations[pos2]) || get<3>(possibleCombinations[pos2])) &&
+                    (get<2>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2]) || get<2>(possibleCombinations[pos2]) || get<3>(possibleCombinations[pos2])) && 
+                    (get<3>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2]) || get<2>(possibleCombinations[pos2]) || get<3>(possibleCombinations[pos2]))
+                        && (get<0>(possibleCombinations[pos]) == get<0>(possibleCombinations[pos2])))
+                {
+                    //füge pos2 liste der duplikate hinzu wenn die nicht schon drin sind. 
+                    // drunter dann den Vector durchgehene, und jede zahl die nicht duplikat ist wir den validen Combinationen hinzugefügt
+                }
+            }
+        }
+        
+        //vector<tuple<int, int, int, int>> validCombinations;
 
         cout << "Tuples:" << endl;
         for (tuple n : possibleCombinations) {
