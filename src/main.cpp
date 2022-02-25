@@ -9,6 +9,8 @@
 #include <cmath>
 #include <fstream>
 #include <filesystem>
+#include <algorithm>
+#include <random>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -16,17 +18,11 @@ namespace fs = std::filesystem;
 string path = ".\\input";
 string outputPath = ".\\output";
 
-int createRandomNumber(int seed, int randomTo){
-  srand((time(0)-(time(0)/2))*seed);
-  int randomNumber = rand();
-  int anotherRandomNumber{};
-  if(randomTo>1){
-
-    anotherRandomNumber = rand() % randomTo;
-  }else {
-    anotherRandomNumber=0;
-  }
-  return anotherRandomNumber;
+int createRandomNumber(int startValue, int randomTo) {
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> distrib(startValue, randomTo);
+    return distrib(gen);
 }
 
 class Parameter
@@ -99,6 +95,13 @@ private:
 };
 
 
+bool isInVector(vector<int> duplicateVector, int number) {
+    if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
+        return true;
+    else
+        return false;
+}
+
 
 
 int main() {
@@ -126,7 +129,7 @@ int main() {
         vector<Parameter> parameters{};
         vector<string> correctAnswers{};
         vector<string> wrongAnswers{};
-        vector<pair<string, string>> interactions{};
+        vector<tuple<string, string, string, string>> interactions{};
         vector<pair<string, string>> exclusions{};
 
         string txtFromFile = "";
@@ -249,7 +252,7 @@ int main() {
                               //make pair pushback into vector
                               is.get();
                               parameterTwoValue=temp;
-                              interactions.push_back(make_pair(parameterValue,parameterTwoValue));
+                              interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
                               ++position;
                               temp="";
                             }else if(!temp.empty())
@@ -260,7 +263,7 @@ int main() {
                           if(temp != ""){
                             //make pair pushback vector
                             parameterTwoValue = temp;
-                            interactions.push_back(make_pair(parameterValue,parameterTwoValue));
+                            interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
                             temp="";
                           }
                           ++line;
@@ -347,10 +350,13 @@ int main() {
         possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[](const tuple<int,int,int,int>& n) -> bool{
           return get<1>(n) == get<3>(n);
         }),possibleCombinations.end());
+       
+        possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(), [](const tuple<int, int, int, int>& n) -> bool {
+            return get<2>(n) == get<3>(n);
+        }), possibleCombinations.end());
 
-        possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[](const tuple<int,int,int,int>& n) -> bool{
-          return get<2>(n) == get<3>(n);
-        }),possibleCombinations.end());
+
+        
 
         //Delete based on Exclusions
         if(exclusions.size() != 0){
@@ -375,53 +381,78 @@ int main() {
             }
           }
 
-       //vector<int> duplikates;
+        vector<int> duplicates;
 
-        //test hinzufügen ob schon drin in duplikates? oben als funktion
-        
-        //TODO Potentiell könnte man hier noch allgemein Duplikate innerhalb des Vectors entfernen.
-        for (auto pos = 0; pos != possibleCombinations.size(); ++pos) {
-            //auto comb = possibleCombinations[pos];
-            for (auto pos2 = pos+1; pos2 < possibleCombinations.size(); ++pos2) {
-                if ((pos != pos2) && (get<1>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2])|| get<2>(possibleCombinations[pos2]) || get<3>(possibleCombinations[pos2])) &&
-                    (get<2>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2]) || get<2>(possibleCombinations[pos2]) || get<3>(possibleCombinations[pos2])) && 
-                    (get<3>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2]) || get<2>(possibleCombinations[pos2]) || get<3>(possibleCombinations[pos2]))
-                        && (get<0>(possibleCombinations[pos]) == get<0>(possibleCombinations[pos2])))
+        //Welche sind Duplikate?
+        for (auto pos = 0; pos < possibleCombinations.size(); ++pos) {
+            for (auto pos2 = 0; pos2 < possibleCombinations.size(); ++pos2) {
+                if ((pos != pos2) &&
+                    (pos < pos2) &&
+                    (get<0>(possibleCombinations[pos]) == get<0>(possibleCombinations[pos2])) &&
+                    (get<1>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2]) || get<1>(possibleCombinations[pos]) == get<2>(possibleCombinations[pos2]) || get<1>(possibleCombinations[pos]) == get<3>(possibleCombinations[pos2])) &&
+                    (get<2>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2]) || get<2>(possibleCombinations[pos]) == get<2>(possibleCombinations[pos2]) || get<2>(possibleCombinations[pos]) == get<3>(possibleCombinations[pos2])) &&
+                    (get<3>(possibleCombinations[pos]) == get<1>(possibleCombinations[pos2]) || get<3>(possibleCombinations[pos]) == get<2>(possibleCombinations[pos2]) || get<3>(possibleCombinations[pos]) == get<3>(possibleCombinations[pos2]))
+                    )
                 {
-                    //füge pos2 liste der duplikate hinzu wenn die nicht schon drin sind. 
-                    // drunter dann den Vector durchgehene, und jede zahl die nicht duplikat ist wir den validen Combinationen hinzugefügt
+                    if (!isInVector(duplicates, pos2)) {
+                        duplicates.push_back(pos2);
+                    }
                 }
             }
         }
         
-        //vector<tuple<int, int, int, int>> validCombinations;
+        vector<tuple<int, int, int, int>> validCombinations;
+        for (int i = 0; i < possibleCombinations.size(); ++i) {
+            if (!isInVector(duplicates, i)) {
+                validCombinations.push_back(possibleCombinations[i]);
+            }
+        }
 
+        //Shuffle the validCombinations
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::shuffle(validCombinations.begin(), validCombinations.end(), gen);
+       
+
+        /*
         cout << "Tuples:" << endl;
-        for (tuple n : possibleCombinations) {
+        for (tuple n : validCombinations) {
             cout << "\t"<< get<0>(n) << "\t"<< get<1>(n) << "\t"<< get<2>(n) << "\t"<< get<3>(n) << endl;
         }
-        cout << "Size of possibleCombinations: " << possibleCombinations.size() << endl;
+        cout << "Size of validCombinations: " << validCombinations.size() << endl;
+        */
+        
+        for (auto n : interactions) {
+            cout << get<0>(n) << "\t" << get<1>(n) << "\t" << get<2>(n) << "\t" << get<3>(n) << "\t" << endl;
+        }
+       
 
-        //TODO Create Questions
-        for(int i=0;i<numberOfExams; ++i){
-
-
-          //cout << "Trying to Generate Question Number: "<< currentQuestionId << endl;
+        //Create Number of Questions and Replace potential Parameters
+        for(int i=0;i<numberOfExams; ++i){          
           string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
           int correct{},first{}, second{}, third{};
 
-          /*
-          createRandomNumber(currentQuestionId,correctAnswers.size());
-          correctAnswer=correctAnswers[correct];
-          wrongAnswerOne = wrongAnswers[first];
-          wrongAnswerTwo = wrongAnswers[second];
-          wrongAnswerThree = wrongAnswers[third];
-          */
+          int randomNumber = createRandomNumber(0,validCombinations.size() - 1);
+
+          correctAnswer=correctAnswers[get<0>(validCombinations[randomNumber])];
+          wrongAnswerOne = wrongAnswers[get<1>(validCombinations[randomNumber])];
+          wrongAnswerTwo = wrongAnswers[get<2>(validCombinations[randomNumber])];
+          wrongAnswerThree = wrongAnswers[get<3>(validCombinations[randomNumber])];
+
+          //if Parameter exist
+          //setzen der Parameter
+          //wenn in strings existiert (Answers, task, code?)
+          //dann ersetzen 
+
+
+          //wenn interaction dann start und endwert der interactions
+          //wenn nicht dann nimm random was aus dem wertebereich
+
 
 
           Question q(currentQuestionId, name, author, description,additionalText, code, taxonomy,task,correctAnswer,wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
           ++currentQuestionId;
-        //  q.outputQuestion();
+          //q.outputQuestion();
           questions.push_back(q);
 
         }
