@@ -528,16 +528,11 @@ int main() {
 
 
 
-
-
-
-         // vector<Parameter> parameters{};
-         // vector<tuple<string, string, string, string>> interactions{};
-
           //if Parameters exist
           if (!parameters.empty()) 
           {
               vector<pair<string, string>> chosenParameters{};
+              vector<Parameter> unsetParameters{};
               //setzen der Parameter
               for (Parameter p : parameters) 
               {
@@ -551,33 +546,71 @@ int main() {
                       else {
                           if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
                               // if yes then take value from one that is interacting with the other
-
+                              // get the name of Zero with function allready written. 
+                              // get the name of ONE set in chosen Parameters
+                              // put all THREES into a new vector 
+                              // randomised taking of one in the vectors
+                              // assignment
 
                           }
                           else {
-                              // else add p to vector try again? 
+                              unsetParameters.push_back(p);
                           }
                       }
-
                   }
                   else if (isInInteractionsTwo(interactions, name)) {
-
-
                       // check if coressponding Interaction 0 is set?
                       if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
                           // if yes then take value from one that is interacting with the other
+
+
                       }
                       else {
-                          // else add p to vector try again? 
-                      }
-
-                      // unter dem Loop dann einfach einen Zweiten, der es nochmal probiert?
+                          unsetParameters.push_back(p);
+                      }                      
                   }
                   else {
                       chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
 
                   }
               }
+
+              if (!unsetParameters.empty()) {
+                  while (parameters.size() != chosenParameters.size()) {
+                      for (Parameter p : unsetParameters)
+                      {
+                          if (!isInPairZero(p.GetName())) {
+                              string name = p.GetName();
+                              //wenn interaction in pos 0
+                              if (isInInteractionsZero(interactions, name)) {
+                                  //aber nicht an pos 2
+                                  if (!isInInteractionsTwo(interactions, name)) {
+                                      chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+                                  }
+                                  else {
+                                      if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
+                                          // if yes then take value from one that is interacting with the other
+
+
+                                      }
+                                  }
+                              }
+                              else if (isInInteractionsTwo(interactions, name)) {
+                                  // check if coressponding Interaction 0 is set?
+                                  if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
+                                      // if yes then take value from one that is interacting with the other
+
+                                  }
+                              }
+                          }                       
+                      }
+                  }               
+              }
+              
+
+
+
+
 
 
 
