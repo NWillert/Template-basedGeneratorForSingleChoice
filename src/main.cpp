@@ -36,6 +36,14 @@ public:
     return name;
   }
 
+  vector<string> GetValueRangeVector() {
+      return valueRange;
+  }
+
+  string GetRandomValue() {
+      return valueRange[createRandomNumber(0, valueRange.size() - 1)];
+  }
+
   void push_backValueRange(string value){
     valueRange.push_back(value);
   }
@@ -101,6 +109,84 @@ bool isInVector(vector<int> duplicateVector, int number) {
     else
         return false;
 }
+
+bool isInVector(vector<string> duplicateVector, string number) {
+    if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
+        return true;
+    else
+        return false;
+}
+
+bool isInPairZero(vector<pair<string, string>> interactions, string name) {
+    bool isIn = false;
+    for (int i = 0; i < interactions.size(); ++i) {
+        if (get<0>(interactions[i]) == name) {
+            isIn = true;
+        }
+    }
+    return isIn;
+}
+
+bool isInInteractionsZero(vector<tuple<string, string, string, string>> interactions, string name) {
+    bool isIn = false;
+    for (int i = 0; i < interactions.size(); ++i) {
+        if (get<0>(interactions[i]) == name) {
+            isIn = true;
+        }
+    }
+    return isIn;
+}
+
+
+bool isInInteractionsOne(vector<tuple<string, string, string, string>> interactions, string name) {
+    bool isIn = false;
+    for (int i = 0; i < interactions.size(); ++i) {
+        if (get<1>(interactions[i]) == name) {
+            isIn = true;
+        }
+    }
+    return isIn;
+}
+
+bool isInInteractionsTwo(vector<tuple<string, string, string, string>> interactions, string name) {
+    bool isIn = false;
+    for (int i = 0; i < interactions.size(); ++i) {
+        if (get<2>(interactions[i]) == name) {
+            isIn = true;
+        }
+    }
+    return isIn;
+}
+
+bool isInInteractionsThree(vector<tuple<string, string, string, string>> interactions, string name) {
+    bool isIn = false;
+    for (int i = 0; i < interactions.size(); ++i) {
+        if (get<3>(interactions[i]) == name) {
+            isIn = true;
+        }
+    }
+    return isIn;
+}
+
+string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactions, string name) {
+    for (int i = 0; i < interactions.size(); ++i) {
+        if (get<2>(interactions[i]) == name) 
+        {
+            return get<0>(interactions[i]);
+        }
+    }
+    return "";
+}
+
+bool isIZeroSetForITwo(vector<tuple<string, string, string, string>> interactions, vector<pair<string, string>> chosenOnes, string name) {
+    if (isInPairZero(chosenOnes, nameOfZeroForTwo(interactions, name))) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 
 
 
@@ -420,12 +506,12 @@ int main() {
             cout << "\t"<< get<0>(n) << "\t"<< get<1>(n) << "\t"<< get<2>(n) << "\t"<< get<3>(n) << endl;
         }
         cout << "Size of validCombinations: " << validCombinations.size() << endl;
-        */
+        
         
         for (auto n : interactions) {
             cout << get<0>(n) << "\t" << get<1>(n) << "\t" << get<2>(n) << "\t" << get<3>(n) << "\t" << endl;
         }
-       
+       */
 
         //Create Number of Questions and Replace potential Parameters
         for(int i=0;i<numberOfExams; ++i){          
@@ -439,14 +525,66 @@ int main() {
           wrongAnswerTwo = wrongAnswers[get<2>(validCombinations[randomNumber])];
           wrongAnswerThree = wrongAnswers[get<3>(validCombinations[randomNumber])];
 
-          //if Parameter exist
-          //setzen der Parameter
-          //wenn in strings existiert (Answers, task, code?)
-          //dann ersetzen 
 
 
-          //wenn interaction dann start und endwert der interactions
-          //wenn nicht dann nimm random was aus dem wertebereich
+
+
+
+
+         // vector<Parameter> parameters{};
+         // vector<tuple<string, string, string, string>> interactions{};
+
+          //if Parameters exist
+          if (!parameters.empty()) 
+          {
+              vector<pair<string, string>> chosenParameters{};
+              //setzen der Parameter
+              for (Parameter p : parameters) 
+              {
+                  string name = p.GetName();
+                  //wenn interaction in pos 0
+                  if (isInInteractionsZero(interactions, name)) {
+                      //aber nicht an pos 2
+                      if (!isInInteractionsTwo(interactions, name)) {                        
+                          chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+                      }
+                      else {
+                          if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
+                              // if yes then take value from one that is interacting with the other
+
+
+                          }
+                          else {
+                              // else add p to vector try again? 
+                          }
+                      }
+
+                  }
+                  else if (isInInteractionsTwo(interactions, name)) {
+
+
+                      // check if coressponding Interaction 0 is set?
+                      if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
+                          // if yes then take value from one that is interacting with the other
+                      }
+                      else {
+                          // else add p to vector try again? 
+                      }
+
+                      // unter dem Loop dann einfach einen Zweiten, der es nochmal probiert?
+                  }
+                  else {
+                      chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+
+                  }
+              }
+
+
+
+            //wenn in strings existiert (Answers, task, code?)
+            //dann ersetzen 
+          }
+
 
 
 
@@ -456,10 +594,6 @@ int main() {
           questions.push_back(q);
 
         }
-
-
-
-        //TODO Fill in Parameters
     }
 
 
