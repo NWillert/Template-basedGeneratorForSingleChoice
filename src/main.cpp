@@ -178,6 +178,16 @@ string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactio
     return "";
 }
 
+string nameOfZeroForTwo(vector<pair<string, string>> interactions, string name) {
+    for (int i = 0; i < interactions.size(); ++i) {
+        if (get<0>(interactions[i]) == name)
+        {
+            return get<1>(interactions[i]);
+        }
+    }
+    return "";
+}
+
 bool isIZeroSetForITwo(vector<tuple<string, string, string, string>> interactions, vector<pair<string, string>> chosenOnes, string name) {
     if (isInPairZero(chosenOnes, nameOfZeroForTwo(interactions, name))) {
         return true;
@@ -334,7 +344,7 @@ int main() {
                                 temp += is.get();
                             }
                             is.get();
-                            if(is.peek() == '#'){
+                            if(is.peek() == '#' || is.peek() < 32){
                               //make pair pushback into vector
                               is.get();
                               parameterTwoValue=temp;
@@ -497,21 +507,7 @@ int main() {
         //Shuffle the validCombinations
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::shuffle(validCombinations.begin(), validCombinations.end(), gen);
-       
-
-        /*
-        cout << "Tuples:" << endl;
-        for (tuple n : validCombinations) {
-            cout << "\t"<< get<0>(n) << "\t"<< get<1>(n) << "\t"<< get<2>(n) << "\t"<< get<3>(n) << endl;
-        }
-        cout << "Size of validCombinations: " << validCombinations.size() << endl;
-        
-        
-        for (auto n : interactions) {
-            cout << get<0>(n) << "\t" << get<1>(n) << "\t" << get<2>(n) << "\t" << get<3>(n) << "\t" << endl;
-        }
-       */
+        std::shuffle(validCombinations.begin(), validCombinations.end(), gen);     
 
         //Create Number of Questions and Replace potential Parameters
         for(int i=0;i<numberOfExams; ++i){          
@@ -524,9 +520,6 @@ int main() {
           wrongAnswerOne = wrongAnswers[get<1>(validCombinations[randomNumber])];
           wrongAnswerTwo = wrongAnswers[get<2>(validCombinations[randomNumber])];
           wrongAnswerThree = wrongAnswers[get<3>(validCombinations[randomNumber])];
-
-
-
 
           //if Parameters exist
           if (!parameters.empty()) 
@@ -545,13 +538,22 @@ int main() {
                       }
                       else {
                           if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                              // if yes then take value from one that is interacting with the other
+                              // if yes then take value from one that is interacting with the other                             
                               // get the name of Zero with function allready written. 
+                              //    nameOfZeroForTwo(interactions, name);
                               // get the name of ONE set in chosen Parameters
+                              string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
                               // put all THREES into a new vector 
-                              // randomised taking of one in the vectors
+                              vector<string> values;
+                              for (tuple t : interactions) {
+                                  if (chosenInteraction == get<1>(t))
+                                  {
+                                      values.push_back(get<3>(t));
+                                  }
+                              }
+                              // randomised taking of one in the vectors                             
                               // assignment
-
+                              chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
                           }
                           else {
                               unsetParameters.push_back(p);
@@ -561,9 +563,15 @@ int main() {
                   else if (isInInteractionsTwo(interactions, name)) {
                       // check if coressponding Interaction 0 is set?
                       if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                          // if yes then take value from one that is interacting with the other
-
-
+                          string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                          vector<string> values;
+                          for (tuple t : interactions) {
+                              if (chosenInteraction == get<1>(t))
+                              {
+                                  values.push_back(get<3>(t));
+                              }
+                          }
+                          chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
                       }
                       else {
                           unsetParameters.push_back(p);
@@ -576,30 +584,38 @@ int main() {
               }
 
               if (!unsetParameters.empty()) {
-                  while (parameters.size() != chosenParameters.size()) {
+                  while (parameters.size() > chosenParameters.size()) {
                       for (Parameter p : unsetParameters)
                       {
-                          if (!isInPairZero(p.GetName())) {
+                          if (!isInPairZero(chosenParameters , p.GetName())) {
                               string name = p.GetName();
                               //wenn interaction in pos 0
-                              if (isInInteractionsZero(interactions, name)) {
-                                  //aber nicht an pos 2
-                                  if (!isInInteractionsTwo(interactions, name)) {
-                                      chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
-                                  }
-                                  else {
-                                      if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                                          // if yes then take value from one that is interacting with the other
-
-
-                                      }
-                                  }
+                              if (isInInteractionsZero(interactions, name)) {  
+                                if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
+                                    string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                    vector<string> values;
+                                    for (tuple t : interactions) {
+                                        if (chosenInteraction == get<1>(t))
+                                        {
+                                            values.push_back(get<3>(t));
+                                        }
+                                    }
+                                    chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
+                                }
                               }
                               else if (isInInteractionsTwo(interactions, name)) {
                                   // check if coressponding Interaction 0 is set?
                                   if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                                      // if yes then take value from one that is interacting with the other
-
+                                      string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                      vector<string> values;
+                                      for (tuple t : interactions) {
+                                          string temp = get<1>(t);
+                                          if(chosenInteraction == temp)
+                                          {
+                                              values.push_back(get<3>(t));
+                                          }
+                                      }
+                                      chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
                                   }
                               }
                           }                       
@@ -607,13 +623,16 @@ int main() {
                   }               
               }
               
+              // TODO -> wenn get 1 nicht in Interaction aber gewählt dann random. 
+              // weil aktuell ist es so wenn ein wert genauer spezifiziert ist, dann müssen alle genauer spezifiziert werden. 
+
+
+              
 
 
 
 
-
-
-
+            // TODO STring ersetzung 
             //wenn in strings existiert (Answers, task, code?)
             //dann ersetzen 
           }
@@ -639,3 +658,23 @@ int main() {
 
     return 0;
 }
+
+
+/*
+cout << "Tuples:" << endl;
+for (tuple n : validCombinations) {
+    cout << "\t"<< get<0>(n) << "\t"<< get<1>(n) << "\t"<< get<2>(n) << "\t"<< get<3>(n) << endl;
+}
+cout << "Size of validCombinations: " << validCombinations.size() << endl;
+
+
+for (auto n : interactions) {
+    cout << get<0>(n) << "\t" << get<1>(n) << "\t" << get<2>(n) << "\t" << get<3>(n) << "\t" << endl;
+}
+
+
+for (pair p : chosenParameters) {
+                  cout << "Parameter: " << get<0>(p) << " is set to: " << get<1>(p) << endl;
+              }
+cout << currentQuestionId << endl;
+*/
