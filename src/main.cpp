@@ -11,6 +11,8 @@
 #include <filesystem>
 #include <algorithm>
 #include <random>
+#include <iterator>
+#include <regex>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -81,18 +83,19 @@ public:
     }
 
 void outputQuestion(){
-  cout << "Id: " << questionId << endl
-      << "Name: " << name << endl
-      << "Author: " << author << endl
-      << "Description: " << description << endl
-      << "Additional Text: " << additionalText << endl
-      << "Code: " << code << endl
-      << "Taxonomy: " << taxonomy << endl
-      << "Task: " << task << endl
-      << "Correct: " << correctAnswer << endl
-      << "Wrong 1: " << wrongAnswerOne << endl
-      << "Wrong 2: " << wrongAnswerTwo << endl
-      << "Wrong 3: " << wrongAnswerThree << endl;
+    cout << "Id: " << questionId << endl
+        << "Name: " << name << endl
+        << "Author: " << author << endl
+        << "Description: " << description << endl
+        << "Additional Text: " << additionalText << endl
+        << "Code: " << code << endl
+        << "Taxonomy: " << taxonomy << endl
+        << "Task: " << task << endl
+        << "Correct: " << correctAnswer << endl
+        << "Wrong 1: " << wrongAnswerOne << endl
+        << "Wrong 2: " << wrongAnswerTwo << endl
+        << "Wrong 3: " << wrongAnswerThree << endl
+        << endl;
 }
 
 
@@ -194,6 +197,17 @@ bool isIZeroSetForITwo(vector<tuple<string, string, string, string>> interaction
     }
     else {
         return false;
+    }
+}
+
+void replaceAll(string& s, const string& search, const string& replace) {
+    for (size_t pos = 0; ; pos += replace.length()) {
+        // Locate the substring to replace
+        pos = s.find(search, pos);
+        if (pos == string::npos) break;
+        // Replace by erasing and inserting
+        s.erase(pos, search.length());
+        s.insert(pos, replace);
     }
 }
 
@@ -627,14 +641,16 @@ int main() {
               // weil aktuell ist es so wenn ein wert genauer spezifiziert ist, dann müssen alle genauer spezifiziert werden. 
 
 
-              
-
-
-
-
-            // TODO STring ersetzung 
-            //wenn in strings existiert (Answers, task, code?)
-            //dann ersetzen 
+              //Replace all parameters where they could stand
+              for (pair n : chosenParameters) {              
+                  replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                  replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                  replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                  replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                  replaceAll(code, get<0>(n), get<1>(n));
+                  replaceAll(task, get<0>(n), get<1>(n));
+                  replaceAll(additionalText, get<0>(n), get<1>(n));
+              }
           }
 
 
@@ -642,7 +658,7 @@ int main() {
 
           Question q(currentQuestionId, name, author, description,additionalText, code, taxonomy,task,correctAnswer,wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
           ++currentQuestionId;
-          //q.outputQuestion();
+          q.outputQuestion();
           questions.push_back(q);
 
         }
