@@ -6,4 +6,4 @@ obj/gen:
 
 # Rule 4: Delete all binaries and executable
 clean:
-	rm -f obj/*
+	rm -r -fo output/*

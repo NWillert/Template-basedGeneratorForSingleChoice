@@ -1,1 +1,70 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Test SYSTEM "http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd"><!--Export of ILIAS Test Questionpool 44605 of installation .--><ContentObject Type="Questionpool_Test"><MetaData><General Structure="Hierarchical"><Identifier Catalog="ILIAS" Entry="il_0_qpl_44605"/><Title Language="de">Geänderter Fragenpoolname</Title><Language Language="de"/><Description Language="de"></Description><Keyword Language="de"/></General></MetaData><Settings><ShowTaxonomies>0</ShowTaxonomies><NavTaxonomy>0</NavTaxonomy><SkillService>0</SkillService></Settings><PageObject><PageContent><Question QRef="il_0_qst_420000"/></PageContent></PageObject><PageObject><PageContent><Question QRef="il_0_qst_420001"/></PageContent></PageObject><PageObject><PageContent><Paragraph Language="de" Characteristic="Standard">Gegeben ist der Folgende Problemcode</Paragraph></PageContent><PageContent><Paragraph Language="de" SubCharacteristic="cpp" ShowLineNumbers="y" Characteristic="Code">#include &amp;lt;iostream&amp;gt;<br/>using namespace std; <br/><br/>int main(){<br/><br/>int i {12}; <br/><br/>cout &amp;lt;&amp;lt; "Der Wert der Variable k ist: " &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; <br/><br/>return 0; <br/>}</Paragraph></PageContent><PageContent><Question QRef="il_0_qst_420002"/></PageContent></PageObject><PageObject><PageContent><Paragraph Language="de" Characteristic="Standard">Gegeben ist der Folgende Testcode</Paragraph></PageContent><PageContent><Paragraph Language="de" SubCharacteristic="cpp" ShowLineNumbers="y" Characteristic="Code">#include &amp;lt;iostream&amp;gt;<br/>using namespace std; <br/><br/>int main(){<br/><br/>int i {12}; <br/><br/>cout &amp;lt;&amp;lt; "Der Wert der Variable i ist: " &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; <br/><br/>return 0; <br/>}</Paragraph></PageContent><PageContent><Question QRef="il_0_qst_420003"/></PageContent></PageObject><QuestionSkillAssignments><TriggerQuestion Id="420000"></TriggerQuestion><TriggerQuestion Id="420001"></TriggerQuestion><TriggerQuestion Id="420002"></TriggerQuestion><TriggerQuestion Id="420003"></TriggerQuestion></QuestionSkillAssignments></ContentObject>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Test SYSTEM "http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd">
+<!--Export of ILIAS Test Questionpool 44605 of installation .-->
+<ContentObject Type="Questionpool_Test">
+  <MetaData>
+    <General Structure="Hierarchical">
+      <Identifier Catalog="ILIAS" Entry="il_0_qpl_44605"/>
+      <Title Language="de">Geänderter Fragenpoolname</Title>
+      <Language Language="de"/>
+      <Description Language="de">
+      </Description>
+      <Keyword Language="de"/>
+    </General>
+  </MetaData>
+  <Settings>
+    <ShowTaxonomies>0</ShowTaxonomies>
+    <NavTaxonomy>0</NavTaxonomy>
+    <SkillService>0</SkillService>
+  </Settings>
+  <PageObject>
+    <PageContent>
+      <Question QRef="il_0_qst_420000"/>
+    </PageContent>
+  </PageObject>
+  <PageObject>
+    <PageContent>
+      <Question QRef="il_0_qst_420001"/>
+    </PageContent>
+  </PageObject>
+  <PageObject>
+    <PageContent>
+      <Paragraph Language="de" Characteristic="Standard">Gegeben ist der Folgende Problemcode</Paragraph>
+    </PageContent>
+    <PageContent>
+      <Paragraph Language="de" SubCharacteristic="cpp" ShowLineNumbers="y" Characteristic="Code">#include &amp;lt;iostream&amp;gt;<br/>using namespace std; <br/>
+      <br/>int main(){<br/>
+      <br/>int i {12}; <br/>
+      <br/>cout &amp;lt;&amp;lt; "Der Wert der Variable k ist: " &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; <br/>
+      <br/>return 0; <br/>}</Paragraph>
+    </PageContent>
+    <PageContent>
+      <Question QRef="il_0_qst_420002"/>
+    </PageContent>
+  </PageObject>
+  <PageObject>
+    <PageContent>
+      <Paragraph Language="de" Characteristic="Standard">Gegeben ist der Folgende Testcode</Paragraph>
+    </PageContent>
+    <PageContent>
+      <Paragraph Language="de" SubCharacteristic="cpp" ShowLineNumbers="y" Characteristic="Code">#include &amp;lt;iostream&amp;gt;<br/>using namespace std; <br/>
+      <br/>int main(){<br/>
+      <br/>int i {12}; <br/>
+      <br/>cout &amp;lt;&amp;lt; "Der Wert der Variable i ist: " &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; <br/>
+      <br/>return 0; <br/>}</Paragraph>
+    </PageContent>
+    <PageContent>
+      <Question QRef="il_0_qst_420003"/>
+    </PageContent>
+  </PageObject>
+  <QuestionSkillAssignments>
+    <TriggerQuestion Id="420000">
+    </TriggerQuestion>
+    <TriggerQuestion Id="420001">
+    </TriggerQuestion>
+    <TriggerQuestion Id="420002">
+    </TriggerQuestion>
+    <TriggerQuestion Id="420003">
+    </TriggerQuestion>
+  </QuestionSkillAssignments>
+</ContentObject>

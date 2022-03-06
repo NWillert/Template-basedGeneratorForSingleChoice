@@ -18,7 +18,14 @@ using namespace std;
 namespace fs = std::filesystem;
 
 string path = ".\\input";
-string outputPath = ".\\output";
+string outputFolder = ".\\output";
+const fs::path outputPath{ outputFolder };
+
+string folderMarking = "1644584918__0__";
+const string qpl = "qpl_";
+const string qti = "qti_";
+
+
 
 int createRandomNumber(int startValue, int randomTo) {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
@@ -98,8 +105,51 @@ void outputQuestion(){
         << endl;
 }
 
-
-
+int GetQuestionId() {
+    return questionId;
+}
+string GetName() {
+    return name;
+}
+string GetAuthor() {
+    return author;
+}
+string GetDescription() {
+    return description;
+}
+string GetCode() {
+    return code;
+}
+string GetAdditionalText() {
+    return additionalText;
+}
+string GetTaxonomy() {
+    return taxonomy;
+}
+string GetTask() {
+    return task;
+}
+string GetCorrectAnswer() {
+    return correctAnswer;
+}
+string GetWrongAnswerOne() {
+    return wrongAnswerOne;
+}
+string GetWrongAnswerTwo() {
+    return wrongAnswerTwo;
+}
+string GetWrongAnswerThree() {
+    return wrongAnswerThree;
+}
+bool IsCodeEmpty() {
+    return code.empty();
+}
+bool IsAdditionalTextEmpty() {
+    return additionalText.empty();
+}
+bool IsTaxonomyEmpty() {
+    return taxonomy.empty();
+}
 private:
   int questionId;
   string name{}, author{}, description{},code{}, additionalText{}, taxonomy{}, task{}, correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
@@ -216,18 +266,41 @@ void replaceAll(string& s, const string& search, const string& replace) {
 
 int main() {
 
-    int examId{};
+    string questionPoolId{};
+    string qpTitle{};
+    string taxId{};
+    string taxTitle{};
+    int childId{}, parentId{};
     int numberOfExams{};
     int currentQuestionId{ 1 };
     vector <Question> questions;
+    vector <string> taxonomyLevels;
 
     //Aktivieren wenn gebraucht.
+    /*
     cout << "Please input, how many versions should be generated: ";
     cin >> numberOfExams;
-/*
+
     cout << "Please input the question pool id: ";
-    cin >> examId;
+    cin >> questionPoolId;
+
+    cout << "Please input the question pool title: ";
+    cin >> qpTitle;
+
+    cout << "Please input the Taxonomy Id: ";
+    cin >> taxId;
+
+    cout << "Please input the Taxonomy Title: ";
+    cin >> taxTitle;
     */
+    numberOfExams = 2;
+    questionPoolId = "34568";
+    qpTitle = "TestTitle";
+    taxId = "42069";
+    taxTitle = "TaxTest";
+
+    childId = 15001;
+    parentId = 15000;
 
 
     //Parsing Files in Input Folder
@@ -275,9 +348,10 @@ int main() {
                     }
                     else if (txtFromFile == "@CODE") {
                       string tempLine{};
-                        while(readFromFile.peek() != '@'){
+                        while(readFromFile.peek() != '@'){                        
                           getline(readFromFile, tempLine);
                           code +=tempLine;
+                          code += "<br/>";
                         }
                     }
                     else if (txtFromFile == "@TAXONOMY") {
@@ -653,24 +727,144 @@ int main() {
               }
           }
 
-
+          if (!isInVector(taxonomyLevels, taxonomy)) {
+              taxonomyLevels.push_back(taxonomy);            
+          }
 
 
           Question q(currentQuestionId, name, author, description,additionalText, code, taxonomy,task,correctAnswer,wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
           ++currentQuestionId;
-          q.outputQuestion();
+          //q.outputQuestion();
           questions.push_back(q);
 
         }
     }
 
 
-    //#TODO CREATE FILE HEADS
+    //Creating Output Structure
+    if (!fs::exists(outputPath)) {
+        fs::create_directory(outputPath);
+    }
+    string questionpoolFolder = outputFolder + "\\" + folderMarking + qpl + questionPoolId;
+    fs::path questionpoolPath{ questionpoolFolder };
+    fs::create_directory(questionpoolPath);
 
-    //TODO Write/Append to the exisisting Files
+    fs::path modulesPath{ questionpoolFolder + "\\Modules" };
+    fs::create_directory(modulesPath);
+    fs::path modulesTestQPPath{ questionpoolFolder + "\\Modules\\TestQuestionPool" };
+    fs::create_directory(modulesTestQPPath);
+    fs::path modulesTestQPSetPath{ questionpoolFolder + "\\Modules\\TestQuestionPool\\set_1" };
+    fs::create_directory(modulesTestQPSetPath);
+
+    fs::path servicesPath{ questionpoolFolder + "\\Services" };
+    fs::create_directory(servicesPath);
+    fs::path servicesTaxPath{ questionpoolFolder + "\\Services\\Taxonomy" };
+    fs::create_directory(servicesTaxPath);
+    fs::path servicesTaxSetPath{ questionpoolFolder + "\\Services\\Taxonomy\\set_1" };
+    fs::create_directory(servicesTaxSetPath);
+
+    //Write/Append to Files
+    ofstream writeToFile;
+    //Write Manifest xml
+    writeToFile.open(questionpoolFolder+"\\manifest.xml", ios_base::out);
+    writeToFile <<
+        "<?xml version=\"1.0\" encoding =\"UTF-8\"?><!--Generated by ILIAS XmlWriter--><Manifest MainEntity=\"qpl\" Title=\"" 
+        << "Testimport"
+        << "\" TargetRelease=\"5.4.0\" InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\"><ExportFile Component=\"Modules/TestQuestionPool\" Path=\"Modules/TestQuestionPool/set_1/export.xml\"/><ExportFile Component=\"Services/Taxonomy\" Path=\"Services/Taxonomy/set_1/export.xml\"/></Manifest>";
+    writeToFile.close();
+
+    //Write export in TestQuestionPool
+    writeToFile.open(questionpoolFolder + "\\Modules\\TestQuestionPool\\set_1\\export.xml", ios_base::out);
+    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        << "<!--Generated by ILIAS XmlWriter-->"
+        << "<exp:Export InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" Entity=\"qpl\" SchemaVersion=\"4.1.0\" TargetRelease=\"5.4.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:exp=\"http://www.ilias.de/Services/Export/exp/4_1\" xsi:schemaLocation=\"http://www.ilias.de/Services/Export/exp/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_export_4_1.xsd http://www.ilias.de/Modules/TestQuestionPool/htlm/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_qpl_4_1.xsd\" xmlns=\"http://www.ilias.de/Modules/TestQuestionPool/htlm/4_1\">"
+        << "<exp:ExportItem Id=\""
+        << questionPoolId
+        << "\"></exp:ExportItem></exp:Export>";
+    writeToFile.close();
+
+    //Write the Questions into the qti
+    writeToFile.open(questionpoolFolder + "\\" + folderMarking + qti + questionPoolId + ".xml");
+    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        << "<!DOCTYPE questestinterop SYSTEM \"ims_qtiasiv1p2p1.dtd\">"
+        << "<!--Generated by ILIAS XmlWriter-->"
+        << "<questestinterop>";
+    for (Question q : questions) {
+        writeToFile << "<item ident=\"il_0_qst_" << q.GetQuestionId() << "\" title=\"" << q.GetName() << "\" maxattempts=\"0\">"
+            << "<qticomment/><duration>P0Y0M0DT0H1M0S</duration><itemmetadata><qtimetadata><qtimetadatafield><fieldlabel>ILIAS_VERSION</fieldlabel><fieldentry>5.4.26 2021-12-22</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>QUESTIONTYPE</fieldlabel><fieldentry>SINGLE CHOICE QUESTION</fieldentry></qtimetadatafield>"
+            << "<qtimetadatafield><fieldlabel>AUTHOR</fieldlabel><fieldentry>" << q.GetAuthor() << "</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>additional_cont_edit_mode</fieldlabel><fieldentry>default</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>thumb_size</fieldlabel><fieldentry/></qtimetadatafield>"
+            << "<qtimetadatafield><fieldlabel>feedback_setting</fieldlabel><fieldentry>2</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>singleline</fieldlabel><fieldentry>0</fieldentry></qtimetadatafield></qtimetadata></itemmetadata>"
+            << "<presentation label=\""<< q.GetName() << "\"><flow>"
+            << "<material><mattext texttype=\"text/xhtml\">" << q.GetTask() <<"</mattext></material>"
+            << "<response_lid ident=\"MCSR\" rcardinality=\"Single\"><render_choice shuffle=\"Yes\">"
+            << "<response_label ident=\"0\"><material><mattext texttype=\"text/xhtml\">"<< q.GetCorrectAnswer() <<"</mattext></material></response_label>"
+            << "<response_label ident=\"1\"><material><mattext texttype=\"text/xhtml\">" << q.GetWrongAnswerOne() << "</mattext></material></response_label>"
+            << "<response_label ident=\"2\"><material><mattext texttype=\"text/xhtml\">" << q.GetWrongAnswerTwo() << "</mattext></material></response_label>"
+            << "<response_label ident=\"3\"><material><mattext texttype=\"text/xhtml\">" << q.GetWrongAnswerThree() << "</mattext></material></response_label>"
+            << "</render_choice></response_lid></flow></presentation><resprocessing><outcomes><decvar></decvar></outcomes><respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">0</varequal></conditionvar><setvar action=\"Add\">1</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_0\"/></respcondition>"
+            << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">1</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_1\"/></respcondition>"
+            << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">2</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_2\"/></respcondition>"
+            << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">3</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_3\"/></respcondition></resprocessing>"
+            << "<itemfeedback ident=\"response_0\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
+            << "<itemfeedback ident=\"response_1\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
+            << "<itemfeedback ident=\"response_2\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
+            << "<itemfeedback ident=\"response_3\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback></item>"
+            ;
+    }
+    writeToFile << "</questestinterop>";
+    writeToFile.close();
+
+    //Writing Question extras like Code or additional text in qpl
+    writeToFile.open(questionpoolFolder + "\\" + folderMarking + qpl + questionPoolId + ".xml");
+    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE Test SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd\"><!--Export of ILIAS Test Questionpool "<< questionPoolId << " of installation .-->"
+        << "<ContentObject Type=\"Questionpool_Test\"><MetaData><General Structure=\"Hierarchical\">"
+        << "<Identifier Catalog=\"ILIAS\" Entry=\"il_0_qpl_" << questionPoolId << "\"/><Title Language=\"de\">"<<qpTitle<<"</Title><Language Language=\"de\"/><Description Language=\"de\"></Description><Keyword Language=\"de\"/></General></MetaData>"
+        << "<Settings><ShowTaxonomies>0</ShowTaxonomies><NavTaxonomy>0</NavTaxonomy><SkillService>0</SkillService></Settings>";
+    for (Question q : questions) {
+        writeToFile << "<PageObject>";
+        if (!q.IsAdditionalTextEmpty()) {
+            writeToFile << "<PageContent><Paragraph Language=\"de\" Characteristic=\"Standard\">" << q.GetAdditionalText() << "</Paragraph></PageContent>";
+        }
+        if (!q.IsCodeEmpty()) {
+            writeToFile << "<PageContent><Paragraph Language=\"de\" SubCharacteristic=\"cpp\" ShowLineNumbers=\"y\" Characteristic=\"Code\">" << q.GetCode() << "</Paragraph></PageContent>";
+        }
+        writeToFile << "<PageContent><Question QRef=\"il_0_qst_" << q.GetQuestionId() << "\"/></PageContent></PageObject>";
+    }
+    writeToFile << "<QuestionSkillAssignments>";
+    for (Question q : questions) {
+        writeToFile << "<TriggerQuestion Id=\"" << q.GetQuestionId() << "\"></TriggerQuestion>";
+    }
+    writeToFile << "</QuestionSkillAssignments></ContentObject>";
+    writeToFile.close();
+
+    //Writing the export xml for the Used Taxonomy
+    writeToFile.open(questionpoolFolder + "\\Services\\Taxonomy\\set_1\\export.xml", ios_base::out);
+    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Generated by ILIAS XmlWriter--><exp:Export InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" Entity=\"tax\" SchemaVersion=\"4.3.0\" TargetRelease=\"5.4.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:exp=\"http://www.ilias.de/Services/Export/exp/4_1\" xsi:schemaLocation=\"http://www.ilias.de/Services/Export/exp/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_export_4_1.xsd http://www.ilias.de/Services/Taxonomy/tax/4_3 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_tax_4_3.xsd http://www.ilias.de/Services/DataSet/ds/4_3 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_ds_4_3.xsd\" xmlns=\"http://www.ilias.de/Services/Taxonomy/tax/4_3\" xmlns:ds=\"http://www.ilias.de/Services/DataSet/ds/4_3\">"
+        << "<exp:ExportItem Id = \"" << taxId << "\"><ds:DataSet InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" TopEntity=\"tax\">";
+    //Tax Toplevel
+    writeToFile << "<ds:Rec Entity=\"tax\"><Tax><Id>" << taxId << "</Id><Title>" << taxTitle << "</Title><Description></Description><SortingMode>0</SortingMode></Tax></ds:Rec>";
+    //TaxTree Toplevel
+    writeToFile << "<ds:Rec Entity=\"tax_tree\"><TaxTree><TaxId>" << taxId << "</TaxId><Child>"<< parentId <<"</Child><Parent>0</Parent><Depth>1</Depth><Type></Type><Title>Root node for taxonomy "<< taxId << "</Title><OrderNr>0</OrderNr></TaxTree></ds:Rec>";
+    
+    //For each level in taxonomy levels add a node to the tree
+    int temp = 10;
+    for (string t : taxonomyLevels) {
+        writeToFile << "<ds:Rec Entity=\"tax_tree\"><TaxTree><TaxId>" << taxId << "</TaxId><Child>"
+            << childId << "</Child><Parent>" << parentId << "</Parent><Depth>2</Depth><Type>taxn</Type><Title>"
+            << t << "</Title><OrderNr>" << temp << "</OrderNr></TaxTree></ds:Rec>";
+        for (Question q : questions) {
+            if (q.GetTaxonomy() == t) {
+                writeToFile << "<ds:Rec Entity=\"tax_node_assignment\"><TaxNodeAssignment><NodeId>" << childId
+                    << "</NodeId><Component>qpl</Component><ItemType>quest</ItemType><ItemId>" << q.GetQuestionId() << "</ItemId></TaxNodeAssignment></ds:Rec>";
+            }
+        }
+        ++childId;
+        temp += 10;
+    }
+    writeToFile << "<ds:Rec Entity=\"tax_usage\"><TaxUsage><TaxId>" << taxId << "</TaxId><ObjId>" << questionPoolId << "</ObjId></TaxUsage></ds:Rec></ds:DataSet></exp:ExportItem></exp:Export>";
+    writeToFile.close();
 
 
-    //#TODO CREATE file ends
 
     return 0;
 }

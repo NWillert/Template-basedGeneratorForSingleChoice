@@ -10,6 +10,12 @@ Ulrich Eisenecker
 Kapitel "Variablen", Anwendungsfrage, mittel
 @TAXONOMY
 2
+@CODE
+dsajfldshagfbj
+ 
+Test
+@ADDITIONALTEXT
+adsfadsfnjkdsf
 @PARAMETER
 $TYPE
 $NAME
