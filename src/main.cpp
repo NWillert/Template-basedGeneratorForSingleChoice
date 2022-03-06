@@ -293,8 +293,10 @@ int main() {
     cout << "Please input the Taxonomy Title: ";
     cin >> taxTitle;
     */
-    numberOfExams = 2;
-    questionPoolId = "34568";
+    cout << "Please input the question pool id: ";
+    cin >> questionPoolId;
+    numberOfExams = 3;
+    //questionPoolId = "34568";
     qpTitle = "TestTitle";
     taxId = "42069";
     taxTitle = "TaxTest";
@@ -819,7 +821,7 @@ int main() {
     writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE Test SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd\"><!--Export of ILIAS Test Questionpool "<< questionPoolId << " of installation .-->"
         << "<ContentObject Type=\"Questionpool_Test\"><MetaData><General Structure=\"Hierarchical\">"
         << "<Identifier Catalog=\"ILIAS\" Entry=\"il_0_qpl_" << questionPoolId << "\"/><Title Language=\"de\">"<<qpTitle<<"</Title><Language Language=\"de\"/><Description Language=\"de\"></Description><Keyword Language=\"de\"/></General></MetaData>"
-        << "<Settings><ShowTaxonomies>0</ShowTaxonomies><NavTaxonomy>0</NavTaxonomy><SkillService>0</SkillService></Settings>";
+        << "<Settings><ShowTaxonomies>1</ShowTaxonomies><NavTaxonomy>0</NavTaxonomy><SkillService>0</SkillService></Settings>";
     for (Question q : questions) {
         writeToFile << "<PageObject>";
         if (!q.IsAdditionalTextEmpty()) {
@@ -864,6 +866,9 @@ int main() {
     writeToFile << "<ds:Rec Entity=\"tax_usage\"><TaxUsage><TaxId>" << taxId << "</TaxId><ObjId>" << questionPoolId << "</ObjId></TaxUsage></ds:Rec></ds:DataSet></exp:ExportItem></exp:Export>";
     writeToFile.close();
 
+
+
+    //TODO zippen
 
 
     return 0;

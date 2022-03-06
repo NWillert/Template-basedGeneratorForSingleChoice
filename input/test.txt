@@ -9,7 +9,7 @@ Ulrich Eisenecker
 @DESCRIPTION
 Kapitel "Turning Completeness", Faktenfrage, leicht
 @TAXONOMY
-1
+5
 @PARAMETER
 
 @VALUERANGE

@@ -9,7 +9,7 @@ Ulrich Eisenecker
 @DESCRIPTION
 Kapitel "Variablen", Anwendungsfrage, mittel
 @TAXONOMY
-2
+4
 @CODE
 dsajfldshagfbj
  
