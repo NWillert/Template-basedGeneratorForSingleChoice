@@ -873,23 +873,3 @@ int main() {
 
     return 0;
 }
-
-
-/*
-cout << "Tuples:" << endl;
-for (tuple n : validCombinations) {
-    cout << "\t"<< get<0>(n) << "\t"<< get<1>(n) << "\t"<< get<2>(n) << "\t"<< get<3>(n) << endl;
-}
-cout << "Size of validCombinations: " << validCombinations.size() << endl;
-
-
-for (auto n : interactions) {
-    cout << get<0>(n) << "\t" << get<1>(n) << "\t" << get<2>(n) << "\t" << get<3>(n) << "\t" << endl;
-}
-
-
-for (pair p : chosenParameters) {
-                  cout << "Parameter: " << get<0>(p) << " is set to: " << get<1>(p) << endl;
-              }
-cout << currentQuestionId << endl;
-*/
