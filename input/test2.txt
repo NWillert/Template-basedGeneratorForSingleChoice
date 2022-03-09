@@ -12,7 +12,7 @@ Kapitel "Variablen", Anwendungsfrage, mittel
 4
 @CODE
 dsajfldshagfbj
- 
+
 Test
 @ADDITIONALTEXT
 adsfadsfnjkdsf
