@@ -309,8 +309,8 @@ int main() {
     for (const auto& entry : fs::directory_iterator(path))
     {
         ifstream readFromFile;
-        string name{}, author{}, date{}, version{}, description{}, taxonomy{}, task{};
-        string code{}, additionalText{};
+        string name{}, author{}, date{}, version{}, description{}, taxonomy{}, task{}, code{}, additionalText{};
+        string taskToSet{}, codeToSet{}, additionalTextToSet{};
         vector<Parameter> parameters{};
         vector<string> correctAnswers{};
         vector<string> wrongAnswers{};
@@ -715,17 +715,21 @@ int main() {
               
               // TODO -> wenn get 1 nicht in Interaction aber gewählt dann random. 
               // weil aktuell ist es so wenn ein wert genauer spezifiziert ist, dann müssen alle genauer spezifiziert werden. 
-
-
+              
+              //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
+              //So to keep the Originals we use the extra variables *ToSet to dont change the variables that might be the same when creating more then one
+              taskToSet = task;
+              codeToSet = code;
+              additionalTextToSet = additionalText;
               //Replace all parameters where they could stand
               for (pair n : chosenParameters) {              
                   replaceAll(correctAnswer, get<0>(n), get<1>(n));
                   replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
                   replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
                   replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
-                  replaceAll(code, get<0>(n), get<1>(n));
-                  replaceAll(task, get<0>(n), get<1>(n));
-                  replaceAll(additionalText, get<0>(n), get<1>(n));
+                  replaceAll(codeToSet, get<0>(n), get<1>(n));
+                  replaceAll(taskToSet, get<0>(n), get<1>(n));
+                  replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
               }
           }
 
@@ -734,7 +738,7 @@ int main() {
           }
 
 
-          Question q(currentQuestionId, name, author, description,additionalText, code, taxonomy,task,correctAnswer,wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
+          Question q(currentQuestionId, name, author, description,additionalTextToSet, codeToSet, taxonomy,taskToSet,correctAnswer,wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
           ++currentQuestionId;
           //q.outputQuestion();
           questions.push_back(q);
