@@ -280,11 +280,14 @@ int main() {
     string qpTitle{};
     string taxId{};
     string taxTitle{};
+
     int childId{}, parentId{};
     int numberOfExams{};
     int currentQuestionId{ 1 };
     vector <Question> questions;
     vector <string> taxonomyLevels;
+
+    int mode{};
 
     //Aktivieren wenn gebraucht.
     /*
@@ -305,6 +308,10 @@ int main() {
     */
     cout << "Please input the question pool id: ";
     cin >> questionPoolId;
+
+    cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
+    cin >> mode;
+
     numberOfExams = 20;
     //questionPoolId = "34568";
     qpTitle = "TestTitle";
@@ -609,99 +616,70 @@ int main() {
         std::mt19937 gen(rd());
         std::shuffle(validCombinations.begin(), validCombinations.end(), gen);
 
-        //Create Number of Questions and Replace potential Parameters
-        for(int i=0;i<numberOfExams; ++i){
-          string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
-          int correct{},first{}, second{}, third{};
 
-          int randomNumber = createRandomNumber(0,validCombinations.size() - 1);
 
-          correctAnswer=correctAnswers[get<0>(validCombinations[randomNumber])];
-          wrongAnswerOne = wrongAnswers[get<1>(validCombinations[randomNumber])];
-          wrongAnswerTwo = wrongAnswers[get<2>(validCombinations[randomNumber])];
-          wrongAnswerThree = wrongAnswers[get<3>(validCombinations[randomNumber])];
+        if (mode == 1) {
+            //Create Number of Questions and Replace potential Parameters
+            for (int i = 0; i < numberOfExams; ++i) {
+                string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
+                int correct{}, first{}, second{}, third{};
 
-          //if Parameters exist
-          if (!parameters.empty())
-          {
-              vector<pair<string, string>> chosenParameters{};
-              vector<Parameter> unsetParameters{};
-              //setzen der Parameter
-              for (Parameter p : parameters)
-              {
-                  string name = p.GetName();
-                  //wenn interaction in pos 0
-                  if (isInInteractionsZero(interactions, name)) {
-                      //aber nicht an pos 2
-                      if (!isInInteractionsTwo(interactions, name)) {
-                          chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
-                      }
-                      else {
-                          if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                            if(isInInteractionsOne(interactions,nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))){
-                              // if yes then take value from one that is interacting with the other
-                              // get the name of Zero with function allready written.
-                              //    nameOfZeroForTwo(interactions, name);
-                              // get the name of ONE set in chosen Parameters
-                              string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
-                              // put all THREES into a new vector
-                              vector<string> values;
-                              for (tuple t : interactions) {
-                                  if (chosenInteraction == get<1>(t))
-                                  {
-                                      values.push_back(get<3>(t));
-                                  }
-                              }
-                              // randomised taking of one in the vectors
-                              // assignment
-                              chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
-                            }else{
-                              //if the chosen parameter is set but there is no interaction set random
-                              chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+                int randomNumber = createRandomNumber(0, validCombinations.size() - 1);
+
+                correctAnswer = correctAnswers[get<0>(validCombinations[randomNumber])];
+                wrongAnswerOne = wrongAnswers[get<1>(validCombinations[randomNumber])];
+                wrongAnswerTwo = wrongAnswers[get<2>(validCombinations[randomNumber])];
+                wrongAnswerThree = wrongAnswers[get<3>(validCombinations[randomNumber])];
+
+                //if Parameters exist
+                if (!parameters.empty())
+                {
+                    vector<pair<string, string>> chosenParameters{};
+                    vector<Parameter> unsetParameters{};
+                    //setzen der Parameter
+                    for (Parameter p : parameters)
+                    {
+                        string name = p.GetName();
+                        //wenn interaction in pos 0
+                        if (isInInteractionsZero(interactions, name)) {
+                            //aber nicht an pos 2
+                            if (!isInInteractionsTwo(interactions, name)) {
+                                chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
                             }
-                          }
-                          else {
-                              unsetParameters.push_back(p);
-                          }
-                      }
-                  }
-                  else if (isInInteractionsTwo(interactions, name)) {
-                      // check if coressponding Interaction 0 is set?
-                      if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                        if(isInInteractionsOne(interactions,nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))){
-                          string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
-                          vector<string> values;
-                          for (tuple t : interactions) {
-                              if (chosenInteraction == get<1>(t))
-                              {
-                                  values.push_back(get<3>(t));
-                              }
-                          }
-                          chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
-                        }else{
-                          chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
-                        }
-                      }
-                      else {
-                          unsetParameters.push_back(p);
-                      }
-                  }
-                  else {
-                      chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
-
-                  }
-              }
-
-              if (!unsetParameters.empty()) {
-                  while (parameters.size() > chosenParameters.size()) {
-                      for (Parameter p : unsetParameters)
-                      {
-                          if (!isInPairZero(chosenParameters , p.GetName())) {
-                              string name = p.GetName();
-                              //wenn interaction in pos 0
-                              if (isInInteractionsZero(interactions, name)) {
+                            else {
                                 if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                                  if(isInInteractionsOne(interactions,nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))){
+                                    if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
+                                        // if yes then take value from one that is interacting with the other
+                                        // get the name of Zero with function allready written.
+                                        //    nameOfZeroForTwo(interactions, name);
+                                        // get the name of ONE set in chosen Parameters
+                                        string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                        // put all THREES into a new vector
+                                        vector<string> values;
+                                        for (tuple t : interactions) {
+                                            if (chosenInteraction == get<1>(t))
+                                            {
+                                                values.push_back(get<3>(t));
+                                            }
+                                        }
+                                        // randomised taking of one in the vectors
+                                        // assignment
+                                        chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
+                                    }
+                                    else {
+                                        //if the chosen parameter is set but there is no interaction set random
+                                        chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+                                    }
+                                }
+                                else {
+                                    unsetParameters.push_back(p);
+                                }
+                            }
+                        }
+                        else if (isInInteractionsTwo(interactions, name)) {
+                            // check if coressponding Interaction 0 is set?
+                            if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
+                                if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
                                     string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
                                     vector<string> values;
                                     for (tuple t : interactions) {
@@ -711,62 +689,149 @@ int main() {
                                         }
                                     }
                                     chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
-                                  }else{
-                                    chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
-                                  }
                                 }
-                              }
-                              else if (isInInteractionsTwo(interactions, name)) {
-                                  // check if coressponding Interaction 0 is set?
-                                  if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                                    if(isInInteractionsOne(interactions,nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))){
-                                      string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
-                                      vector<string> values;
-                                      for (tuple t : interactions) {
-                                          if (chosenInteraction == get<1>(t))
-                                          {
-                                              values.push_back(get<3>(t));
-                                          }
-                                      }
-                                      chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
-                                    }else{
-                                      chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+                                else {
+                                    chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+                                }
+                            }
+                            else {
+                                unsetParameters.push_back(p);
+                            }
+                        }
+                        else {
+                            chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+
+                        }
+                    }
+
+                    if (!unsetParameters.empty()) {
+                        while (parameters.size() > chosenParameters.size()) {
+                            for (Parameter p : unsetParameters)
+                            {
+                                if (!isInPairZero(chosenParameters, p.GetName())) {
+                                    string name = p.GetName();
+                                    //wenn interaction in pos 0
+                                    if (isInInteractionsZero(interactions, name)) {
+                                        if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
+                                            if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
+                                                string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                                vector<string> values;
+                                                for (tuple t : interactions) {
+                                                    if (chosenInteraction == get<1>(t))
+                                                    {
+                                                        values.push_back(get<3>(t));
+                                                    }
+                                                }
+                                                chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
+                                            }
+                                            else {
+                                                chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+                                            }
+                                        }
                                     }
-                                  }
-                              }
-                          }
-                      }
-                  }
-              }
+                                    else if (isInInteractionsTwo(interactions, name)) {
+                                        // check if coressponding Interaction 0 is set?
+                                        if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
+                                            if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
+                                                string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                                vector<string> values;
+                                                for (tuple t : interactions) {
+                                                    if (chosenInteraction == get<1>(t))
+                                                    {
+                                                        values.push_back(get<3>(t));
+                                                    }
+                                                }
+                                                chosenParameters.push_back(make_pair(name, values[createRandomNumber(0, values.size() - 1)]));
+                                            }
+                                            else {
+                                                chosenParameters.push_back(make_pair(name, p.GetRandomValue()));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
 
 
-              //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
-              //So to keep the Originals we use the extra variables *ToSet to dont change the variables that might be the same when creating more then one
-              taskToSet = task;
-              codeToSet = code;
-              additionalTextToSet = additionalText;
-              //Replace all parameters where they could stand
-              for (pair n : chosenParameters) {
-                  replaceAll(correctAnswer, get<0>(n), get<1>(n));
-                  replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
-                  replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
-                  replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
-                  replaceAll(codeToSet, get<0>(n), get<1>(n));
-                  replaceAll(taskToSet, get<0>(n), get<1>(n));
-                  replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
-              }
-          }
-
-          if (!isInVector(taxonomyLevels, taxonomy)) {
-              taxonomyLevels.push_back(taxonomy);
-          }
+                    //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
+                    //So to keep the Originals we use the extra variables *ToSet to dont change the variables that might be the same when creating more then one
+                    taskToSet = task;
+                    codeToSet = code;
+                    additionalTextToSet = additionalText;
+                    //Replace all parameters where they could stand
+                    for (pair n : chosenParameters) {
+                        replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                        replaceAll(codeToSet, get<0>(n), get<1>(n));
+                        replaceAll(taskToSet, get<0>(n), get<1>(n));
+                        replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                    }
+                }
 
 
-          Question q(currentQuestionId, name, author, description,additionalTextToSet, codeToSet, taxonomy,taskToSet,correctAnswer,wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
-          ++currentQuestionId;
-          //q.outputQuestion();
-          questions.push_back(q);
 
+
+
+                if (!isInVector(taxonomyLevels, taxonomy)) {
+                    taxonomyLevels.push_back(taxonomy);
+                }
+
+                Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
+                ++currentQuestionId;
+                //q.outputQuestion();
+                questions.push_back(q);
+
+            }
+        }
+        else if (mode == 2) {
+        //create parameter Combinations
+            for (tuple t : validCombinations) {
+                            //for all parameter cominations 
+                             /*
+                             string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
+                        int correct{}, first{}, second{}, third{};
+
+                        int randomNumber = createRandomNumber(0, validCombinations.size() - 1);
+
+                        correctAnswer = correctAnswers[get<0>(validCombinations[randomNumber])];
+                        wrongAnswerOne = wrongAnswers[get<1>(validCombinations[randomNumber])];
+                        wrongAnswerTwo = wrongAnswers[get<2>(validCombinations[randomNumber])];
+                        wrongAnswerThree = wrongAnswers[get<3>(validCombinations[randomNumber])];
+
+                        //if Parameters exist
+                        if (!parameters.empty())
+                        {
+            
+                            //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
+                                //So to keep the Originals we use the extra variables *ToSet to dont change the variables that might be the same when creating more then one
+                            taskToSet = task;
+                            codeToSet = code;
+                            additionalTextToSet = additionalText;
+                            //Replace all parameters where they could stand
+                            for (pair n : chosenParameters) {
+                                replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                                replaceAll(codeToSet, get<0>(n), get<1>(n));
+                                replaceAll(taskToSet, get<0>(n), get<1>(n));
+                                replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                            }
+                        }
+                        if (!isInVector(taxonomyLevels, taxonomy)) {
+                            taxonomyLevels.push_back(taxonomy);
+                        }
+
+                        Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
+                        ++currentQuestionId;
+                        //q.outputQuestion();
+                        questions.push_back(q);
+                 
+                 */
+            }            
         }
     }
 
