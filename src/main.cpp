@@ -631,6 +631,12 @@ int main() {
                 wrongAnswerTwo = wrongAnswers[get<2>(validCombinations[randomNumber])];
                 wrongAnswerThree = wrongAnswers[get<3>(validCombinations[randomNumber])];
 
+                //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
+                //So to keep the Originals we use the extra variables *ToSet to dont change the variables that might be the same when creating more then one
+                taskToSet = task;
+                codeToSet = code;
+                additionalTextToSet = additionalText;
+
                 //if Parameters exist
                 if (!parameters.empty())
                 {
@@ -754,11 +760,7 @@ int main() {
                     }
 
 
-                    //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
-                    //So to keep the Originals we use the extra variables *ToSet to dont change the variables that might be the same when creating more then one
-                    taskToSet = task;
-                    codeToSet = code;
-                    additionalTextToSet = additionalText;
+
                     //Replace all parameters where they could stand
                     for (pair n : chosenParameters) {
                         replaceAll(correctAnswer, get<0>(n), get<1>(n));
@@ -789,7 +791,7 @@ int main() {
         else if (mode == 2) {
         //create parameter Combinations
             for (tuple t : validCombinations) {
-                            //for all parameter cominations 
+                            //for all parameter cominations
                              /*
                              string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
                         int correct{}, first{}, second{}, third{};
@@ -804,7 +806,7 @@ int main() {
                         //if Parameters exist
                         if (!parameters.empty())
                         {
-            
+
                             //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
                                 //So to keep the Originals we use the extra variables *ToSet to dont change the variables that might be the same when creating more then one
                             taskToSet = task;
@@ -829,9 +831,9 @@ int main() {
                         ++currentQuestionId;
                         //q.outputQuestion();
                         questions.push_back(q);
-                 
+
                  */
-            }            
+            }
         }
     }
 
