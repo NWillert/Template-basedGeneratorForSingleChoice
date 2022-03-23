@@ -34,6 +34,37 @@ int createRandomNumber(int startValue, int randomTo) {
     return distrib(gen);
 }
 
+class Picture
+{
+public:
+  Picture(){};
+
+  void SetAll(string p_name, string p_width, string p_height, int p_id){
+    name = p_name;
+    height = p_height;
+    width = p_width;
+    Id = p_id;
+  }
+
+  string GetName(){
+    return name;
+  }
+  string GetHeight(){
+    return height;
+  }
+  string GetWidth(){
+    return width;
+  }
+  int GetId(){
+    return Id;
+  }
+
+private:
+  string width, height;
+  int Id;
+  string name;
+};
+
 class Parameter
 {
 public:
@@ -74,7 +105,7 @@ class Question
 {
 public:
   Question(int Id,string q_name,string q_author,string q_description,string q_additionalText, string q_code,string q_taxonomy,string q_task,
-    string q_correctAnswer, string q_wrongAnswerOne, string q_wrongAnswerTwo, string q_wrongAnswerThree){
+    string q_correctAnswer, string q_wrongAnswerOne, string q_wrongAnswerTwo, string q_wrongAnswerThree, Picture q_picture){
       questionId=Id;
       name=q_name;
       author=q_author;
@@ -87,6 +118,7 @@ public:
       wrongAnswerOne=q_wrongAnswerOne;
       wrongAnswerTwo=q_wrongAnswerTwo;
       wrongAnswerThree=q_wrongAnswerThree;
+      picture = q_picture;
     }
 
 void outputQuestion(){
@@ -150,11 +182,24 @@ bool IsAdditionalTextEmpty() {
 bool IsTaxonomyEmpty() {
     return taxonomy.empty();
 }
+Picture GetPicture(){
+  return picture;
+}
 private:
   int questionId;
   string name{}, author{}, description{},code{}, additionalText{}, taxonomy{}, task{}, correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
+  Picture picture;
 };
 
+bool isPictureInVector(vector<Picture> picVector, string name){
+  bool isIn = false;
+  for (int i = 0; i < picVector.size(); ++i) {
+      if (picVector[i].GetName() == name) {
+          isIn = true;
+      }
+  }
+  return isIn;
+}
 
 bool isInVector(vector<int> duplicateVector, int number) {
     if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
@@ -284,6 +329,8 @@ int main() {
     int childId{}, parentId{};
     int numberOfExams{};
     int currentQuestionId{ 1 };
+    int currentPictureId{ 1 };
+    vector <Picture> pictures;
     vector <Question> questions;
     vector <string> taxonomyLevels;
 
@@ -312,7 +359,7 @@ int main() {
     cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
     cin >> mode;
 
-    numberOfExams = 20;
+    numberOfExams = 1;
     //questionPoolId = "34568";
     qpTitle = "TestTitle";
     taxId = "42069";
@@ -333,6 +380,7 @@ int main() {
         vector<string> wrongAnswers{};
         vector<tuple<string, string, string, string>> interactions{};
         vector<pair<string, string>> exclusions{};
+        Picture picture;
 
         string txtFromFile = "";
 
@@ -372,6 +420,17 @@ int main() {
                           code +=tempLine;
                           code += "<br/>";
                         }
+                    }
+                    else if (txtFromFile == "@PICTURE") {
+                      string pictureName, pictureHeight, pictureWidth;
+                      getline(readFromFile, pictureName);
+                      getline(readFromFile, pictureWidth);
+                      getline(readFromFile, pictureHeight);
+                      picture.SetAll(pictureName,pictureWidth,pictureHeight,currentPictureId);
+                      ++currentPictureId;
+                      if(!isPictureInVector(pictures,pictureName)){
+                        pictures.push_back(picture);
+                      }
                     }
                     else if (txtFromFile == "@TAXONOMY") {
                         getline(readFromFile, taxonomy);
@@ -781,7 +840,7 @@ int main() {
                     taxonomyLevels.push_back(taxonomy);
                 }
 
-                Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
+                Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                 ++currentQuestionId;
                 //q.outputQuestion();
                 questions.push_back(q);
@@ -827,7 +886,7 @@ int main() {
                             taxonomyLevels.push_back(taxonomy);
                         }
 
-                        Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree);
+                        Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                         ++currentQuestionId;
                         //q.outputQuestion();
                         questions.push_back(q);
@@ -960,6 +1019,11 @@ int main() {
     }
     writeToFile << "<ds:Rec Entity=\"tax_usage\"><TaxUsage><TaxId>" << taxId << "</TaxId><ObjId>" << questionPoolId << "</ObjId></TaxUsage></ds:Rec></ds:DataSet></exp:ExportItem></exp:Export>";
     writeToFile.close();
+
+
+    // TODO Pictures that are in vector, create folder structure for it.
+
+  //  also in qpl create xml stuff for the pictures
 
     return 0;
 }

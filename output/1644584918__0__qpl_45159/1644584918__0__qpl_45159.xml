@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Test SYSTEM "http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd">
+<!--Export of ILIAS Test Questionpool 45159 of installation .-->
+<ContentObject Type="Questionpool_Test">
+  <MetaData>
+    <General Structure="Hierarchical">
+      <Identifier Catalog="ILIAS" Entry="il_0_qpl_45159"/>
+      <Title Language="de">TestTitle</Title>
+      <Language Language="de"/>
+      <Description Language="de">
+      </Description>
+      <Keyword Language="de"/>
+    </General>
+  </MetaData>
+  <Settings>
+    <ShowTaxonomies>1</ShowTaxonomies>
+    <NavTaxonomy>0</NavTaxonomy>
+    <SkillService>0</SkillService>
+  </Settings>
+  <PageObject>
+    <PageContent>
+      <MediaObject>
+        <MediaAlias OriginId="il_0_mob_33333"/>
+        <MediaAliasItem Purpose="Standard">
+          <Layout HorizontalAlign="Left" Width="860" Height="430"/>
+        </MediaAliasItem>
+      </MediaObject>
+    </PageContent>
+    <PageContent>
+      <Question QRef="il_0_qst_1"/>
+    </PageContent>
+  </PageObject>
+  <PageObject>
+    <PageContent>
+      <Paragraph Language="de" Characteristic="Standard">adsfadsfnjkdsf</Paragraph>
+    </PageContent>
+    <PageContent>
+      <Paragraph Language="de" SubCharacteristic="cpp" ShowLineNumbers="y" Characteristic="Code">dsajfldshagfbj<br/>
+      <br/>Test<br/>
+    </Paragraph>
+  </PageContent>
+  <PageContent>
+    <Question QRef="il_0_qst_2"/>
+  </PageContent>
+</PageObject>
+<MediaObject>
+  <MetaData>
+    <General Structure="Hierarchical">
+      <Identifier Catalog="ILIAS" Entry="il_0_mob_33333"/>
+      <Title Language="de">Codeart</Title>
+      <Language Language="de"/>
+      <Description Language="de">image/png</Description>
+      <Keyword Language="de"/>
+    </General>
+  </MetaData>
+  <MediaItem Purpose="Standard">
+    <Location Type="LocalFile">Code.png</Location>
+    <Format>image/png</Format>
+    <Layout   HorizontalAlign="Left" />
+  </MediaItem>
+</MediaObject>
+<QuestionSkillAssignments>
+  <TriggerQuestion Id="1">
+  </TriggerQuestion>
+  <TriggerQuestion Id="2">
+  </TriggerQuestion>
+</QuestionSkillAssignments>
+</ContentObject>

@@ -1,0 +1,41 @@
+<MediaObject>
+  <MetaData>
+    <General Structure="Hierarchical">
+      <Identifier Catalog="ILIAS" Entry="il_0_mob_33333"/>
+      <Title Language="de">Codeart</Title>
+      <Language Language="de"/>
+      <Description Language="de">image/png</Description>
+      <Keyword Language="de"/>
+    </General>
+  </MetaData>
+  <MediaItem Purpose="Standard">
+    <Location Type="LocalFile">Code.png</Location>
+    <Format>image/png</Format>
+    <Layout   HorizontalAlign="Left" />
+  </MediaItem>
+</MediaObject>
+
+un the qpl.xml 
+
+<PageContent>
+      <MediaObject>
+        <MediaAlias OriginId="il_0_mob_33333"/>
+        <MediaAliasItem Purpose="Standard">
+          <Layout HorizontalAlign="Left" Width="860" Height="430"/>
+        </MediaAliasItem>
+      </MediaObject>
+    </PageContent>
+
+in the page object
+
+File in Folder objects/il_0_mob_23442(id)
+
+
+Picture as Object, so that it has a name, id, height and width 
+name, height and width from the template as a new category. 
+
+extra ordner? -> für Bilder
+
+Wenn Bild existiert mit dem entsprechenden Namen, dann mit in die Fragen/Objecterstellung. 
+
+Für jedes Bild welches existiert einen Ordner erstellen und dort rein kopieren.?
