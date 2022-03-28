@@ -18,7 +18,6 @@ using namespace std;
 namespace fs = std::filesystem;
 
 string path = ".\\input";
-string pictureInputpath = ".\\inputPictures";
 string outputFolder = ".\\output";
 const fs::path outputPath{ outputFolder };
 
@@ -360,7 +359,7 @@ int main() {
     cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
     cin >> mode;
 
-    numberOfExams = 2;
+    numberOfExams = 1;
     //questionPoolId = "34568";
     qpTitle = "TestTitle";
     taxId = "42069";
@@ -1021,20 +1020,8 @@ int main() {
     writeToFile << "<ds:Rec Entity=\"tax_usage\"><TaxUsage><TaxId>" << taxId << "</TaxId><ObjId>" << questionPoolId << "</ObjId></TaxUsage></ds:Rec></ds:DataSet></exp:ExportItem></exp:Export>";
     writeToFile.close();
 
-    //genereller Pfad wenn pictures nicht empty
-    fs::path picturePath{questionpoolFolder + "\\objects"};
-    fs::create_directory(picturePath);
 
-    //Pictures that are in vector, create folder structure for it.
-    for(Picture p : pictures){
-      // path anlegen basierend auf der id,
-      string pStringPath = questionpoolFolder + "\\objects" + "\\il_0_mob_" + to_string(p.GetId());
-      fs::path pPath{pStringPath};
-      fs::create_directory(pPath);
-      // Bild von inputPictures in den neuen Ordner kopieren.
-      string fromPath{pictureInputpath + "\\" + p.GetName()};
-      fs::copy_file(fromPath, pStringPath + "\\" + p.GetName());
-    }
+    // TODO Pictures that are in vector, create folder structure for it.
 
   //  also in qpl create xml stuff for the pictures
 
