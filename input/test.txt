@@ -8,12 +8,12 @@ Ulrich Eisenecker
 1.0
 @DESCRIPTION
 Kapitel "Turning Completeness", Faktenfrage, leicht
-@PICTURE
-Bild.PNG
-450
-600
 @TAXONOMY
 5
+@PICTURE
+Bild.PNG
+300
+300
 @PARAMETER
 
 @VALUERANGE

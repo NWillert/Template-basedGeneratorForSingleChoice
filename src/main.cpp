@@ -360,7 +360,7 @@ int main() {
     cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
     cin >> mode;
 
-    numberOfExams = 2;
+    numberOfExams = 5;
     //questionPoolId = "34568";
     qpTitle = "TestTitle";
     taxId = "42069";
@@ -985,7 +985,20 @@ int main() {
         if (!q.IsCodeEmpty()) {
             writeToFile << "<PageContent><Paragraph Language=\"de\" SubCharacteristic=\"cpp\" ShowLineNumbers=\"y\" Characteristic=\"Code\">" << q.GetCode() << "</Paragraph></PageContent>";
         }
+        // If Pictures are in question, then create a new content
+        if(q.GetPicture().GetName() != "")
+        {
+          writeToFile << "<PageContent><MediaObject><MediaAlias OriginId=\"il_0_mob_"<< q.GetPicture().GetId() <<"\"/><MediaAliasItem Purpose=\"Standard\"><Layout HorizontalAlign=\"Left\" Width=\""<<q.GetPicture().GetWidth()<<"\" Height=\""<<q.GetPicture().GetHeight()<<"\"/></MediaAliasItem></MediaObject></PageContent>";
+        }
         writeToFile << "<PageContent><Question QRef=\"il_0_qst_" << q.GetQuestionId() << "\"/></PageContent></PageObject>";
+    }
+    for (Question q : questions){
+      if(q.GetPicture().GetName() != "")
+      {
+      writeToFile << "<MediaObject><MetaData><General Structure=\"Hierarchical\"><Identifier Catalog=\"ILIAS\" Entry=\"il_0_mob_"<< q.GetPicture().GetId() <<"\"/>"
+        << "<Title Language=\"de\">"<< q.GetPicture().GetName() <<"</Title><Language Language=\"de\"/><Description Language=\"de\">image/png</Description><Keyword Language=\"de\"/></General></MetaData>"
+        << "<MediaItem Purpose=\"Standard\"><Location Type=\"LocalFile\">"<< q.GetPicture().GetName() <<"</Location><Format>image/png</Format><Layout   HorizontalAlign=\"Left\" /></MediaItem></MediaObject>";
+      }
     }
     writeToFile << "<QuestionSkillAssignments>";
     for (Question q : questions) {
@@ -1021,6 +1034,8 @@ int main() {
     writeToFile << "<ds:Rec Entity=\"tax_usage\"><TaxUsage><TaxId>" << taxId << "</TaxId><ObjId>" << questionPoolId << "</ObjId></TaxUsage></ds:Rec></ds:DataSet></exp:ExportItem></exp:Export>";
     writeToFile.close();
 
+
+
     //genereller Pfad wenn pictures nicht empty
     fs::path picturePath{questionpoolFolder + "\\objects"};
     fs::create_directory(picturePath);
@@ -1036,7 +1051,6 @@ int main() {
       fs::copy_file(fromPath, pStringPath + "\\" + p.GetName());
     }
 
-  //  also in qpl create xml stuff for the pictures
 
     return 0;
 }

@@ -15,7 +15,7 @@
   </MediaItem>
 </MediaObject>
 
-un the qpl.xml 
+un the qpl.xml
 
 <PageContent>
       <MediaObject>
@@ -27,15 +27,3 @@ un the qpl.xml
     </PageContent>
 
 in the page object
-
-File in Folder objects/il_0_mob_23442(id)
-
-
-Picture as Object, so that it has a name, id, height and width 
-name, height and width from the template as a new category. 
-
-extra ordner? -> für Bilder
-
-Wenn Bild existiert mit dem entsprechenden Namen, dann mit in die Fragen/Objecterstellung. 
-
-Für jedes Bild welches existiert einen Ordner erstellen und dort rein kopieren.?
