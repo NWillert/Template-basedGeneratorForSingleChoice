@@ -26,6 +26,7 @@ string folderMarking = "1644584918__0__";
 const string qpl = "qpl_";
 const string qti = "qti_";
 
+int justAZero = 0;
 
 
 int createRandomNumber(int startValue, int randomTo) {
@@ -317,6 +318,27 @@ void replaceAll(string& s, const string& search, const string& replace) {
     }
 }
 
+
+void createValidParameters(int currentPlace, vector<vector<pair<string, string>>> allParameterPairs, vector<vector<pair<string, string>>>& validParameterPairs) {
+   /*
+    for (int i = currentPlace; i < allParameterPairs.size(); ++i) 
+    {
+        vector<pair<string, string>> validPair;
+        for (int j = 0; j < allParameterPairs.at(i).size(); ++j) 
+        {
+            validPair.push_back(allParameterPairs.at(i).at(j));
+            if (i < allParameterPairs.size()) {
+                cout << "next try " << endl;
+                createValidParameters(currentPlace+1, allParameterPairs, validParameterPairs);
+            }
+            else {
+                cout << "push back" << endl;
+                validParameterPairs.push_back(validPair);
+            }
+        }      
+    }
+    */
+}
 
 
 
@@ -850,6 +872,46 @@ int main() {
         }
         else if (mode == 2) {
         //create parameter Combinations
+        //Parameters must be used recursiv in a function so for all parameters all values next parameter all values. 
+        if(!parameters.empty()){
+            vector<vector<pair<string, string>>> allParameterPairs;
+            for (Parameter p : parameters) {
+                vector<pair<string, string>> parameterPairs;
+                for (string s : p.GetValueRangeVector()) {
+                    parameterPairs.push_back(make_pair(p.GetName(), s));
+                }
+                allParameterPairs.push_back(parameterPairs);
+            }
+            vector<vector<pair<string, string>>> validParameterPairs;
+            //createValidParameters(justAZero,allParameterPairs, validParameterPairs);
+            cout << "0 0: " << allParameterPairs.at(0).at(0).first << endl;
+            cout << "size of allParameter Pairs: " << allParameterPairs.size() << endl;
+        }
+        /*
+        
+        für vector 0 
+
+
+        
+        for(vector v : allParameterPairs) {
+            for (pair p : v) {
+                cout << "p.first : " << p.first << " p.second : " << p.second << endl;
+            }
+            cout << endl;
+        }
+        
+
+
+
+        cout << "Ended" << endl;
+        for (vector v : validParameterPairs) {
+            for (pair p : v) {
+                cout << "p.first : " << p.first << " p.second : " << p.second << endl;
+            }
+            cout << endl;
+        }
+        */
+
             for (tuple t : validCombinations) {
                             //for all parameter cominations
                              /*
