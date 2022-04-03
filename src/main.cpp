@@ -26,8 +26,6 @@ string folderMarking = "1644584918__0__";
 const string qpl = "qpl_";
 const string qti = "qti_";
 
-int justAZero = 0;
-
 
 int createRandomNumber(int startValue, int randomTo) {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
@@ -319,27 +317,70 @@ void replaceAll(string& s, const string& search, const string& replace) {
 }
 
 
-void createValidParameters(int currentPlace, vector<vector<pair<string, string>>> allParameterPairs, vector<vector<pair<string, string>>>& validParameterPairs) {
-   /*
-    for (int i = currentPlace; i < allParameterPairs.size(); ++i) 
-    {
-        vector<pair<string, string>> validPair;
-        for (int j = 0; j < allParameterPairs.at(i).size(); ++j) 
+int justAZero = 0;
+vector<pair<string, string>> vecForRecursion;
+void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> allParameterPairs, vector<vector<pair<string, string>>>& validParameterPairs) {
+
+    for (int i = 0; i < allParameterPairs.at(currentPlace).size(); ++i) {
+        //cout << allParameterPairs.at(currentPlace).at(i).first << " " << allParameterPairs.at(currentPlace).at(i).second << endl;
+        vecForRecursion.push_back(allParameterPairs.at(currentPlace).at(i));
+        //cout << "Size of allParameterPairs.at(currentPlace) : " << allParameterPairs.at(currentPlace).size() << "  currentPlace : " << currentPlace << endl;
+        if (allParameterPairs.size() == currentPlace + 1) {
+            validParameterPairs.push_back(vecForRecursion);
+        }
+        else
         {
-            validPair.push_back(allParameterPairs.at(i).at(j));
-            if (i < allParameterPairs.size()) {
-                cout << "next try " << endl;
-                createValidParameters(currentPlace+1, allParameterPairs, validParameterPairs);
-            }
-            else {
-                cout << "push back" << endl;
-                validParameterPairs.push_back(validPair);
-            }
-        }      
+            createAllParameters(currentPlace + 1, allParameterPairs, validParameterPairs);
+        }
+        vecForRecursion.pop_back();
     }
-    */
 }
 
+
+
+bool isPairInVectorTupleZeroOne(pair<string, string> p_pair, vector<tuple<string, string, string, string>> v_vector)
+{
+    for (tuple t : v_vector) {
+        if (get<0>(p_pair) == get<0>(t) && get<1>(p_pair) == get<1>(t)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool checkValidParameter(vector<pair<string, string>> v, vector<tuple<string, string, string, string>> interactions) {
+    for (pair p : v) {
+        if (isPairInVectorTupleZeroOne(p, interactions)) {
+            //vector<vector<pair<string, string>>> influencedByParameter;
+            vector<pair<string, string>> allInfluenced;
+            vector<string> influencedParameter;
+            for (tuple t : interactions) {
+                if (get<0>(p) == get<0>(t) && get<1>(p) == get<1>(t)) {
+                    allInfluenced.push_back(make_pair(get<2>(t), get<3>(t)));
+                    if (!isInVector(influencedParameter, get<2>(t))) {
+                        influencedParameter.push_back(get<2>(t));
+                    }
+                }
+            }
+            for (string s : influencedParameter) {
+                bool hasOneTrueInfluence = false;
+                for (pair p_parameterpair : allInfluenced) {
+                    if (s == get<0>(p_parameterpair)) {
+                        for (pair p_Setpair : v) {
+                            if (get<0>(p_Setpair) == get<0>(p_parameterpair) && get<1>(p_Setpair) == get<1>(p_parameterpair)) {
+                                hasOneTrueInfluence = true;
+                            }
+                        }
+                    }
+                }
+                if (hasOneTrueInfluence == false) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
 
 
 int main() {
@@ -871,22 +912,41 @@ int main() {
             }
         }
         else if (mode == 2) {
+        vector<vector<pair<string, string>>> validParameterPairs;
         //create parameter Combinations
         //Parameters must be used recursiv in a function so for all parameters all values next parameter all values. 
         if(!parameters.empty()){
             vector<vector<pair<string, string>>> allParameterPairs;
+            vector<vector<pair<string, string>>> otherParameterPairs;
             for (Parameter p : parameters) {
                 vector<pair<string, string>> parameterPairs;
                 for (string s : p.GetValueRangeVector()) {
                     parameterPairs.push_back(make_pair(p.GetName(), s));
                 }
                 allParameterPairs.push_back(parameterPairs);
+            }     
+            createAllParameters(justAZero,allParameterPairs, otherParameterPairs);
+           // cout << "0 0: " << allParameterPairs.at(0).at(0).first << endl;
+           // cout << "size of allParameter Pairs: " << allParameterPairs.size() << endl;
+
+           //vector<tuple<string, string, string, string>> interactions{};
+
+            for (vector v : otherParameterPairs) {
+                if (checkValidParameter(v, interactions)) {
+                    validParameterPairs.push_back(v);
+                }
             }
-            vector<vector<pair<string, string>>> validParameterPairs;
-            //createValidParameters(justAZero,allParameterPairs, validParameterPairs);
-            cout << "0 0: " << allParameterPairs.at(0).at(0).first << endl;
-            cout << "size of allParameter Pairs: " << allParameterPairs.size() << endl;
+
         }
+
+        for (vector v : validParameterPairs) {
+            for (pair p : v) {
+                cout << "p.first : " << p.first << " p.second : " << p.second << endl;
+            }
+            cout << endl;
+        }
+
+
         /*
         
         für vector 0 
@@ -899,10 +959,6 @@ int main() {
             }
             cout << endl;
         }
-        
-
-
-
         cout << "Ended" << endl;
         for (vector v : validParameterPairs) {
             for (pair p : v) {
