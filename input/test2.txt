@@ -32,11 +32,11 @@ a # b # c # myVar # some_var #
 $TYPE int $VALUE 42 # 99 # 0
 $TYPE double $VALUE 0.0 # 3.14 # 120.0
 $TYPE std::string $VALUE "OMG"s # "Hi, there" # "Good "s + "point"
-$NAME c $TYPE int # std::string
+$NAME c $TYPE std::string
 $NAME myVar $TYPE std::string
-$NAME a $TYPE int # double
-$NAME b $TYPE int # double
-$NAME some_var $TYPE double # int
+$NAME a $TYPE double
+$NAME b $TYPE int
+$NAME some_var $TYPE double
 @TASK
 How do you define the variable $NAME of type $TYPE and initialize it with value $VALUE? What is the correct statement?
 @TRUE

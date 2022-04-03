@@ -420,14 +420,25 @@ int main() {
     cout << "Please input the question pool id: ";
     cin >> questionPoolId;
 
+    cout << "Please input the question pool title: ";
+    cin >> qpTitle;
+
+    cout << "Please input the Taxonomy Title: ";
+    cin >> taxTitle;
+
     cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
     cin >> mode;
 
-    numberOfExams = 5;
+    if (mode == 1) {
+        cout << "Please input, how many versions should be generated: ";
+        cin >> numberOfExams;
+    }
+
+   // numberOfExams = 5;
     //questionPoolId = "34568";
-    qpTitle = "TestTitle";
+    //qpTitle = "TestTitle";
     taxId = "42069";
-    taxTitle = "TaxTest";
+    //taxTitle = "TaxTest";
 
     childId = 15001;
     parentId = 15000;
@@ -912,105 +923,96 @@ int main() {
             }
         }
         else if (mode == 2) {
-        vector<vector<pair<string, string>>> validParameterPairs;
-        //create parameter Combinations
-        //Parameters must be used recursiv in a function so for all parameters all values next parameter all values. 
-        if(!parameters.empty()){
-            vector<vector<pair<string, string>>> allParameterPairs;
-            vector<vector<pair<string, string>>> otherParameterPairs;
-            for (Parameter p : parameters) {
-                vector<pair<string, string>> parameterPairs;
-                for (string s : p.GetValueRangeVector()) {
-                    parameterPairs.push_back(make_pair(p.GetName(), s));
+            vector<vector<pair<string, string>>> validParameterPairs;
+            //create parameter Combinations
+            //Parameters must be used recursiv in a function so for all parameters all values next parameter all values. 
+            if(!parameters.empty()){
+                vector<vector<pair<string, string>>> allParameterPairs;
+                vector<vector<pair<string, string>>> otherParameterPairs;
+                for (Parameter p : parameters) {
+                    vector<pair<string, string>> parameterPairs;
+                    for (string s : p.GetValueRangeVector()) {
+                        parameterPairs.push_back(make_pair(p.GetName(), s));
+                    }
+                    allParameterPairs.push_back(parameterPairs);
+                }     
+                createAllParameters(justAZero,allParameterPairs, otherParameterPairs);
+               // cout << "0 0: " << allParameterPairs.at(0).at(0).first << endl;
+               // cout << "size of allParameter Pairs: " << allParameterPairs.size() << endl;
+
+               //vector<tuple<string, string, string, string>> interactions{};
+
+                for (vector v : otherParameterPairs) {
+                    if (checkValidParameter(v, interactions)) {
+                        validParameterPairs.push_back(v);
+                    }
                 }
-                allParameterPairs.push_back(parameterPairs);
-            }     
-            createAllParameters(justAZero,allParameterPairs, otherParameterPairs);
-           // cout << "0 0: " << allParameterPairs.at(0).at(0).first << endl;
-           // cout << "size of allParameter Pairs: " << allParameterPairs.size() << endl;
 
-           //vector<tuple<string, string, string, string>> interactions{};
-
-            for (vector v : otherParameterPairs) {
-                if (checkValidParameter(v, interactions)) {
-                    validParameterPairs.push_back(v);
+            }
+            /*
+            for (vector v : validParameterPairs) {
+                for (pair p : v) {
+                    cout << "p.first : " << p.first << " p.second : " << p.second << endl;
                 }
+                cout << endl;
             }
-
-        }
-
-        for (vector v : validParameterPairs) {
-            for (pair p : v) {
-                cout << "p.first : " << p.first << " p.second : " << p.second << endl;
-            }
-            cout << endl;
-        }
-
-
-        /*
-        
-        für vector 0 
-
-
-        
-        for(vector v : allParameterPairs) {
-            for (pair p : v) {
-                cout << "p.first : " << p.first << " p.second : " << p.second << endl;
-            }
-            cout << endl;
-        }
-        cout << "Ended" << endl;
-        for (vector v : validParameterPairs) {
-            for (pair p : v) {
-                cout << "p.first : " << p.first << " p.second : " << p.second << endl;
-            }
-            cout << endl;
-        }
-        */
-
+            */
             for (tuple t : validCombinations) {
-                            //for all parameter cominations
-                             /*
-                             string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
+                if (!parameters.empty()) {
+                    for (vector v_validParam: validParameterPairs) {
+                        string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
                         int correct{}, first{}, second{}, third{};
 
-                        int randomNumber = createRandomNumber(0, validCombinations.size() - 1);
+                        correctAnswer = correctAnswers[get<0>(t)];
+                        wrongAnswerOne = wrongAnswers[get<1>(t)];
+                        wrongAnswerTwo = wrongAnswers[get<2>(t)];
+                        wrongAnswerThree = wrongAnswers[get<3>(t)];
 
-                        correctAnswer = correctAnswers[get<0>(validCombinations[randomNumber])];
-                        wrongAnswerOne = wrongAnswers[get<1>(validCombinations[randomNumber])];
-                        wrongAnswerTwo = wrongAnswers[get<2>(validCombinations[randomNumber])];
-                        wrongAnswerThree = wrongAnswers[get<3>(validCombinations[randomNumber])];
-
-                        //if Parameters exist
-                        if (!parameters.empty())
-                        {
-
-                            //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
+                        //Setting these Variables because task, code and additionalText are set through the parser and when using Parameters we write them out
                                 //So to keep the Originals we use the extra variables *ToSet to dont change the variables that might be the same when creating more then one
-                            taskToSet = task;
-                            codeToSet = code;
-                            additionalTextToSet = additionalText;
-                            //Replace all parameters where they could stand
-                            for (pair n : chosenParameters) {
-                                replaceAll(correctAnswer, get<0>(n), get<1>(n));
-                                replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
-                                replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
-                                replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
-                                replaceAll(codeToSet, get<0>(n), get<1>(n));
-                                replaceAll(taskToSet, get<0>(n), get<1>(n));
-                                replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
-                            }
+                        taskToSet = task;
+                        codeToSet = code;
+                        additionalTextToSet = additionalText;
+                        //Replace all parameters where they could stand
+
+                        //textersetzung. 
+                        for (pair n : v_validParam) {
+                            replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                            replaceAll(codeToSet, get<0>(n), get<1>(n));
+                            replaceAll(taskToSet, get<0>(n), get<1>(n));
+                            replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                         }
-                        if (!isInVector(taxonomyLevels, taxonomy)) {
-                            taxonomyLevels.push_back(taxonomy);
-                        }
+
 
                         Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                         ++currentQuestionId;
                         //q.outputQuestion();
                         questions.push_back(q);
+                    }
+                }
+                else {
+                    string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
+                    int correct{}, first{}, second{}, third{};
 
-                 */
+                    correctAnswer = correctAnswers[get<0>(t)];
+                    wrongAnswerOne = wrongAnswers[get<1>(t)];
+                    wrongAnswerTwo = wrongAnswers[get<2>(t)];
+                    wrongAnswerThree = wrongAnswers[get<3>(t)];
+                    taskToSet = task;
+                    codeToSet = code;
+                    additionalTextToSet = additionalText;
+
+                    Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
+                    ++currentQuestionId;
+                    //q.outputQuestion();
+                    questions.push_back(q);
+                }
+                if (!isInVector(taxonomyLevels, taxonomy)) {
+                    taxonomyLevels.push_back(taxonomy);
+                }
             }
         }
     }
@@ -1110,12 +1112,12 @@ int main() {
         }
         writeToFile << "<PageContent><Question QRef=\"il_0_qst_" << q.GetQuestionId() << "\"/></PageContent></PageObject>";
     }
-    for (Question q : questions){
-      if(q.GetPicture().GetName() != "")
+    for (Picture p : pictures){
+      if(p.GetName() != "")
       {
-      writeToFile << "<MediaObject><MetaData><General Structure=\"Hierarchical\"><Identifier Catalog=\"ILIAS\" Entry=\"il_0_mob_"<< q.GetPicture().GetId() <<"\"/>"
-        << "<Title Language=\"de\">"<< q.GetPicture().GetName() <<"</Title><Language Language=\"de\"/><Description Language=\"de\">image/png</Description><Keyword Language=\"de\"/></General></MetaData>"
-        << "<MediaItem Purpose=\"Standard\"><Location Type=\"LocalFile\">"<< q.GetPicture().GetName() <<"</Location><Format>image/png</Format><Layout   HorizontalAlign=\"Left\" /></MediaItem></MediaObject>";
+      writeToFile << "<MediaObject><MetaData><General Structure=\"Hierarchical\"><Identifier Catalog=\"ILIAS\" Entry=\"il_0_mob_"<< p.GetId() <<"\"/>"
+        << "<Title Language=\"de\">"<< p.GetName() <<"</Title><Language Language=\"de\"/><Description Language=\"de\">image/png</Description><Keyword Language=\"de\"/></General></MetaData>"
+        << "<MediaItem Purpose=\"Standard\"><Location Type=\"LocalFile\">"<< p.GetName() <<"</Location><Format>image/png</Format><Layout   HorizontalAlign=\"Left\" /></MediaItem></MediaObject>";
       }
     }
     writeToFile << "<QuestionSkillAssignments>";
