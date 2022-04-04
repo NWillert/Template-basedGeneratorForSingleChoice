@@ -1,0 +1,40 @@
+@NAME
+Das ist quatsch
+@AUTHOR
+Nico Willert
+@DATE
+17.5.2001
+@VERSION
+1.0
+@DESCRIPTION
+Kapitel "Variablen", Anwendungsfrage, mittel
+@TAXONOMY
+8
+@PARAMETER
+$TYPE
+$NAME
+$VALUE
+@VALUERANGE
+int # double # std::string #
+a # b # c #
+42 # 99 # 0 # 0.0 # 3.14 # 120.0 # "OMG"s # "Hi, there" # "Good "s + "point"
+@INTERACTION
+$TYPE int $VALUE 42 # 99 # 0
+$TYPE double $VALUE 0.0 # 3.14 # 120.0
+$TYPE std::string $VALUE "OMG"s # "Hi, there" # "Good "s + "point"
+$NAME c $TYPE std::string
+$NAME a $TYPE double
+$NAME b $TYPE int
+@TASK
+How do you define the variable $NAME of type $TYPE and initialize it with value $VALUE? What is the correct statement?
+@TRUE
+$TYPE $NAME { $VALUE };
+$TYPE $NAME = $VALUE;
+@FALSE
+$TYPE $NAME; $NAME = $VALUE;
+$NAME as $TYPE = $VALUE;
+$TYPE $NAME { }; $NAME = $VALUE;
+$NAME = $TYPE($VALUE);
+auto $NAME = new $TYPE($VALUE);
+@EXCLUSIONS
+w1 excludes w3

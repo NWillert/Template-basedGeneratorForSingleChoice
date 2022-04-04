@@ -88,14 +88,6 @@ public:
     valueRange.push_back(value);
   }
 
-  void output(){
-    cout << "Values:" << endl;
-    for (string n : valueRange) {
-        cout << "\t"<< n << endl;
-    }
-    cout << "Size of valueRangeVector: " << valueRange.size() << endl;
-  }
-
 private:
   string name{};
   vector<string> valueRange;
@@ -120,22 +112,6 @@ public:
       wrongAnswerThree=q_wrongAnswerThree;
       picture = q_picture;
     }
-
-void outputQuestion(){
-    cout << "Id: " << questionId << endl
-        << "Name: " << name << endl
-        << "Author: " << author << endl
-        << "Description: " << description << endl
-        << "Additional Text: " << additionalText << endl
-        << "Code: " << code << endl
-        << "Taxonomy: " << taxonomy << endl
-        << "Task: " << task << endl
-        << "Correct: " << correctAnswer << endl
-        << "Wrong 1: " << wrongAnswerOne << endl
-        << "Wrong 2: " << wrongAnswerTwo << endl
-        << "Wrong 3: " << wrongAnswerThree << endl
-        << endl;
-}
 
 int GetQuestionId() {
     return questionId;
@@ -317,14 +293,11 @@ void replaceAll(string& s, const string& search, const string& replace) {
 }
 
 
-int justAZero = 0;
 vector<pair<string, string>> vecForRecursion;
 void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> allParameterPairs, vector<vector<pair<string, string>>>& validParameterPairs) {
 
     for (int i = 0; i < allParameterPairs.at(currentPlace).size(); ++i) {
-        //cout << allParameterPairs.at(currentPlace).at(i).first << " " << allParameterPairs.at(currentPlace).at(i).second << endl;
         vecForRecursion.push_back(allParameterPairs.at(currentPlace).at(i));
-        //cout << "Size of allParameterPairs.at(currentPlace) : " << allParameterPairs.at(currentPlace).size() << "  currentPlace : " << currentPlace << endl;
         if (allParameterPairs.size() == currentPlace + 1) {
             validParameterPairs.push_back(vecForRecursion);
         }
@@ -351,7 +324,6 @@ bool isPairInVectorTupleZeroOne(pair<string, string> p_pair, vector<tuple<string
 bool checkValidParameter(vector<pair<string, string>> v, vector<tuple<string, string, string, string>> interactions) {
     for (pair p : v) {
         if (isPairInVectorTupleZeroOne(p, interactions)) {
-            //vector<vector<pair<string, string>>> influencedByParameter;
             vector<pair<string, string>> allInfluenced;
             vector<string> influencedParameter;
             for (tuple t : interactions) {
@@ -434,7 +406,7 @@ int main() {
         cin >> numberOfExams;
     }
 
-   // numberOfExams = 5;
+    // numberOfExams = 5;
     //questionPoolId = "34568";
     //qpTitle = "TestTitle";
     taxId = "42069";
@@ -455,7 +427,7 @@ int main() {
         vector<string> wrongAnswers{};
         vector<tuple<string, string, string, string>> interactions{};
         vector<pair<string, string>> exclusions{};
-        Picture picture;
+        Picture picture{};
 
         string txtFromFile = "";
 
@@ -464,7 +436,6 @@ int main() {
         readFromFile.open(filename, ios_base::in);
 
         if (readFromFile.is_open()) {
-          //  cout << filename << endl;
             while (readFromFile.good()) {
                 char c = readFromFile.peek();
                 if (c == '@')
@@ -817,7 +788,7 @@ int main() {
                             }
                         }
                         else if (isInInteractionsTwo(interactions, name)) {
-                            // check if coressponding Interaction 0 is set?
+                            // check if corresponding Interaction 0 is set?
                             if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
                                 if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
                                     string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
@@ -870,7 +841,7 @@ int main() {
                                         }
                                     }
                                     else if (isInInteractionsTwo(interactions, name)) {
-                                        // check if coressponding Interaction 0 is set?
+                                        // check if corresponding Interaction 0 is set?
                                         if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
                                             if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
                                                 string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
@@ -907,17 +878,12 @@ int main() {
                     }
                 }
 
-
-
-
-
                 if (!isInVector(taxonomyLevels, taxonomy)) {
                     taxonomyLevels.push_back(taxonomy);
                 }
 
                 Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                 ++currentQuestionId;
-                //q.outputQuestion();
                 questions.push_back(q);
 
             }
@@ -936,11 +902,7 @@ int main() {
                     }
                     allParameterPairs.push_back(parameterPairs);
                 }     
-                createAllParameters(justAZero,allParameterPairs, otherParameterPairs);
-               // cout << "0 0: " << allParameterPairs.at(0).at(0).first << endl;
-               // cout << "size of allParameter Pairs: " << allParameterPairs.size() << endl;
-
-               //vector<tuple<string, string, string, string>> interactions{};
+                createAllParameters(0,allParameterPairs, otherParameterPairs);
 
                 for (vector v : otherParameterPairs) {
                     if (checkValidParameter(v, interactions)) {
@@ -989,7 +951,6 @@ int main() {
 
                         Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                         ++currentQuestionId;
-                        //q.outputQuestion();
                         questions.push_back(q);
                     }
                 }
@@ -1007,7 +968,6 @@ int main() {
 
                     Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                     ++currentQuestionId;
-                    //q.outputQuestion();
                     questions.push_back(q);
                 }
                 if (!isInVector(taxonomyLevels, taxonomy)) {
