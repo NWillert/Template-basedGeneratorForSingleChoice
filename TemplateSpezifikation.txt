@@ -1,0 +1,44 @@
+@NAME
+Titel of the question (Mandatory) Max. 100 characters
+@AUTHOR
+Name of the author (Mandatory) Max. 200 characters
+@DATE
+Date (Optional, also Ilias does replace the date when imported either way) 
+@VERSION
+Versionnumber (Optional, also only for the User, not imported)
+@DESCRIPTION
+Description of the question (Optional)  Max. 200 characters
+@TAXONOMY
+Name of the taxonomy level (Optional)
+@ADDITIONALTEXT
+Additional text that is shown above the question code and picture (Optional) One Line
+@PICTURE
+Name of the Picture in inputPictures Folder(@PICTURE is Optional), with ending -> Example Name.PNG; must be exact 3 Lines(Name,Width, Heigth)
+Width in Pixel
+Height in Pixel
+@CODE
+Code (Optional) can be multiple lines, In Ilias creates a Codeblock for C++
+@PARAMETER
+Each Parameter starts with '$', each line defines a new parameter, 
+preferably all in upper case but not needed (@PARAMETERS is optional)
+The Parameters can be used and replaced in (@ADDITIONALTEXT,@CODE,@TASK,@TRUE,@FALSE)
+@VALUERANGE
+Each line is the valuerange of the correlating Parameter -> First line here = Values for first Parameter
+(Mandatory if @PARAMETER exists, else Forbidden)
+The values are differentiated with an '#'
+@INTERACTION
+Each line describes an Required interaction between two Values of Two Parameters
+NameOfParameter1 ValueofParameter1 NameOfParameter2 ValueOfParameter2 # OtherValueOfParameter2 #...
+For the second Parameter there can be multiple Values separated by #
+@TASK
+One line task/question (Mandatory) 
+@TRUE
+One line for each correct answer (Mandatory, at least One correct answer)
+@FALSE
+One line for each false answer (Mandatory, at least Three false answers)
+@EXCLUSIONS
+One line for each exclusion of answers-> c for correct , w for false 
+together with a number for which answer starting with 1
+example: 
+c1 excludes w3 
+-> This means the correct Answer 1 excludes the wrong answer 3
