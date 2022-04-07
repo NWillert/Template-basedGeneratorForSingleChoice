@@ -17,6 +17,7 @@
 using namespace std;
 namespace fs = std::filesystem;
 
+//Creating global Variabled for the input and output parts 
 string path = ".\\input";
 string pictureInputpath = ".\\inputPictures";
 string outputFolder = ".\\output";
@@ -26,7 +27,7 @@ string folderMarking = "1644584918__0__";
 const string qpl = "qpl_";
 const string qti = "qti_";
 
-
+// Creating a random number between(including) two values, based on the mersenne twister engine of the c++ standard
 int createRandomNumber(int startValue, int randomTo) {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
@@ -639,7 +640,7 @@ int main() {
             readFromFile.close();
         }
 
-        //Combinatorics
+        //Combinatorics, just building all combinations for correct and false answers
         vector<tuple<int,int,int,int>> possibleCombinations;
         for(int i =0;i<correctAnswers.size();++i){
           for(int j=0;j<wrongAnswers.size();++j){
@@ -667,7 +668,7 @@ int main() {
 
 
 
-        //Delete based on Exclusions
+        //Delete based on Exclusions criteria from @EXCLUSION Part of the question template
         if(exclusions.size() != 0){
           for (pair n : exclusions) {
             string firstInPair (1,n.first[1]);
@@ -690,9 +691,10 @@ int main() {
             }
           }
 
+        //Vector for the positions of duplicates
         vector<int> duplicates;
 
-        //Welche sind Duplikate?
+        //Filter all possible Combinations of duplicates, so that two answer combinations, where the answers are the same but but just shuffled 
         for (auto pos = 0; pos < possibleCombinations.size(); ++pos) {
             for (auto pos2 = 0; pos2 < possibleCombinations.size(); ++pos2) {
                 if ((pos != pos2) &&
@@ -710,6 +712,7 @@ int main() {
             }
         }
 
+        //Based on the possible combinations and the duplicates, create all Valid Answer Combinations that are not duplicates
         vector<tuple<int, int, int, int>> validCombinations;
         for (int i = 0; i < possibleCombinations.size(); ++i) {
             if (!isInVector(duplicates, i)) {
@@ -865,9 +868,9 @@ int main() {
                         }
                     }
 
-
-
                     //Replace all parameters where they could stand
+                    //The variables are initialized above inside the for loop, 
+                    //so for every new question it is replace with another value
                     for (pair n : chosenParameters) {
                         replaceAll(correctAnswer, get<0>(n), get<1>(n));
                         replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
@@ -877,10 +880,6 @@ int main() {
                         replaceAll(taskToSet, get<0>(n), get<1>(n));
                         replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                     }
-                }
-
-                if (!isInVector(taxonomyLevels, taxonomy)) {
-                    taxonomyLevels.push_back(taxonomy);
                 }
 
                 Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
@@ -971,10 +970,12 @@ int main() {
                     ++currentQuestionId;
                     questions.push_back(q);
                 }
-                if (!isInVector(taxonomyLevels, taxonomy)) {
-                    taxonomyLevels.push_back(taxonomy);
-                }
             }
+        }
+
+        //Once per question template, it is checked wheter the current taxonomy is allready existing for the generating process
+        if (!isInVector(taxonomyLevels, taxonomy)) {
+            taxonomyLevels.push_back(taxonomy);
         }
     }
 
