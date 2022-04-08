@@ -28,6 +28,7 @@ Each line is the valuerange of the correlating Parameter -> First line here = Va
 The values are differentiated with an '#'
 @INTERACTION
 Each line describes an Required interaction between two Values of Two Parameters
+(Optional if @PARAMETER & VALUERANGE exists, else Forbidden)
 NameOfParameter1 ValueofParameter1 NameOfParameter2 ValueOfParameter2 # OtherValueOfParameter2 #...
 For the second Parameter there can be multiple Values separated by #
 @TASK

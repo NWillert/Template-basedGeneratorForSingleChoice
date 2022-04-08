@@ -1,0 +1,47 @@
+@NAME
+Title of the Question
+@AUTHOR
+Some Name
+@DATE
+11.11.1111
+@VERSION
+420
+@DESCRIPTION
+This is a very accurate question describtion. 
+@TAXONOMY
+Exam question 3
+@ADDITIONALTEXT
+This is text that will be shown above the other parts.
+@PICTURE
+NameOfPictureThatIsInThe_inputPictures_Folder.PNG
+Width in Pixel
+Height in Pixel
+@CODE
+#include <iostream>
+using namespace std;
+
+int main ()
+{
+	cout << "Hello" << "World" << endl;
+	return 0;
+}
+@PARAMETER
+$PARAMETER1
+$PARAMETER2
+@VALUERANGE
+Value1 # Value2 # Value3
+OtherValue 1 # OtherValue 2 
+@INTERACTION
+$PARAMETER1 Value1 $PARAMETER2 OtherValue 1
+$PARAMETER2 OtherValue 2 $PARAMETER1 Value2 # Value3
+@TASK
+What is a $PARAMETER1 
+@TRUE
+It is a true $PARAMETER1 $PARAMETER2
+@FALSE
+It is a false $PARAMETER2 $PARAMETER1
+This is an other false answer
+An another one
+Its false $PARAMETER2 $PARAMETER1
+@EXCLUSIONS
+w1 excludes w4

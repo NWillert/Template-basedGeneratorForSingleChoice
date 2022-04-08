@@ -35,6 +35,7 @@ int createRandomNumber(int startValue, int randomTo) {
     return distrib(gen);
 }
 
+//Class for creation the object of a picture with name, width and height.
 class Picture
 {
 public:
@@ -66,6 +67,7 @@ private:
   string name;
 };
 
+//Class for creating a Parameter that has one name and a vector with all its Values
 class Parameter
 {
 public:
@@ -94,6 +96,7 @@ private:
   vector<string> valueRange;
 };
 
+//Class for instantiating a question, with all necessary values. so that all questions can be stored at creation, and be later used to write the corresponding xmls
 class Question
 {
 public:
@@ -168,6 +171,7 @@ private:
   Picture picture;
 };
 
+//As we save all Picture Objects in a vector, we check if the same pictures are used by different templates, so that we only have one picture copied and used
 bool isPictureInVector(vector<Picture> picVector, string name){
   bool isIn = false;
   for (int i = 0; i < picVector.size(); ++i) {
@@ -178,13 +182,13 @@ bool isPictureInVector(vector<Picture> picVector, string name){
   return isIn;
 }
 
+//overloaded functions for checking if a certain int or string is allready in a given vector with these types. 
 bool isInVector(vector<int> duplicateVector, int number) {
     if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
         return true;
     else
         return false;
 }
-
 bool isInVector(vector<string> duplicateVector, string number) {
     if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
         return true;
@@ -192,6 +196,7 @@ bool isInVector(vector<string> duplicateVector, string number) {
         return false;
 }
 
+//Functions to see if a string is in a vector at position 0 or 1 inside a pair of two strings
 bool isInPairZero(vector<pair<string, string>> interactions, string name) {
     bool isIn = false;
     for (int i = 0; i < interactions.size(); ++i) {
@@ -201,7 +206,6 @@ bool isInPairZero(vector<pair<string, string>> interactions, string name) {
     }
     return isIn;
 }
-
 bool isInPairOne(vector<pair<string, string>> interactions, string name) {
     bool isIn = false;
     for (int i = 0; i < interactions.size(); ++i) {
@@ -212,6 +216,8 @@ bool isInPairOne(vector<pair<string, string>> interactions, string name) {
     return isIn;
 }
 
+
+//Boolean functions to inspect if a given string is inside the tuple of four strings at postion 0,1,2 or 3. 
 bool isInInteractionsZero(vector<tuple<string, string, string, string>> interactions, string name) {
     bool isIn = false;
     for (int i = 0; i < interactions.size(); ++i) {
@@ -221,8 +227,6 @@ bool isInInteractionsZero(vector<tuple<string, string, string, string>> interact
     }
     return isIn;
 }
-
-
 bool isInInteractionsOne(vector<tuple<string, string, string, string>> interactions, string name) {
     bool isIn = false;
     for (int i = 0; i < interactions.size(); ++i) {
@@ -232,7 +236,6 @@ bool isInInteractionsOne(vector<tuple<string, string, string, string>> interacti
     }
     return isIn;
 }
-
 bool isInInteractionsTwo(vector<tuple<string, string, string, string>> interactions, string name) {
     bool isIn = false;
     for (int i = 0; i < interactions.size(); ++i) {
@@ -242,7 +245,6 @@ bool isInInteractionsTwo(vector<tuple<string, string, string, string>> interacti
     }
     return isIn;
 }
-
 bool isInInteractionsThree(vector<tuple<string, string, string, string>> interactions, string name) {
     bool isIn = false;
     for (int i = 0; i < interactions.size(); ++i) {
@@ -253,6 +255,8 @@ bool isInInteractionsThree(vector<tuple<string, string, string, string>> interac
     return isIn;
 }
 
+
+//Return the first string at tuple position 0, where postion 2 is name
 string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactions, string name) {
     for (int i = 0; i < interactions.size(); ++i) {
         if (get<2>(interactions[i]) == name)
@@ -263,7 +267,8 @@ string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactio
     return "";
 }
 
-string nameOfZeroForTwo(vector<pair<string, string>> interactions, string name) {
+//Return the first string at pair position 1, where postion 0 is name
+string nameOfZOneForZero(vector<pair<string, string>> interactions, string name) {
     for (int i = 0; i < interactions.size(); ++i) {
         if (get<0>(interactions[i]) == name)
         {
@@ -282,6 +287,7 @@ bool isIZeroSetForITwo(vector<tuple<string, string, string, string>> interaction
     }
 }
 
+//replaces all occurances of a given string search with a string replace in another bigger string
 void replaceAll(string& s, const string& search, const string& replace) {
     for (size_t pos = 0; ; pos += replace.length()) {
         // Locate the substring to replace
@@ -293,7 +299,7 @@ void replaceAll(string& s, const string& search, const string& replace) {
     }
 }
 
-
+//Create all Permutations of ParameterValues, each Parameter and value exists a pair, for each complete Permuation a vector with pairs is created. 
 vector<pair<string, string>> vecForRecursion;
 void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> allParameterPairs, vector<vector<pair<string, string>>>& validParameterPairs) {
 
@@ -311,7 +317,7 @@ void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> 
 }
 
 
-
+//Checking if a pair of two strings is present at position 0 and 1 in a vector of tuples
 bool isPairInVectorTupleZeroOne(pair<string, string> p_pair, vector<tuple<string, string, string, string>> v_vector)
 {
     for (tuple t : v_vector) {
@@ -322,6 +328,7 @@ bool isPairInVectorTupleZeroOne(pair<string, string> p_pair, vector<tuple<string
     return false;
 }
 
+//check for all pairs in a vector, if there exists a an interaction so that it is not a valid permutation
 bool checkValidParameter(vector<pair<string, string>> v, vector<tuple<string, string, string, string>> interactions) {
     for (pair p : v) {
         if (isPairInVectorTupleZeroOne(p, interactions)) {
@@ -511,13 +518,14 @@ int main() {
                                 is.get();
                                 temp = "";
                             }
-                            else if(!temp.empty())
+                            else if(!temp.empty() && !is.peek() == EOF)
                             {
                                 temp += whitespace;
                             }
-                            if (is.peek() == '@') {
+                            if (is.peek() == '@' || is.peek() == EOF) {
                               if(temp != ""){
                                 parameters[position].push_backValueRange(temp);
+                                temp = "";
                               }
                             }
                           }
@@ -726,7 +734,7 @@ int main() {
         std::shuffle(validCombinations.begin(), validCombinations.end(), gen);
 
 
-
+        //TODO  Mode 1 can be completely reworked as mode 2, so that only randoms have to be chosen and not checked every time. 
         if (mode == 1) {
             //Create Number of Questions and Replace potential Parameters
             for (int i = 0; i < numberOfExams; ++i) {
@@ -763,12 +771,12 @@ int main() {
                             }
                             else {
                                 if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                                    if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
+                                    if (isInInteractionsOne(interactions, nameOfZOneForZero(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
                                         // if yes then take value from one that is interacting with the other
                                         // get the name of Zero with function allready written.
                                         //    nameOfZeroForTwo(interactions, name);
                                         // get the name of ONE set in chosen Parameters
-                                        string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                        string chosenInteraction = nameOfZOneForZero(chosenParameters, nameOfZeroForTwo(interactions, name));
                                         // put all THREES into a new vector
                                         vector<string> values;
                                         for (tuple t : interactions) {
@@ -794,8 +802,8 @@ int main() {
                         else if (isInInteractionsTwo(interactions, name)) {
                             // check if corresponding Interaction 0 is set?
                             if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                                if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
-                                    string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                if (isInInteractionsOne(interactions, nameOfZOneForZero(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
+                                    string chosenInteraction = nameOfZOneForZero(chosenParameters, nameOfZeroForTwo(interactions, name));
                                     vector<string> values;
                                     for (tuple t : interactions) {
                                         if (chosenInteraction == get<1>(t))
@@ -828,8 +836,8 @@ int main() {
                                     //wenn interaction in pos 0
                                     if (isInInteractionsZero(interactions, name)) {
                                         if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                                            if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
-                                                string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                            if (isInInteractionsOne(interactions, nameOfZOneForZero(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
+                                                string chosenInteraction = nameOfZOneForZero(chosenParameters, nameOfZeroForTwo(interactions, name));
                                                 vector<string> values;
                                                 for (tuple t : interactions) {
                                                     if (chosenInteraction == get<1>(t))
@@ -847,8 +855,8 @@ int main() {
                                     else if (isInInteractionsTwo(interactions, name)) {
                                         // check if corresponding Interaction 0 is set?
                                         if (isIZeroSetForITwo(interactions, chosenParameters, name)) {
-                                            if (isInInteractionsOne(interactions, nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
-                                                string chosenInteraction = nameOfZeroForTwo(chosenParameters, nameOfZeroForTwo(interactions, name));
+                                            if (isInInteractionsOne(interactions, nameOfZOneForZero(chosenParameters, nameOfZeroForTwo(interactions, name)))) {
+                                                string chosenInteraction = nameOfZOneForZero(chosenParameters, nameOfZeroForTwo(interactions, name));
                                                 vector<string> values;
                                                 for (tuple t : interactions) {
                                                     if (chosenInteraction == get<1>(t))

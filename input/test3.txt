@@ -15,8 +15,8 @@ $TYPE
 $NAME
 $VALUE
 @VALUERANGE
-int # double # std::string #
-a # b # c #
+int # double # std::string
+a # b # c
 42 # 99 # 0 # 0.0 # 3.14 # 120.0 # "OMG"s # "Hi, there" # "Good "s + "point"
 @INTERACTION
 $TYPE int $VALUE 42 # 99 # 0
