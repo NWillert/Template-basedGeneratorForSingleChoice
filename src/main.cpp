@@ -370,14 +370,21 @@ int main() {
     string taxId{};
     string taxTitle{};
 
+    //Id's needed for the writing of the taxonomy levels. 
+    //The actual Id's dont matter so these are just dummies used, ILIAS will overwrite them after import
     int childId{}, parentId{};
     childId = 15001;
     parentId = 15000;
+
     int numberOfExams{};
     int currentQuestionId{ 1 };
     int currentPictureId{ 1 };
+    //Vectors to work with 
+    //for all Pictures, to Copy them in the end in their respective folder
     vector <Picture> pictures;
+    //All Questions that will be created during the process
     vector <Question> questions;
+    //All Taxonomy levels that are present in the templates. 
     vector <string> taxonomyLevels;
 
     int mode{};
@@ -425,7 +432,8 @@ int main() {
     
 
 
-    //Parsing Files in Input Folder
+    //Parsing Files in Input Folder, each file is seperatly handled and 
+    //based on the parsed template the questions will be created into the vector questions
     for (const auto& entry : fs::directory_iterator(path))
     {
         ifstream readFromFile;
