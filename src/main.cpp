@@ -196,66 +196,6 @@ bool isInVector(vector<string> duplicateVector, string number) {
         return false;
 }
 
-//Functions to see if a string is in a vector at position 0 or 1 inside a pair of two strings
-bool isInPairZero(vector<pair<string, string>> interactions, string name) {
-    bool isIn = false;
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<0>(interactions[i]) == name) {
-            isIn = true;
-        }
-    }
-    return isIn;
-}
-bool isInPairOne(vector<pair<string, string>> interactions, string name) {
-    bool isIn = false;
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<1>(interactions[i]) == name) {
-            isIn = true;
-        }
-    }
-    return isIn;
-}
-
-
-//Boolean functions to inspect if a given string is inside the tuple of four strings at postion 0,1,2 or 3. 
-bool isInInteractionsZero(vector<tuple<string, string, string, string>> interactions, string name) {
-    bool isIn = false;
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<0>(interactions[i]) == name) {
-            isIn = true;
-        }
-    }
-    return isIn;
-}
-bool isInInteractionsOne(vector<tuple<string, string, string, string>> interactions, string name) {
-    bool isIn = false;
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<1>(interactions[i]) == name) {
-            isIn = true;
-        }
-    }
-    return isIn;
-}
-bool isInInteractionsTwo(vector<tuple<string, string, string, string>> interactions, string name) {
-    bool isIn = false;
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<2>(interactions[i]) == name) {
-            isIn = true;
-        }
-    }
-    return isIn;
-}
-bool isInInteractionsThree(vector<tuple<string, string, string, string>> interactions, string name) {
-    bool isIn = false;
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<3>(interactions[i]) == name) {
-            isIn = true;
-        }
-    }
-    return isIn;
-}
-
-
 //Return the first string at tuple position 0, where postion 2 is name
 string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactions, string name) {
     for (int i = 0; i < interactions.size(); ++i) {
@@ -267,25 +207,6 @@ string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactio
     return "";
 }
 
-//Return the first string at pair position 1, where postion 0 is name
-string nameOfZOneForZero(vector<pair<string, string>> interactions, string name) {
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<0>(interactions[i]) == name)
-        {
-            return get<1>(interactions[i]);
-        }
-    }
-    return "";
-}
-
-bool isIZeroSetForITwo(vector<tuple<string, string, string, string>> interactions, vector<pair<string, string>> chosenOnes, string name) {
-    if (isInPairZero(chosenOnes, nameOfZeroForTwo(interactions, name))) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
 
 //replaces all occurances of a given string search with a string replace in another bigger string
 void replaceAll(string& s, const string& search, const string& replace) {
@@ -765,11 +686,14 @@ int main() {
 
         }
 
-        std::shuffle(validParameterPairs.begin(), validParameterPairs.end(), gen);
 
-        //TODO  Mode 1 can be completely reworked as mode 2, so that only randoms have to be chosen and not checked every time. 
+
         if (mode == 1) {
+            //Randomising the all Parameters vector
+            std::shuffle(validParameterPairs.begin(), validParameterPairs.end(), gen);
+
             //Create Number of Questions and Replace potential Parameters
+            //Based on the shuffled vecotrs of questions and parameters
             int questionToTake{ 0 }, parametersToTake{ 0 };
             for (int i = 0; i < numberOfExams; ++i) {
                 
@@ -922,7 +846,7 @@ int main() {
         << "\"></exp:ExportItem></exp:Export>";
     writeToFile.close();
 
-    //Write the Questions into the qti
+    //Write the Questions into the qti - items = base of the questions
     writeToFile.open(questionpoolFolder + "\\" + folderMarking + qti + questionPoolId + ".xml");
     writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         << "<!DOCTYPE questestinterop SYSTEM \"ims_qtiasiv1p2p1.dtd\">"
@@ -953,7 +877,8 @@ int main() {
     writeToFile << "</questestinterop>";
     writeToFile.close();
 
-    //Writing Question extras like Code or additional text in qpl
+    //Writing Question extras like Code or additional text in qpl- questionpool - creating the structure for each question
+    // a question can be with additional Text, Picture or Code 
     writeToFile.open(questionpoolFolder + "\\" + folderMarking + qpl + questionPoolId + ".xml");
     writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE Test SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd\"><!--Export of ILIAS Test Questionpool "<< questionPoolId << " of installation .-->"
         << "<ContentObject Type=\"Questionpool_Test\"><MetaData><General Structure=\"Hierarchical\">"
@@ -999,6 +924,7 @@ int main() {
     writeToFile << "<ds:Rec Entity=\"tax_tree\"><TaxTree><TaxId>" << taxId << "</TaxId><Child>"<< parentId <<"</Child><Parent>0</Parent><Depth>1</Depth><Type></Type><Title>Root node for taxonomy "<< taxId << "</Title><OrderNr>0</OrderNr></TaxTree></ds:Rec>";
 
     //For each level in taxonomy levels add a node to the tree
+    //temp is just the Order which each node is in. each new taxonomy level is one node, under each node do the question et created
     int temp = 10;
     for (string t : taxonomyLevels) {
         writeToFile << "<ds:Rec Entity=\"tax_tree\"><TaxTree><TaxId>" << taxId << "</TaxId><Child>"
@@ -1017,22 +943,24 @@ int main() {
     writeToFile.close();
 
 
+    if (!pictures.empty()) {
+        //general path for pictures, needed when pictures arent empty. 
+        fs::path picturePath{ questionpoolFolder + "\\objects" };
+        fs::create_directory(picturePath);
 
-    //genereller Pfad wenn pictures nicht empty
-    fs::path picturePath{questionpoolFolder + "\\objects"};
-    fs::create_directory(picturePath);
+        //Pictures that are in vector, create folder structure for it.
+        for (Picture p : pictures) {
+            // creating a path for the picture based on the id
+            string pStringPath = questionpoolFolder + "\\objects" + "\\il_0_mob_" + to_string(p.GetId());
+            fs::path pPath{ pStringPath };
+            fs::create_directory(pPath);
+            // copy the picture from inputPictured in the newly created folder 
+            string fromPath{ pictureInputpath + "\\" + p.GetName() };
+            fs::copy_file(fromPath, pStringPath + "\\" + p.GetName());
+        }
 
-    //Pictures that are in vector, create folder structure for it.
-    for(Picture p : pictures){
-      // path anlegen basierend auf der id,
-      string pStringPath = questionpoolFolder + "\\objects" + "\\il_0_mob_" + to_string(p.GetId());
-      fs::path pPath{pStringPath};
-      fs::create_directory(pPath);
-      // Bild von inputPictures in den neuen Ordner kopieren.
-      string fromPath{pictureInputpath + "\\" + p.GetName()};
-      fs::copy_file(fromPath, pStringPath + "\\" + p.GetName());
     }
-
+    
     cout << "Number of questions created: " << currentQuestionId - 1 << endl;
 
     return 0;
