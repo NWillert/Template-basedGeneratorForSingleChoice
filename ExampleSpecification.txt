@@ -14,8 +14,8 @@ Exam question 3
 This is text that will be shown above the other parts.
 @PICTURE
 NameOfPictureThatIsInThe_inputPictures_Folder.PNG
-Width in Pixel
-Height in Pixel
+400
+400
 @CODE
 #include <iostream>
 using namespace std;
