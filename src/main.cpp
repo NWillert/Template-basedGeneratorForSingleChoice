@@ -1,3 +1,8 @@
+/*
+Template-based generator for single choice question with XML output for Ilias
+Created By Nico Willert, April 2022
+*/
+
 #include <cstdlib>
 #include <iostream>
 #include <string>
