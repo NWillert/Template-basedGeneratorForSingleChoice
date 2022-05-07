@@ -19,6 +19,11 @@ Created By Nico Willert, April 2022
 #include <iterator>
 #include <regex>
 
+#include "picture.h"
+#include "parameter.h"
+#include "randomNumberFunction.h"
+#include "question.h"
+
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -32,149 +37,7 @@ string folderMarking = "1644584918__0__";
 const string qpl = "qpl_";
 const string qti = "qti_";
 
-// Creating a random number between(including) two values, based on the mersenne twister engine of the c++ standard
-int createRandomNumber(int startValue, int randomTo) {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> distrib(startValue, randomTo);
-    return distrib(gen);
-}
 
-//Class for creation the object of a picture with name, width and height.
-class Picture
-{
-public:
-  Picture(){};
-
-  void SetAll(string p_name, string p_width, string p_height, int p_id){
-    name = p_name;
-    height = p_height;
-    width = p_width;
-    Id = p_id;
-  }
-
-  string GetName(){
-    return name;
-  }
-  string GetHeight(){
-    return height;
-  }
-  string GetWidth(){
-    return width;
-  }
-  int GetId(){
-    return Id;
-  }
-
-private:
-  string width, height;
-  int Id;
-  string name;
-};
-
-//Class for creating a Parameter that has one name and a vector with all its Values
-class Parameter
-{
-public:
-  Parameter(string thisName){
-    name = thisName;
-  }
-
-  string GetName(){
-    return name;
-  }
-
-  vector<string> GetValueRangeVector() {
-      return valueRange;
-  }
-
-  string GetRandomValue() {
-      return valueRange[createRandomNumber(0, valueRange.size() - 1)];
-  }
-
-  void push_backValueRange(string value){
-    valueRange.push_back(value);
-  }
-
-private:
-  string name{};
-  vector<string> valueRange;
-};
-
-//Class for instantiating a question, with all necessary values. so that all questions can be stored at creation, and be later used to write the corresponding xmls
-class Question
-{
-public:
-  Question(int Id,string q_name,string q_author,string q_description,string q_additionalText, string q_code,string q_taxonomy,string q_task,
-    string q_correctAnswer, string q_wrongAnswerOne, string q_wrongAnswerTwo, string q_wrongAnswerThree, Picture q_picture){
-      questionId=Id;
-      name=q_name;
-      author=q_author;
-      description=q_description;
-      additionalText = q_additionalText;
-      code = q_code;
-      taxonomy=q_taxonomy;
-      task=q_task;
-      correctAnswer=q_correctAnswer;
-      wrongAnswerOne=q_wrongAnswerOne;
-      wrongAnswerTwo=q_wrongAnswerTwo;
-      wrongAnswerThree=q_wrongAnswerThree;
-      picture = q_picture;
-    }
-
-int GetQuestionId() {
-    return questionId;
-}
-string GetName() {
-    return name;
-}
-string GetAuthor() {
-    return author;
-}
-string GetDescription() {
-    return description;
-}
-string GetCode() {
-    return code;
-}
-string GetAdditionalText() {
-    return additionalText;
-}
-string GetTaxonomy() {
-    return taxonomy;
-}
-string GetTask() {
-    return task;
-}
-string GetCorrectAnswer() {
-    return correctAnswer;
-}
-string GetWrongAnswerOne() {
-    return wrongAnswerOne;
-}
-string GetWrongAnswerTwo() {
-    return wrongAnswerTwo;
-}
-string GetWrongAnswerThree() {
-    return wrongAnswerThree;
-}
-bool IsCodeEmpty() {
-    return code.empty();
-}
-bool IsAdditionalTextEmpty() {
-    return additionalText.empty();
-}
-bool IsTaxonomyEmpty() {
-    return taxonomy.empty();
-}
-Picture GetPicture(){
-  return picture;
-}
-private:
-  int questionId;
-  string name{}, author{}, description{},code{}, additionalText{}, taxonomy{}, task{}, correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
-  Picture picture;
-};
 
 //As we save all Picture Objects in a vector, we check if the same pictures are used by different templates, so that we only have one picture copied and used
 bool isPictureInVector(vector<Picture> picVector, string name){
@@ -970,3 +833,161 @@ int main() {
 
     return 0;
 }
+
+
+
+
+/*
+// Creating a random number between(including) two values, based on the mersenne twister engine of the c++ standard
+int createRandomNumber(int startValue, int randomTo) {
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> distrib(startValue, randomTo);
+    return distrib(gen);
+}
+*/
+
+/*
+//Class for creation the object of a picture with name, width and height.
+class Picture
+{
+public:
+  Picture(){};
+
+  void SetAll(string p_name, string p_width, string p_height, int p_id){
+    name = p_name;
+    height = p_height;
+    width = p_width;
+    Id = p_id;
+  }
+
+  string GetName(){
+    return name;
+  }
+  string GetHeight(){
+    return height;
+  }
+  string GetWidth(){
+    return width;
+  }
+  int GetId(){
+    return Id;
+  }
+
+private:
+  string width, height;
+  int Id;
+  string name;
+};
+*/
+
+
+/*
+//Class for creating a Parameter that has one name and a vector with all its Values
+class Parameter
+{
+public:
+  Parameter(string thisName){
+    name = thisName;
+  }
+
+  string GetName(){
+    return name;
+  }
+
+  vector<string> GetValueRangeVector() {
+      return valueRange;
+  }
+
+  string GetRandomValue() {
+      return valueRange[createRandomNumber(0, valueRange.size() - 1)];
+  }
+
+  void push_backValueRange(string value){
+    valueRange.push_back(value);
+  }
+
+private:
+  string name{};
+  vector<string> valueRange;
+};
+*/
+
+/*
+//Class for instantiating a question, with all necessary values. so that all questions can be stored at creation, and be later used to write the corresponding xmls
+class Question
+{
+public:
+  Question(int Id,string q_name,string q_author,string q_description,string q_additionalText, string q_code,string q_taxonomy,string q_task,
+    string q_correctAnswer, string q_wrongAnswerOne, string q_wrongAnswerTwo, string q_wrongAnswerThree, Picture q_picture){
+      questionId=Id;
+      name=q_name;
+      author=q_author;
+      description=q_description;
+      additionalText = q_additionalText;
+      code = q_code;
+      taxonomy=q_taxonomy;
+      task=q_task;
+      correctAnswer=q_correctAnswer;
+      wrongAnswerOne=q_wrongAnswerOne;
+      wrongAnswerTwo=q_wrongAnswerTwo;
+      wrongAnswerThree=q_wrongAnswerThree;
+      picture = q_picture;
+    }
+
+int GetQuestionId() {
+    return questionId;
+}
+string GetName() {
+    return name;
+}
+string GetAuthor() {
+    return author;
+}
+string GetDescription() {
+    return description;
+}
+string GetCode() {
+    return code;
+}
+string GetAdditionalText() {
+    return additionalText;
+}
+string GetTaxonomy() {
+    return taxonomy;
+}
+string GetTask() {
+    return task;
+}
+string GetCorrectAnswer() {
+    return correctAnswer;
+}
+string GetWrongAnswerOne() {
+    return wrongAnswerOne;
+}
+string GetWrongAnswerTwo() {
+    return wrongAnswerTwo;
+}
+string GetWrongAnswerThree() {
+    return wrongAnswerThree;
+}
+bool IsCodeEmpty() {
+    return code.empty();
+}
+bool IsAdditionalTextEmpty() {
+    return additionalText.empty();
+}
+bool IsTaxonomyEmpty() {
+    return taxonomy.empty();
+}
+Picture GetPicture(){
+  return picture;
+}
+private:
+  int questionId;
+  string name{}, author{}, description{},code{}, additionalText{}, taxonomy{}, task{}, correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
+  Picture picture;
+};
+
+
+*/
