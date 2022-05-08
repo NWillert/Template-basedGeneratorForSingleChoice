@@ -23,6 +23,7 @@ Created By Nico Willert, April 2022
 #include "parameter.h"
 #include "randomNumberFunction.h"
 #include "question.h"
+#include "vectorHelperFunctions.h"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -36,44 +37,6 @@ const fs::path outputPath{ outputFolder };
 string folderMarking = "1644584918__0__";
 const string qpl = "qpl_";
 const string qti = "qti_";
-
-
-
-//As we save all Picture Objects in a vector, we check if the same pictures are used by different templates, so that we only have one picture copied and used
-bool isPictureInVector(vector<Picture> picVector, string name){
-  bool isIn = false;
-  for (int i = 0; i < picVector.size(); ++i) {
-      if (picVector[i].GetName() == name) {
-          isIn = true;
-      }
-  }
-  return isIn;
-}
-
-//overloaded functions for checking if a certain int or string is allready in a given vector with these types. 
-bool isInVector(vector<int> duplicateVector, int number) {
-    if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
-        return true;
-    else
-        return false;
-}
-bool isInVector(vector<string> duplicateVector, string number) {
-    if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
-        return true;
-    else
-        return false;
-}
-
-//Return the first string at tuple position 0, where postion 2 is name
-string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactions, string name) {
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<2>(interactions[i]) == name)
-        {
-            return get<0>(interactions[i]);
-        }
-    }
-    return "";
-}
 
 
 //replaces all occurances of a given string search with a string replace in another bigger string
@@ -103,18 +66,6 @@ void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> 
         }
         vecForRecursion.pop_back();
     }
-}
-
-
-//Checking if a pair of two strings is present at position 0 and 1 in a vector of tuples
-bool isPairInVectorTupleZeroOne(pair<string, string> p_pair, vector<tuple<string, string, string, string>> v_vector)
-{
-    for (tuple t : v_vector) {
-        if (get<0>(p_pair) == get<0>(t) && get<1>(p_pair) == get<1>(t)) {
-            return true;
-        }
-    }
-    return false;
 }
 
 //check for all pairs in a vector, if there exists a an interaction so that it is not a valid permutation
@@ -989,5 +940,50 @@ private:
   Picture picture;
 };
 
+//As we save all Picture Objects in a vector, we check if the same pictures are used by different templates, so that we only have one picture copied and used
+bool isPictureInVector(vector<Picture> picVector, string name) {
+    bool isIn = false;
+    for (int i = 0; i < picVector.size(); ++i) {
+        if (picVector[i].GetName() == name) {
+            isIn = true;
+        }
+    }
+    return isIn;
+}
 
+//overloaded functions for checking if a certain int or string is allready in a given vector with these types.
+bool isInVector(vector<int> duplicateVector, int number) {
+    if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
+        return true;
+    else
+        return false;
+}
+bool isInVector(vector<string> duplicateVector, string number) {
+    if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
+        return true;
+    else
+        return false;
+}
+
+//Return the first string at tuple position 0, where postion 2 is name
+string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactions, string name){
+    for (int i = 0; i < interactions.size(); ++i) {
+        if (get<2>(interactions[i]) == name)
+        {
+            return get<0>(interactions[i]);
+        }
+    }
+    return "";
+}
+
+//Checking if a pair of two strings is present at position 0 and 1 in a vector of tuples
+bool isPairInVectorTupleZeroOne(pair<string, string> p_pair, vector<tuple<string, string, string, string>> v_vector)
+{
+    for (tuple t : v_vector) {
+        if (get<0>(p_pair) == get<0>(t) && get<1>(p_pair) == get<1>(t)) {
+            return true;
+        }
+    }
+    return false;
+}
 */
