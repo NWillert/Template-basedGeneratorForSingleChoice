@@ -19,6 +19,7 @@ Created By Nico Willert, April 2022
 #include <iterator>
 #include <regex>
 
+//Header Files of the different classes and pulled out Functions
 #include "picture.h"
 #include "parameter.h"
 #include "randomNumberFunction.h"
@@ -129,23 +130,6 @@ int main() {
 
     int mode{};
 
-    //Aktivieren wenn gebraucht.
-    /*
-    cout << "Please input, how many versions should be generated: ";
-    cin >> numberOfExams;
-
-    cout << "Please input the question pool id: ";
-    cin >> questionPoolId;
-
-    cout << "Please input the question pool title: ";
-    cin >> qpTitle;
-
-    cout << "Please input the Taxonomy Id: ";
-    cin >> taxId;
-
-    cout << "Please input the Taxonomy Title: ";
-    cin >> taxTitle;
-    */
     cout << "Please input the question pool id: ";
     cin >> questionPoolId;
 
@@ -169,13 +153,12 @@ int main() {
     taxId = "42069";
     //taxTitle = "TaxTest";
 
-    
-
 
     //Parsing Files in Input Folder, each file is seperatly handled and 
     //based on the parsed template the questions will be created into the vector questions
     for (const auto& entry : fs::directory_iterator(path))
     {
+        //all Variables that need to be refreshed after each file
         ifstream readFromFile;
         string name{}, author{}, date{}, version{}, description{}, taxonomy{}, task{}, code{}, additionalText{};
         string taskToSet{}, codeToSet{}, additionalTextToSet{};
