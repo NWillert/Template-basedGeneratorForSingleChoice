@@ -53,8 +53,7 @@ void replaceAll(string& s, const string& search, const string& replace) {
 }
 
 //Create all Permutations of ParameterValues, each Parameter and value exists a pair, for each complete Permuation a vector with pairs is created. 
-vector<pair<string, string>> vecForRecursion;
-void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> allParameterPairs, vector<vector<pair<string, string>>>& validParameterPairs) {
+void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> allParameterPairs, vector<vector<pair<string, string>>>& validParameterPairs, vector<pair<string, string>>& vecForRecursion) {
 
     for (int i = 0; i < allParameterPairs.at(currentPlace).size(); ++i) {
         vecForRecursion.push_back(allParameterPairs.at(currentPlace).at(i));
@@ -63,7 +62,7 @@ void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> 
         }
         else
         {
-            createAllParameters(currentPlace + 1, allParameterPairs, validParameterPairs);
+            createAllParameters(currentPlace + 1, allParameterPairs, validParameterPairs, vecForRecursion);
         }
         vecForRecursion.pop_back();
     }
@@ -466,6 +465,7 @@ int main() {
 
 
         vector<vector<pair<string, string>>> validParameterPairs;
+        vector<pair<string, string>> vecForRecursion;
         //create parameter Combinations
         //Parameters must be used recursiv in a function so for all parameters all values next parameter all values. 
         if (!parameters.empty()) {
@@ -478,7 +478,7 @@ int main() {
                 }
                 allParameterPairs.push_back(parameterPairs);
             }
-            createAllParameters(0, allParameterPairs, otherParameterPairs);
+            createAllParameters(0, allParameterPairs, otherParameterPairs, vecForRecursion);
 
             for (vector v : otherParameterPairs) {
                 if (checkValidParameter(v, interactions)) {
