@@ -16,3 +16,5 @@ All - generates all possible instantiation for each question.
 	Permutations of Answers are matched with each permutation of parameters. 
 
 
+The Generator supports the export format for ILIAS-Questionpool Imports when the created folder for ILIAS is zipped. 
+In Addition to this a simple Moodle-XML is supported, were ONLY the questions and answers can be imported!

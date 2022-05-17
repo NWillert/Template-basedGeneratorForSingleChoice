@@ -763,210 +763,27 @@ int main() {
 
     }
     
+    //Creating Moodle Xml with just questions and their answers.
+    writeToFile.open(outputFolder + "\\" + "moodle.xml");
+    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        << "<quiz>";
+    for (Question q : questions) {
+        writeToFile << "<question type=\"multichoice\"><name><text>" << q.GetName() << "</text></name>"
+            << "<questiontext format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetTask() << "</p>]]></text></questiontext>"
+            << "<generalfeedback format=\"html\"><text></text></generalfeedback><defaultgrade>1</defaultgrade><penalty>0</penalty><hidden>0</hidden><idnumber></idnumber>"
+            << "<single>true</single><shuffleanswers>true</shuffleanswers><answernumbering>abc</answernumbering><showstandardinstruction>0</showstandardinstruction><shownumcorrect/>"
+            << "<answer fraction=\"100\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetCorrectAnswer() << "</p>]]></text></answer>"
+            << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerOne() << "</p>]]></text></answer>"
+            << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerTwo() << "</p>]]></text></answer>"
+            << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerThree() << "</p>]]></text></answer>"
+            << "</question>"
+            ;
+    }
+    writeToFile << "</quiz>";
+    writeToFile.close();
+
+
     cout << "Number of questions created: " << currentQuestionId - 1 << endl;
 
     return 0;
 }
-
-
-
-
-/*
-// Creating a random number between(including) two values, based on the mersenne twister engine of the c++ standard
-int createRandomNumber(int startValue, int randomTo) {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> distrib(startValue, randomTo);
-    return distrib(gen);
-}
-*/
-
-/*
-//Class for creation the object of a picture with name, width and height.
-class Picture
-{
-public:
-  Picture(){};
-
-  void SetAll(string p_name, string p_width, string p_height, int p_id){
-    name = p_name;
-    height = p_height;
-    width = p_width;
-    Id = p_id;
-  }
-
-  string GetName(){
-    return name;
-  }
-  string GetHeight(){
-    return height;
-  }
-  string GetWidth(){
-    return width;
-  }
-  int GetId(){
-    return Id;
-  }
-
-private:
-  string width, height;
-  int Id;
-  string name;
-};
-*/
-
-
-/*
-//Class for creating a Parameter that has one name and a vector with all its Values
-class Parameter
-{
-public:
-  Parameter(string thisName){
-    name = thisName;
-  }
-
-  string GetName(){
-    return name;
-  }
-
-  vector<string> GetValueRangeVector() {
-      return valueRange;
-  }
-
-  string GetRandomValue() {
-      return valueRange[createRandomNumber(0, valueRange.size() - 1)];
-  }
-
-  void push_backValueRange(string value){
-    valueRange.push_back(value);
-  }
-
-private:
-  string name{};
-  vector<string> valueRange;
-};
-*/
-
-/*
-//Class for instantiating a question, with all necessary values. so that all questions can be stored at creation, and be later used to write the corresponding xmls
-class Question
-{
-public:
-  Question(int Id,string q_name,string q_author,string q_description,string q_additionalText, string q_code,string q_taxonomy,string q_task,
-    string q_correctAnswer, string q_wrongAnswerOne, string q_wrongAnswerTwo, string q_wrongAnswerThree, Picture q_picture){
-      questionId=Id;
-      name=q_name;
-      author=q_author;
-      description=q_description;
-      additionalText = q_additionalText;
-      code = q_code;
-      taxonomy=q_taxonomy;
-      task=q_task;
-      correctAnswer=q_correctAnswer;
-      wrongAnswerOne=q_wrongAnswerOne;
-      wrongAnswerTwo=q_wrongAnswerTwo;
-      wrongAnswerThree=q_wrongAnswerThree;
-      picture = q_picture;
-    }
-
-int GetQuestionId() {
-    return questionId;
-}
-string GetName() {
-    return name;
-}
-string GetAuthor() {
-    return author;
-}
-string GetDescription() {
-    return description;
-}
-string GetCode() {
-    return code;
-}
-string GetAdditionalText() {
-    return additionalText;
-}
-string GetTaxonomy() {
-    return taxonomy;
-}
-string GetTask() {
-    return task;
-}
-string GetCorrectAnswer() {
-    return correctAnswer;
-}
-string GetWrongAnswerOne() {
-    return wrongAnswerOne;
-}
-string GetWrongAnswerTwo() {
-    return wrongAnswerTwo;
-}
-string GetWrongAnswerThree() {
-    return wrongAnswerThree;
-}
-bool IsCodeEmpty() {
-    return code.empty();
-}
-bool IsAdditionalTextEmpty() {
-    return additionalText.empty();
-}
-bool IsTaxonomyEmpty() {
-    return taxonomy.empty();
-}
-Picture GetPicture(){
-  return picture;
-}
-private:
-  int questionId;
-  string name{}, author{}, description{},code{}, additionalText{}, taxonomy{}, task{}, correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
-  Picture picture;
-};
-
-//As we save all Picture Objects in a vector, we check if the same pictures are used by different templates, so that we only have one picture copied and used
-bool isPictureInVector(vector<Picture> picVector, string name) {
-    bool isIn = false;
-    for (int i = 0; i < picVector.size(); ++i) {
-        if (picVector[i].GetName() == name) {
-            isIn = true;
-        }
-    }
-    return isIn;
-}
-
-//overloaded functions for checking if a certain int or string is allready in a given vector with these types.
-bool isInVector(vector<int> duplicateVector, int number) {
-    if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
-        return true;
-    else
-        return false;
-}
-bool isInVector(vector<string> duplicateVector, string number) {
-    if (std::find(duplicateVector.begin(), duplicateVector.end(), number) != duplicateVector.end())
-        return true;
-    else
-        return false;
-}
-
-//Return the first string at tuple position 0, where postion 2 is name
-string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactions, string name){
-    for (int i = 0; i < interactions.size(); ++i) {
-        if (get<2>(interactions[i]) == name)
-        {
-            return get<0>(interactions[i]);
-        }
-    }
-    return "";
-}
-
-//Checking if a pair of two strings is present at position 0 and 1 in a vector of tuples
-bool isPairInVectorTupleZeroOne(pair<string, string> p_pair, vector<tuple<string, string, string, string>> v_vector)
-{
-    for (tuple t : v_vector) {
-        if (get<0>(p_pair) == get<0>(t) && get<1>(p_pair) == get<1>(t)) {
-            return true;
-        }
-    }
-    return false;
-}
-*/
