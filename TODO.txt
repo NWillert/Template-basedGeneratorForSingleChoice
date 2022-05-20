@@ -1,0 +1,9 @@
+Picture-Namen sollen Parametrisierbar sein.!
+Erfordert definitives Reworking von wie Bilder gehändelt werden. und potentiell anderes 
+
+Random amount of questions for the questions stops per question when all possible combinations are created?
+
+
+Parsing the file 
+	- sending error messages for false inputs?
+	- specifying errors when a parameter has no value range. 
