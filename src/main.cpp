@@ -235,31 +235,33 @@ int main() {
                         while (readFromFile.peek() != '@'){
                           istringstream is;
                           getline(readFromFile,tempLine);
-                          is.str(tempLine);
-                          while(is){
-                            string whitespace = " ";
-                            while (is.peek() > 32) {
-                                temp += is.get();
-                            }
-                            is.get();
-                            if (is.peek() == '#')
-                            {
-                                parameters[position].push_backValueRange(temp);
-                                is.get();
-                                temp = "";
-                            }
-                            else if(!temp.empty() && is.peek() != EOF)
-                            {
-                                temp += whitespace;
-                            }
-                            if (is.peek() == '@' || is.peek() == EOF) {
-                              if(temp != ""){
-                                parameters[position].push_backValueRange(temp);
-                                temp = "";
+                          if (!tempLine.empty()) {
+                              is.str(tempLine);
+                              while (is) {
+                                  string whitespace = " ";
+                                  while (is.peek() > 32) {
+                                      temp += is.get();
+                                  }
+                                  is.get();
+                                  if (is.peek() == '#')
+                                  {
+                                      parameters[position].push_backValueRange(temp);
+                                      is.get();
+                                      temp = "";
+                                  }
+                                  else if (!temp.empty() && is.peek() != EOF)
+                                  {
+                                      temp += whitespace;
+                                  }
+                                  if (is.peek() == '@' || is.peek() == EOF) {
+                                      if (temp != "") {
+                                          parameters[position].push_backValueRange(temp);
+                                          temp = "";
+                                      }
+                                  }
                               }
-                            }
-                          }
-                          ++position;
+                              ++position;
+                          }                     
                         }
                     }
                     else if (txtFromFile == "@INTERACTION") {
@@ -271,67 +273,62 @@ int main() {
                       while (readFromFile.peek() != '@'){
                         istringstream is;
                         getline(readFromFile,tempLine);
-                        is.str(tempLine);
-                          string whitespace = " ";
-                          while (is.peek() > 32) {
-                              temp += is.get();
-                          }
-                          is.get();
-                          parameterName= temp;
-                          temp = "";
-
-
-                          // HARD TODO value 1 has to end if the next one is a # and not for Whitespace.
-                          while (is.peek() > 32) {
-                              temp += is.get();
-                          }
-                          is.get();
-                          parameterValue= temp;
-
-                          /*
-                          while (is.peek() != '$') {
-                              while (is.peek() > 32) {
-                                  temp += is.get();
-                              }
-                              is.get();
-                              if (is.peek() != '$') {
-                                  temp += whitespace;
-                              }
-                          }
-                          */
-
-                          temp= "";
-                          while (is.peek() > 32) {
-                              temp += is.get();
-                          }
-                          is.get();
-                          parameterTwoName= temp;
-                          temp= "";
-                          while(is){
+                        if (!tempLine.empty()) {
+                            is.str(tempLine);
+                            string whitespace = " ";
                             while (is.peek() > 32) {
                                 temp += is.get();
                             }
                             is.get();
-                            if(is.peek() == '#' || is.peek() < 32){
-                              //make pair pushback into vector
-                              is.get();
-                              parameterTwoValue=temp;
-                              interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
-                              ++position;
-                              temp="";
-                            }else if(!temp.empty())
-                            {
-                                temp += whitespace;
+                            parameterName = temp;
+                            temp = "";
+
+                            while (is.peek() != '$') {                               
+                                while (is.peek() > 32) {
+                                    temp += is.get();                                
+                                }
+                                is.get();
+                                if (is.peek() != '$') {
+                                    temp += whitespace;
+                                }
                             }
-                          }
-                          if(temp != ""){
-                            //make pair pushback vector
-                            parameterTwoValue = temp;
-                            interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
-                            temp="";
-                          }
-                          ++line;
+                            parameterValue = temp;
+                            temp = "";
+
+                            while (is.peek() > 32) {
+                                temp += is.get();
+                            }
+                            is.get();
+                            parameterTwoName = temp;
+                            temp = "";
+                            while (is) {
+                                while (is.peek() > 32) {
+                                    temp += is.get();
+                                }
+                                is.get();
+                                if (is.peek() == '#' || is.peek() < 32) {
+                                    //make pair pushback into vector
+                                    is.get();
+                                    parameterTwoValue = temp;
+                                    interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
+                                    ++position;
+                                    temp = "";
+                                }
+                                else if (!temp.empty())
+                                {
+                                    temp += whitespace;
+                                }
+                            }
+                            if (temp != "") {
+                                //make pair pushback vector
+                                parameterTwoValue = temp;
+                                interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
+                                temp = "";
+                            }
+                            ++line;
                         }
+                        
+                      }
                     }
                     else if (txtFromFile == "@TASK") {
                         getline(readFromFile, task);

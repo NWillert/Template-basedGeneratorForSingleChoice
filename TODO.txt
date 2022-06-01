@@ -8,6 +8,6 @@ Random amount of questions for the questions stops per question when all possibl
 
 
 Parsing the file 
-	- !! Parsing Interactions - Parameter Value is read as one continueos string - but has to be till the second parameter starts.
+	- Interactions/All Parameter Values shoudl have the possibility to include other Parameters as Values?
 	- sending error messages for false inputs?
 	- specifying errors when a parameter has no value range. 
