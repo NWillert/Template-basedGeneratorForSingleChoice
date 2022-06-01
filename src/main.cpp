@@ -29,7 +29,7 @@ Created By Nico Willert, April 2022
 using namespace std;
 namespace fs = std::filesystem;
 
-//Creating global Variabled for the input and output parts 
+//Creating global Variabled for the input and output parts
 string path = ".\\input";
 string pictureInputpath = ".\\inputPictures";
 string outputFolder = ".\\output";
@@ -52,7 +52,7 @@ void replaceAll(string& s, const string& search, const string& replace) {
     }
 }
 
-//Create all Permutations of ParameterValues, each Parameter and value exists a pair, for each complete Permuation a vector with pairs is created. 
+//Create all Permutations of ParameterValues, each Parameter and value exists a pair, for each complete Permuation a vector with pairs is created.
 void createAllParameters(int currentPlace, vector<vector<pair<string, string>>> allParameterPairs, vector<vector<pair<string, string>>>& validParameterPairs, vector<pair<string, string>>& vecForRecursion) {
 
     for (int i = 0; i < allParameterPairs.at(currentPlace).size(); ++i) {
@@ -110,7 +110,7 @@ int main() {
     string taxId{};
     string taxTitle{};
 
-    //Id's needed for the writing of the taxonomy levels. 
+    //Id's needed for the writing of the taxonomy levels.
     //The actual Id's dont matter so these are just dummies used, ILIAS will overwrite them after import
     int childId{}, parentId{};
     childId = 15001;
@@ -119,12 +119,12 @@ int main() {
     int numberOfExams{};
     int currentQuestionId{ 1 };
     int currentPictureId{ 1 };
-    //Vectors to work with 
+    //Vectors to work with
     //for all Pictures, to Copy them in the end in their respective folder
     vector <Picture> pictures;
     //All Questions that will be created during the process
     vector <Question> questions;
-    //All Taxonomy levels that are present in the templates. 
+    //All Taxonomy levels that are present in the templates.
     vector <string> taxonomyLevels;
 
     int mode{};
@@ -153,7 +153,7 @@ int main() {
     //taxTitle = "TaxTest";
 
 
-    //Parsing Files in Input Folder, each file is seperatly handled and 
+    //Parsing Files in Input Folder, each file is seperatly handled and
     //based on the parsed template the questions will be created into the vector questions
     for (const auto& entry : fs::directory_iterator(path))
     {
@@ -278,12 +278,28 @@ int main() {
                           }
                           is.get();
                           parameterName= temp;
-                          temp= "";
+                          temp = "";
+
+
+                          // HARD TODO value 1 has to end if the next one is a # and not for Whitespace.
                           while (is.peek() > 32) {
                               temp += is.get();
                           }
                           is.get();
                           parameterValue= temp;
+
+                          /*
+                          while (is.peek() != '$') {
+                              while (is.peek() > 32) {
+                                  temp += is.get();
+                              }
+                              is.get();
+                              if (is.peek() != '$') {
+                                  temp += whitespace;
+                              }
+                          }
+                          */
+
                           temp= "";
                           while (is.peek() > 32) {
                               temp += is.get();
@@ -432,7 +448,7 @@ int main() {
         //Vector for the positions of duplicates
         vector<int> duplicates;
 
-        //Filter all possible Combinations of duplicates, so that two answer combinations, where the answers are the same but but just shuffled 
+        //Filter all possible Combinations of duplicates, so that two answer combinations, where the answers are the same but but just shuffled
         for (auto pos = 0; pos < possibleCombinations.size(); ++pos) {
             for (auto pos2 = 0; pos2 < possibleCombinations.size(); ++pos2) {
                 if ((pos != pos2) &&
@@ -467,7 +483,7 @@ int main() {
         vector<vector<pair<string, string>>> validParameterPairs;
         vector<pair<string, string>> vecForRecursion;
         //create parameter Combinations
-        //Parameters must be used recursiv in a function so for all parameters all values next parameter all values. 
+        //Parameters must be used recursiv in a function so for all parameters all values next parameter all values.
         if (!parameters.empty()) {
             vector<vector<pair<string, string>>> allParameterPairs;
             vector<vector<pair<string, string>>> otherParameterPairs;
@@ -498,7 +514,7 @@ int main() {
             //Based on the shuffled vecotrs of questions and parameters
             int questionToTake{ 0 }, parametersToTake{ 0 };
             for (int i = 0; i < numberOfExams; ++i) {
-                
+
                 string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
                 int correct{}, first{}, second{}, third{};
 
@@ -518,7 +534,7 @@ int main() {
                 if (!parameters.empty())
                 {
                     //Replace all parameters where they could stand
-                    //The variables are initialized above inside the for loop, 
+                    //The variables are initialized above inside the for loop,
                     //so for every new question it is replace with another value
                     for (pair n : validParameterPairs.at(parametersToTake)) {
                         replaceAll(correctAnswer, get<0>(n), get<1>(n));
@@ -563,7 +579,7 @@ int main() {
                         additionalTextToSet = additionalText;
                         //Replace all parameters where they could stand
 
-                        //textersetzung. 
+                        //textersetzung.
                         for (pair n : v_validParam) {
                             replaceAll(correctAnswer, get<0>(n), get<1>(n));
                             replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
@@ -680,7 +696,7 @@ int main() {
     writeToFile.close();
 
     //Writing Question extras like Code or additional text in qpl- questionpool - creating the structure for each question
-    // a question can be with additional Text, Picture or Code 
+    // a question can be with additional Text, Picture or Code
     writeToFile.open(questionpoolFolder + "\\" + folderMarking + qpl + questionPoolId + ".xml");
     writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE Test SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd\"><!--Export of ILIAS Test Questionpool "<< questionPoolId << " of installation .-->"
         << "<ContentObject Type=\"Questionpool_Test\"><MetaData><General Structure=\"Hierarchical\">"
@@ -746,7 +762,7 @@ int main() {
 
 
     if (!pictures.empty()) {
-        //general path for pictures, needed when pictures arent empty. 
+        //general path for pictures, needed when pictures arent empty.
         fs::path picturePath{ questionpoolFolder + "\\objects" };
         fs::create_directory(picturePath);
 
@@ -756,13 +772,13 @@ int main() {
             string pStringPath = questionpoolFolder + "\\objects" + "\\il_0_mob_" + to_string(p.GetId());
             fs::path pPath{ pStringPath };
             fs::create_directory(pPath);
-            // copy the picture from inputPictured in the newly created folder 
+            // copy the picture from inputPictured in the newly created folder
             string fromPath{ pictureInputpath + "\\" + p.GetName() };
             fs::copy_file(fromPath, pStringPath + "\\" + p.GetName());
         }
 
     }
-    
+
     //Creating Moodle Xml with just questions and their answers.
     writeToFile.open(outputFolder + "\\" + "moodle.xml");
     writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
