@@ -14,9 +14,10 @@ int main()
 {
 	int a=55;
 	int *i =&a;
+	string s= "dfg";
 } 
 @ADDITIONALTEXT
-This is some Additional Text
+This is some Additional Text, & $u Hello $/u$nl $bFett$/b 
 @TASK
 In 1935 Alan Turing published his famous paper Und : & , String : "hallo Welt "; $b Fett $/b; $nl Neue Zeile in $c Codefont $/c Unfortunately this machine cannot be built in reality. What is a valid reason?
 @TRUE

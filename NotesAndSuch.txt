@@ -20,6 +20,3 @@ Kursiv <em></em>			&lt;em&gt;	&lt;/em&gt;
 Unterstrichen <u></u>			&lt;u&gt;	&lt;/u&gt;
 Code <code></code>			&lt;code&gt;	&lt;/code&gt;
 Rohdaten <pre></pre>			&lt;pre&gt;	&lt;/pre&gt;
-
-
-

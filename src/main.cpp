@@ -138,9 +138,16 @@ int main() {
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("&", "&amp;amp;"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("<", "&amp;lt;"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair(">", "&amp;gt;"));
-    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("\"", "&amp;quot;"));
-    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("\'", "&amp;apos;"));
-    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("&amp;lt;br/&amp;gt;", "<br/>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$nl", "<br/>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$b", "<Strong>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/b", "</Strong>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$i", "<Emph>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/i", "</Emph>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$u", "<Important>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/u", "</Important>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$c", "<Code>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/c", "</Code>"));
+    
 
     vector<pair<string, string>> replacementsForXmlMoodle{};
     replacementsForXmlMoodle.push_back(make_pair("$nl", "</p><p>"));
@@ -620,10 +627,13 @@ int main() {
                         replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
                         replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));                       
                         replaceAll(taskToSet, get<0>(n), get<1>(n));
-                        replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                        //replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                     }
                     for (pair n : replacementsForXmlIliasSpecialCode) {
                         replaceAll(codeToSet, get<0>(n), get<1>(n));
+                    }
+                    for (pair n : replacementsForXmlIliasSpecialAdditionalText) {
+                        replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                     }
                 }
 
@@ -692,10 +702,13 @@ int main() {
                                 replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
                                 //replaceAll(codeToSet, get<0>(n), get<1>(n));
                                 replaceAll(taskToSet, get<0>(n), get<1>(n));
-                                replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                               // replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                             }
                             for (pair n : replacementsForXmlIliasSpecialCode) {
                                 replaceAll(codeToSet, get<0>(n), get<1>(n));
+                            }
+                            for (pair n : replacementsForXmlIliasSpecialAdditionalText) {
+                                replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                             }
                         }
 
@@ -736,10 +749,13 @@ int main() {
                             replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
                             //replaceAll(codeToSet, get<0>(n), get<1>(n));
                             replaceAll(taskToSet, get<0>(n), get<1>(n));
-                            replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                            //replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                         }
                         for (pair n : replacementsForXmlIliasSpecialCode) {
                             replaceAll(codeToSet, get<0>(n), get<1>(n));
+                        }
+                        for (pair n : replacementsForXmlIliasSpecialAdditionalText) {
+                            replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                         }
                     }
 

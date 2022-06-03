@@ -9,5 +9,6 @@ Random amount of questions for the questions stops per question when all possibl
 
 Parsing the file 
 	- Interactions/All Parameter Values shoudl have the possibility to include other Parameters as Values?
+		Recursive Parameters?
 	- sending error messages for false inputs?
 	- specifying errors when a parameter has no value range. 
