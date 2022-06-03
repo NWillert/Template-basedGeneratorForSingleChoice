@@ -105,6 +105,57 @@ bool checkValidParameter(vector<pair<string, string>> v, vector<tuple<string, st
 
 int main() {
 
+    //Replacements for xml generations
+    vector<pair<string, string>> replacementsForXmlIlias{};
+    replacementsForXmlIlias.push_back(make_pair("&", "&amp;"));
+    replacementsForXmlIlias.push_back(make_pair("<", "&lt;"));
+    replacementsForXmlIlias.push_back(make_pair(">", "&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("\"", "&quot;"));
+    replacementsForXmlIlias.push_back(make_pair("\'", "&apos;"));
+
+    replacementsForXmlIlias.push_back(make_pair("$nl", "&lt;/p&gt;&lt;p&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$b", "&lt;strong&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$/b", "&lt;/strong&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$i", "&lt;em&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$/i", "&lt;/em&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$u", "&lt;u&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$/u", "&lt;/u&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$c", "&lt;code&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$/c", "&lt;/code&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$p", "&lt;pre&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$/p", "&lt;/pre&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("&lt;br/&gt;", "<br/>"));
+
+    vector<pair<string, string>> replacementsForXmlIliasSpecialCode{};
+    replacementsForXmlIliasSpecialCode.push_back(make_pair("&", "&amp;amp;"));
+    replacementsForXmlIliasSpecialCode.push_back(make_pair("<", "&amp;lt;"));
+    replacementsForXmlIliasSpecialCode.push_back(make_pair(">", "&amp;gt;"));
+    replacementsForXmlIliasSpecialCode.push_back(make_pair("\"", "&amp;quot;"));
+    replacementsForXmlIliasSpecialCode.push_back(make_pair("\'", "&amp;apos;"));
+    replacementsForXmlIliasSpecialCode.push_back(make_pair("&amp;lt;br/&amp;gt;", "<br/>"));
+
+    vector<pair<string, string>> replacementsForXmlIliasSpecialAdditionalText{};
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("&", "&amp;amp;"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("<", "&amp;lt;"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair(">", "&amp;gt;"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("\"", "&amp;quot;"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("\'", "&amp;apos;"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("&amp;lt;br/&amp;gt;", "<br/>"));
+
+    vector<pair<string, string>> replacementsForXmlMoodle{};
+    replacementsForXmlMoodle.push_back(make_pair("$nl", "</p><p>"));
+    replacementsForXmlMoodle.push_back(make_pair("$b", "<strong>"));
+    replacementsForXmlMoodle.push_back(make_pair("$/b", "</strong>"));
+    replacementsForXmlMoodle.push_back(make_pair("$i", "<em>"));
+    replacementsForXmlMoodle.push_back(make_pair("$/i", "</em>"));
+    replacementsForXmlMoodle.push_back(make_pair("$u", "<u>"));
+    replacementsForXmlMoodle.push_back(make_pair("$/u", "</u>"));
+    replacementsForXmlMoodle.push_back(make_pair("$c", "<code>"));
+    replacementsForXmlMoodle.push_back(make_pair("$/c", "</code>"));
+    replacementsForXmlMoodle.push_back(make_pair("$p", "<pre>"));
+    replacementsForXmlMoodle.push_back(make_pair("$/p", "</pre>"));
+    //End Replacements for xml generations
+
     string questionPoolId{};
     string qpTitle{};
     string taxId{};
@@ -128,15 +179,21 @@ int main() {
     vector <string> taxonomyLevels;
 
     int mode{};
+    int mode2{};
 
-    cout << "Please input the question pool id: ";
-    cin >> questionPoolId;
+    cout << "Which Output is be generated? Enter 1 for IliasXml and 2 for MoodleXml: ";
+    cin >> mode2;
 
-    cout << "Please input the question pool title: ";
-    cin >> qpTitle;
+    if (mode2 == 1) {
+        cout << "Please input the question pool id: ";
+        cin >> questionPoolId;
 
-    cout << "Please input the Taxonomy Title: ";
-    cin >> taxTitle;
+        cout << "Please input the question pool title: ";
+        cin >> qpTitle;
+
+        cout << "Please input the Taxonomy Title: ";
+        cin >> taxTitle;
+    } 
 
     cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
     cin >> mode;
@@ -261,7 +318,7 @@ int main() {
                                   }
                               }
                               ++position;
-                          }                     
+                          }
                         }
                     }
                     else if (txtFromFile == "@INTERACTION") {
@@ -283,9 +340,9 @@ int main() {
                             parameterName = temp;
                             temp = "";
 
-                            while (is.peek() != '$') {                               
+                            while (is.peek() != '$') {
                                 while (is.peek() > 32) {
-                                    temp += is.get();                                
+                                    temp += is.get();
                                 }
                                 is.get();
                                 if (is.peek() != '$') {
@@ -327,7 +384,7 @@ int main() {
                             }
                             ++line;
                         }
-                        
+
                       }
                     }
                     else if (txtFromFile == "@TASK") {
@@ -544,6 +601,33 @@ int main() {
                     }
                 }
 
+                //Based on the mode replacing certain characters  mode2==2 = Moodle other is Ilias
+                if (mode2 == 2) {                
+                    for (pair n : replacementsForXmlMoodle) {
+                        replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                        replaceAll(codeToSet, get<0>(n), get<1>(n));
+                        replaceAll(taskToSet, get<0>(n), get<1>(n));
+                        replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                    }
+                }
+                else {
+                    for (pair n : replacementsForXmlIlias) {
+                        replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                        replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));                       
+                        replaceAll(taskToSet, get<0>(n), get<1>(n));
+                        replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                    }
+                    for (pair n : replacementsForXmlIliasSpecialCode) {
+                        replaceAll(codeToSet, get<0>(n), get<1>(n));
+                    }
+                }
+
+
                 Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                 ++currentQuestionId;
                 questions.push_back(q);
@@ -588,6 +672,33 @@ int main() {
                         }
 
 
+                        //Based on the mode replacing certain characters  mode2==2 = Moodle other is Ilias
+                        if (mode2 == 2) {
+                            for (pair n : replacementsForXmlMoodle) {
+                                replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                                replaceAll(codeToSet, get<0>(n), get<1>(n));
+                                replaceAll(taskToSet, get<0>(n), get<1>(n));
+                                replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                            }
+                        }
+                        else {
+                            for (pair n : replacementsForXmlIlias) {
+                                replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                                //replaceAll(codeToSet, get<0>(n), get<1>(n));
+                                replaceAll(taskToSet, get<0>(n), get<1>(n));
+                                replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                            }
+                            for (pair n : replacementsForXmlIliasSpecialCode) {
+                                replaceAll(codeToSet, get<0>(n), get<1>(n));
+                            }
+                        }
+
                         Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                         ++currentQuestionId;
                         questions.push_back(q);
@@ -604,6 +715,33 @@ int main() {
                     taskToSet = task;
                     codeToSet = code;
                     additionalTextToSet = additionalText;
+
+                    //Based on the mode replacing certain characters  mode2==2 = Moodle other is Ilias
+                    if (mode2 == 2) {
+                        for (pair n : replacementsForXmlMoodle) {
+                            replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                            replaceAll(codeToSet, get<0>(n), get<1>(n));
+                            replaceAll(taskToSet, get<0>(n), get<1>(n));
+                            replaceAll(additionalTextToSet, get<0>(n), get<1>(n));                          
+                        }
+                    }
+                    else {
+                        for (pair n : replacementsForXmlIlias) {
+                            replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                            replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                            //replaceAll(codeToSet, get<0>(n), get<1>(n));
+                            replaceAll(taskToSet, get<0>(n), get<1>(n));
+                            replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                        }
+                        for (pair n : replacementsForXmlIliasSpecialCode) {
+                            replaceAll(codeToSet, get<0>(n), get<1>(n));
+                        }
+                    }
 
                     Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                     ++currentQuestionId;
@@ -623,177 +761,185 @@ int main() {
     if (!fs::exists(outputPath)) {
         fs::create_directory(outputPath);
     }
-    string questionpoolFolder = outputFolder + "\\" + folderMarking + qpl + questionPoolId;
-    fs::path questionpoolPath{ questionpoolFolder };
-    fs::create_directory(questionpoolPath);
 
-    fs::path modulesPath{ questionpoolFolder + "\\Modules" };
-    fs::create_directory(modulesPath);
-    fs::path modulesTestQPPath{ questionpoolFolder + "\\Modules\\TestQuestionPool" };
-    fs::create_directory(modulesTestQPPath);
-    fs::path modulesTestQPSetPath{ questionpoolFolder + "\\Modules\\TestQuestionPool\\set_1" };
-    fs::create_directory(modulesTestQPSetPath);
+    if(mode2==1){
+      string questionpoolFolder = outputFolder + "\\" + folderMarking + qpl + questionPoolId;
+      fs::path questionpoolPath{ questionpoolFolder };
+      fs::create_directory(questionpoolPath);
 
-    fs::path servicesPath{ questionpoolFolder + "\\Services" };
-    fs::create_directory(servicesPath);
-    fs::path servicesTaxPath{ questionpoolFolder + "\\Services\\Taxonomy" };
-    fs::create_directory(servicesTaxPath);
-    fs::path servicesTaxSetPath{ questionpoolFolder + "\\Services\\Taxonomy\\set_1" };
-    fs::create_directory(servicesTaxSetPath);
+      fs::path modulesPath{ questionpoolFolder + "\\Modules" };
+      fs::create_directory(modulesPath);
+      fs::path modulesTestQPPath{ questionpoolFolder + "\\Modules\\TestQuestionPool" };
+      fs::create_directory(modulesTestQPPath);
+      fs::path modulesTestQPSetPath{ questionpoolFolder + "\\Modules\\TestQuestionPool\\set_1" };
+      fs::create_directory(modulesTestQPSetPath);
 
-    //Write/Append to Files
-    ofstream writeToFile;
-    //Write Manifest xml
-    writeToFile.open(questionpoolFolder+"\\manifest.xml", ios_base::out);
-    writeToFile <<
-        "<?xml version=\"1.0\" encoding =\"UTF-8\"?><!--Generated by ILIAS XmlWriter--><Manifest MainEntity=\"qpl\" Title=\""
-        << "Testimport"
-        << "\" TargetRelease=\"5.4.0\" InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\"><ExportFile Component=\"Modules/TestQuestionPool\" Path=\"Modules/TestQuestionPool/set_1/export.xml\"/><ExportFile Component=\"Services/Taxonomy\" Path=\"Services/Taxonomy/set_1/export.xml\"/></Manifest>";
-    writeToFile.close();
+      fs::path servicesPath{ questionpoolFolder + "\\Services" };
+      fs::create_directory(servicesPath);
+      fs::path servicesTaxPath{ questionpoolFolder + "\\Services\\Taxonomy" };
+      fs::create_directory(servicesTaxPath);
+      fs::path servicesTaxSetPath{ questionpoolFolder + "\\Services\\Taxonomy\\set_1" };
+      fs::create_directory(servicesTaxSetPath);
 
-    //Write export in TestQuestionPool
-    writeToFile.open(questionpoolFolder + "\\Modules\\TestQuestionPool\\set_1\\export.xml", ios_base::out);
-    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        << "<!--Generated by ILIAS XmlWriter-->"
-        << "<exp:Export InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" Entity=\"qpl\" SchemaVersion=\"4.1.0\" TargetRelease=\"5.4.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:exp=\"http://www.ilias.de/Services/Export/exp/4_1\" xsi:schemaLocation=\"http://www.ilias.de/Services/Export/exp/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_export_4_1.xsd http://www.ilias.de/Modules/TestQuestionPool/htlm/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_qpl_4_1.xsd\" xmlns=\"http://www.ilias.de/Modules/TestQuestionPool/htlm/4_1\">"
-        << "<exp:ExportItem Id=\""
-        << questionPoolId
-        << "\"></exp:ExportItem></exp:Export>";
-    writeToFile.close();
+      //Write/Append to Files
+      ofstream writeToFile;
+      //Write Manifest xml
+      writeToFile.open(questionpoolFolder+"\\manifest.xml", ios_base::out);
+      writeToFile <<
+          "<?xml version=\"1.0\" encoding =\"UTF-8\"?><!--Generated by ILIAS XmlWriter--><Manifest MainEntity=\"qpl\" Title=\""
+          << "Testimport"
+          << "\" TargetRelease=\"5.4.0\" InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\"><ExportFile Component=\"Modules/TestQuestionPool\" Path=\"Modules/TestQuestionPool/set_1/export.xml\"/><ExportFile Component=\"Services/Taxonomy\" Path=\"Services/Taxonomy/set_1/export.xml\"/></Manifest>";
+      writeToFile.close();
 
-    //Write the Questions into the qti - items = base of the questions
-    writeToFile.open(questionpoolFolder + "\\" + folderMarking + qti + questionPoolId + ".xml");
-    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        << "<!DOCTYPE questestinterop SYSTEM \"ims_qtiasiv1p2p1.dtd\">"
-        << "<!--Generated by ILIAS XmlWriter-->"
-        << "<questestinterop>";
-    for (Question q : questions) {
-        writeToFile << "<item ident=\"il_0_qst_" << q.GetQuestionId() << "\" title=\"" << q.GetName() << "\" maxattempts=\"0\">"
-            << "<qticomment>" << q.GetDescription() << "</qticomment><duration>P0Y0M0DT0H1M0S</duration><itemmetadata><qtimetadata><qtimetadatafield><fieldlabel>ILIAS_VERSION</fieldlabel><fieldentry>5.4.26 2021-12-22</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>QUESTIONTYPE</fieldlabel><fieldentry>SINGLE CHOICE QUESTION</fieldentry></qtimetadatafield>"
-            << "<qtimetadatafield><fieldlabel>AUTHOR</fieldlabel><fieldentry>" << q.GetAuthor() << "</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>additional_cont_edit_mode</fieldlabel><fieldentry>default</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>thumb_size</fieldlabel><fieldentry/></qtimetadatafield>"
-            << "<qtimetadatafield><fieldlabel>feedback_setting</fieldlabel><fieldentry>2</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>singleline</fieldlabel><fieldentry>0</fieldentry></qtimetadatafield></qtimetadata></itemmetadata>"
-            << "<presentation label=\""<< q.GetName() << "\"><flow>"
-            << "<material><mattext texttype=\"text/xhtml\">" << q.GetTask() <<"</mattext></material>"
-            << "<response_lid ident=\"MCSR\" rcardinality=\"Single\"><render_choice shuffle=\"Yes\">"
-            << "<response_label ident=\"0\"><material><mattext texttype=\"text/xhtml\">"<< q.GetCorrectAnswer() <<"</mattext></material></response_label>"
-            << "<response_label ident=\"1\"><material><mattext texttype=\"text/xhtml\">" << q.GetWrongAnswerOne() << "</mattext></material></response_label>"
-            << "<response_label ident=\"2\"><material><mattext texttype=\"text/xhtml\">" << q.GetWrongAnswerTwo() << "</mattext></material></response_label>"
-            << "<response_label ident=\"3\"><material><mattext texttype=\"text/xhtml\">" << q.GetWrongAnswerThree() << "</mattext></material></response_label>"
-            << "</render_choice></response_lid></flow></presentation><resprocessing><outcomes><decvar></decvar></outcomes><respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">0</varequal></conditionvar><setvar action=\"Add\">1</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_0\"/></respcondition>"
-            << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">1</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_1\"/></respcondition>"
-            << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">2</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_2\"/></respcondition>"
-            << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">3</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_3\"/></respcondition></resprocessing>"
-            << "<itemfeedback ident=\"response_0\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
-            << "<itemfeedback ident=\"response_1\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
-            << "<itemfeedback ident=\"response_2\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
-            << "<itemfeedback ident=\"response_3\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback></item>"
-            ;
-    }
-    writeToFile << "</questestinterop>";
-    writeToFile.close();
+      //Write export in TestQuestionPool
+      writeToFile.open(questionpoolFolder + "\\Modules\\TestQuestionPool\\set_1\\export.xml", ios_base::out);
+      writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+          << "<!--Generated by ILIAS XmlWriter-->"
+          << "<exp:Export InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" Entity=\"qpl\" SchemaVersion=\"4.1.0\" TargetRelease=\"5.4.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:exp=\"http://www.ilias.de/Services/Export/exp/4_1\" xsi:schemaLocation=\"http://www.ilias.de/Services/Export/exp/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_export_4_1.xsd http://www.ilias.de/Modules/TestQuestionPool/htlm/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_qpl_4_1.xsd\" xmlns=\"http://www.ilias.de/Modules/TestQuestionPool/htlm/4_1\">"
+          << "<exp:ExportItem Id=\""
+          << questionPoolId
+          << "\"></exp:ExportItem></exp:Export>";
+      writeToFile.close();
 
-    //Writing Question extras like Code or additional text in qpl- questionpool - creating the structure for each question
-    // a question can be with additional Text, Picture or Code
-    writeToFile.open(questionpoolFolder + "\\" + folderMarking + qpl + questionPoolId + ".xml");
-    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE Test SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd\"><!--Export of ILIAS Test Questionpool "<< questionPoolId << " of installation .-->"
-        << "<ContentObject Type=\"Questionpool_Test\"><MetaData><General Structure=\"Hierarchical\">"
-        << "<Identifier Catalog=\"ILIAS\" Entry=\"il_0_qpl_" << questionPoolId << "\"/><Title Language=\"de\">"<<qpTitle<<"</Title><Language Language=\"de\"/><Description Language=\"de\"></Description><Keyword Language=\"de\"/></General></MetaData>"
-        << "<Settings><ShowTaxonomies>1</ShowTaxonomies><NavTaxonomy>0</NavTaxonomy><SkillService>0</SkillService></Settings>";
-    for (Question q : questions) {
-        writeToFile << "<PageObject>";
-        if (!q.IsAdditionalTextEmpty()) {
-            writeToFile << "<PageContent><Paragraph Language=\"de\" Characteristic=\"Standard\">" << q.GetAdditionalText() << "</Paragraph></PageContent>";
-        }
-        if (!q.IsCodeEmpty()) {
-            writeToFile << "<PageContent><Paragraph Language=\"de\" SubCharacteristic=\"cpp\" ShowLineNumbers=\"y\" Characteristic=\"Code\">" << q.GetCode() << "</Paragraph></PageContent>";
-        }
-        // If Pictures are in question, then create a new content
-        if(q.GetPicture().GetName() != "")
+      //Write the Questions into the qti - items = base of the questions
+      writeToFile.open(questionpoolFolder + "\\" + folderMarking + qti + questionPoolId + ".xml");
+      writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+          << "<!DOCTYPE questestinterop SYSTEM \"ims_qtiasiv1p2p1.dtd\">"
+          << "<!--Generated by ILIAS XmlWriter-->"
+          << "<questestinterop>";
+      for (Question q : questions) {
+          writeToFile << "<item ident=\"il_0_qst_" << q.GetQuestionId() << "\" title=\"" << q.GetName() << "\" maxattempts=\"0\">"
+              << "<qticomment>" << q.GetDescription() << "</qticomment><duration>P0Y0M0DT0H1M0S</duration><itemmetadata><qtimetadata><qtimetadatafield><fieldlabel>ILIAS_VERSION</fieldlabel><fieldentry>5.4.26 2021-12-22</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>QUESTIONTYPE</fieldlabel><fieldentry>SINGLE CHOICE QUESTION</fieldentry></qtimetadatafield>"
+              << "<qtimetadatafield><fieldlabel>AUTHOR</fieldlabel><fieldentry>" << q.GetAuthor() << "</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>additional_cont_edit_mode</fieldlabel><fieldentry>default</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>thumb_size</fieldlabel><fieldentry/></qtimetadatafield>"
+              << "<qtimetadatafield><fieldlabel>feedback_setting</fieldlabel><fieldentry>2</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>singleline</fieldlabel><fieldentry>0</fieldentry></qtimetadatafield></qtimetadata></itemmetadata>"
+              << "<presentation label=\""<< q.GetName() << "\"><flow>"
+              << "<material><mattext texttype=\"text/xhtml\">&lt;p&gt;" << q.GetTask() <<"&lt;/p&gt;</mattext></material>"
+              << "<response_lid ident=\"MCSR\" rcardinality=\"Single\"><render_choice shuffle=\"Yes\">"
+              << "<response_label ident=\"0\"><material><mattext texttype=\"text/xhtml\">&lt;p&gt;"<< q.GetCorrectAnswer() <<"&lt;/p&gt;</mattext></material></response_label>"
+              << "<response_label ident=\"1\"><material><mattext texttype=\"text/xhtml\">&lt;p&gt;" << q.GetWrongAnswerOne() << "&lt;/p&gt;</mattext></material></response_label>"
+              << "<response_label ident=\"2\"><material><mattext texttype=\"text/xhtml\">&lt;p&gt;" << q.GetWrongAnswerTwo() << "&lt;/p&gt;</mattext></material></response_label>"
+              << "<response_label ident=\"3\"><material><mattext texttype=\"text/xhtml\">&lt;p&gt;" << q.GetWrongAnswerThree() << "&lt;/p&gt;</mattext></material></response_label>"
+              << "</render_choice></response_lid></flow></presentation><resprocessing><outcomes><decvar></decvar></outcomes><respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">0</varequal></conditionvar><setvar action=\"Add\">1</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_0\"/></respcondition>"
+              << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">1</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_1\"/></respcondition>"
+              << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">2</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_2\"/></respcondition>"
+              << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">3</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_3\"/></respcondition></resprocessing>"
+              << "<itemfeedback ident=\"response_0\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
+              << "<itemfeedback ident=\"response_1\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
+              << "<itemfeedback ident=\"response_2\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback>"
+              << "<itemfeedback ident=\"response_3\" view=\"All\"><flow_mat><material><mattext texttype=\"text/plain\">&#10;          </mattext></material></flow_mat></itemfeedback></item>"
+              ;
+      }
+      writeToFile << "</questestinterop>";
+      writeToFile.close();
+
+      //Writing Question extras like Code or additional text in qpl- questionpool - creating the structure for each question
+      // a question can be with additional Text, Picture or Code
+      writeToFile.open(questionpoolFolder + "\\" + folderMarking + qpl + questionPoolId + ".xml");
+      writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE Test SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_co.dtd\"><!--Export of ILIAS Test Questionpool "<< questionPoolId << " of installation .-->"
+          << "<ContentObject Type=\"Questionpool_Test\"><MetaData><General Structure=\"Hierarchical\">"
+          << "<Identifier Catalog=\"ILIAS\" Entry=\"il_0_qpl_" << questionPoolId << "\"/><Title Language=\"de\">"<<qpTitle<<"</Title><Language Language=\"de\"/><Description Language=\"de\"></Description><Keyword Language=\"de\"/></General></MetaData>"
+          << "<Settings><ShowTaxonomies>1</ShowTaxonomies><NavTaxonomy>0</NavTaxonomy><SkillService>0</SkillService></Settings>";
+      for (Question q : questions) {
+          writeToFile << "<PageObject>";
+          if (!q.IsAdditionalTextEmpty()) {
+              writeToFile << "<PageContent><Paragraph Language=\"de\" Characteristic=\"Standard\">" << q.GetAdditionalText() << "</Paragraph></PageContent>";
+          }
+          if (!q.IsCodeEmpty()) {
+              writeToFile << "<PageContent><Paragraph Language=\"de\" SubCharacteristic=\"cpp\" ShowLineNumbers=\"y\" Characteristic=\"Code\">" << q.GetCode() << "</Paragraph></PageContent>";
+          }
+          // If Pictures are in question, then create a new content
+          if(q.GetPicture().GetName() != "")
+          {
+            writeToFile << "<PageContent><MediaObject><MediaAlias OriginId=\"il_0_mob_"<< q.GetPicture().GetId() <<"\"/><MediaAliasItem Purpose=\"Standard\"><Layout HorizontalAlign=\"Left\" Width=\""<<q.GetPicture().GetWidth()<<"\" Height=\""<<q.GetPicture().GetHeight()<<"\"/></MediaAliasItem></MediaObject></PageContent>";
+          }
+          writeToFile << "<PageContent><Question QRef=\"il_0_qst_" << q.GetQuestionId() << "\"/></PageContent></PageObject>";
+      }
+      for (Picture p : pictures){
+        if(p.GetName() != "")
         {
-          writeToFile << "<PageContent><MediaObject><MediaAlias OriginId=\"il_0_mob_"<< q.GetPicture().GetId() <<"\"/><MediaAliasItem Purpose=\"Standard\"><Layout HorizontalAlign=\"Left\" Width=\""<<q.GetPicture().GetWidth()<<"\" Height=\""<<q.GetPicture().GetHeight()<<"\"/></MediaAliasItem></MediaObject></PageContent>";
+        writeToFile << "<MediaObject><MetaData><General Structure=\"Hierarchical\"><Identifier Catalog=\"ILIAS\" Entry=\"il_0_mob_"<< p.GetId() <<"\"/>"
+          << "<Title Language=\"de\">"<< p.GetName() <<"</Title><Language Language=\"de\"/><Description Language=\"de\">image/png</Description><Keyword Language=\"de\"/></General></MetaData>"
+          << "<MediaItem Purpose=\"Standard\"><Location Type=\"LocalFile\">"<< p.GetName() <<"</Location><Format>image/png</Format><Layout   HorizontalAlign=\"Left\" /></MediaItem></MediaObject>";
         }
-        writeToFile << "<PageContent><Question QRef=\"il_0_qst_" << q.GetQuestionId() << "\"/></PageContent></PageObject>";
-    }
-    for (Picture p : pictures){
-      if(p.GetName() != "")
-      {
-      writeToFile << "<MediaObject><MetaData><General Structure=\"Hierarchical\"><Identifier Catalog=\"ILIAS\" Entry=\"il_0_mob_"<< p.GetId() <<"\"/>"
-        << "<Title Language=\"de\">"<< p.GetName() <<"</Title><Language Language=\"de\"/><Description Language=\"de\">image/png</Description><Keyword Language=\"de\"/></General></MetaData>"
-        << "<MediaItem Purpose=\"Standard\"><Location Type=\"LocalFile\">"<< p.GetName() <<"</Location><Format>image/png</Format><Layout   HorizontalAlign=\"Left\" /></MediaItem></MediaObject>";
+      }
+      writeToFile << "<QuestionSkillAssignments>";
+      for (Question q : questions) {
+          writeToFile << "<TriggerQuestion Id=\"" << q.GetQuestionId() << "\"></TriggerQuestion>";
+      }
+      writeToFile << "</QuestionSkillAssignments></ContentObject>";
+      writeToFile.close();
+
+      //Writing the export xml for the Used Taxonomy
+      writeToFile.open(questionpoolFolder + "\\Services\\Taxonomy\\set_1\\export.xml", ios_base::out);
+      writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Generated by ILIAS XmlWriter--><exp:Export InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" Entity=\"tax\" SchemaVersion=\"4.3.0\" TargetRelease=\"5.4.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:exp=\"http://www.ilias.de/Services/Export/exp/4_1\" xsi:schemaLocation=\"http://www.ilias.de/Services/Export/exp/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_export_4_1.xsd http://www.ilias.de/Services/Taxonomy/tax/4_3 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_tax_4_3.xsd http://www.ilias.de/Services/DataSet/ds/4_3 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_ds_4_3.xsd\" xmlns=\"http://www.ilias.de/Services/Taxonomy/tax/4_3\" xmlns:ds=\"http://www.ilias.de/Services/DataSet/ds/4_3\">"
+          << "<exp:ExportItem Id = \"" << taxId << "\"><ds:DataSet InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" TopEntity=\"tax\">";
+      //Tax Toplevel
+      writeToFile << "<ds:Rec Entity=\"tax\"><Tax><Id>" << taxId << "</Id><Title>" << taxTitle << "</Title><Description></Description><SortingMode>0</SortingMode></Tax></ds:Rec>";
+      //TaxTree Toplevel
+      writeToFile << "<ds:Rec Entity=\"tax_tree\"><TaxTree><TaxId>" << taxId << "</TaxId><Child>"<< parentId <<"</Child><Parent>0</Parent><Depth>1</Depth><Type></Type><Title>Root node for taxonomy "<< taxId << "</Title><OrderNr>0</OrderNr></TaxTree></ds:Rec>";
+
+      //For each level in taxonomy levels add a node to the tree
+      //temp is just the Order which each node is in. each new taxonomy level is one node, under each node do the question et created
+      int temp = 10;
+      for (string t : taxonomyLevels) {
+          writeToFile << "<ds:Rec Entity=\"tax_tree\"><TaxTree><TaxId>" << taxId << "</TaxId><Child>"
+              << childId << "</Child><Parent>" << parentId << "</Parent><Depth>2</Depth><Type>taxn</Type><Title>"
+              << t << "</Title><OrderNr>" << temp << "</OrderNr></TaxTree></ds:Rec>";
+          for (Question q : questions) {
+              if (q.GetTaxonomy() == t) {
+                  writeToFile << "<ds:Rec Entity=\"tax_node_assignment\"><TaxNodeAssignment><NodeId>" << childId
+                      << "</NodeId><Component>qpl</Component><ItemType>quest</ItemType><ItemId>" << q.GetQuestionId() << "</ItemId></TaxNodeAssignment></ds:Rec>";
+              }
+          }
+          ++childId;
+          temp += 10;
+      }
+      writeToFile << "<ds:Rec Entity=\"tax_usage\"><TaxUsage><TaxId>" << taxId << "</TaxId><ObjId>" << questionPoolId << "</ObjId></TaxUsage></ds:Rec></ds:DataSet></exp:ExportItem></exp:Export>";
+      writeToFile.close();
+
+
+      if (!pictures.empty()) {
+          //general path for pictures, needed when pictures arent empty.
+          fs::path picturePath{ questionpoolFolder + "\\objects" };
+          fs::create_directory(picturePath);
+
+          //Pictures that are in vector, create folder structure for it.
+          for (Picture p : pictures) {
+              // creating a path for the picture based on the id
+              string pStringPath = questionpoolFolder + "\\objects" + "\\il_0_mob_" + to_string(p.GetId());
+              fs::path pPath{ pStringPath };
+              fs::create_directory(pPath);
+              // copy the picture from inputPictured in the newly created folder
+              string fromPath{ pictureInputpath + "\\" + p.GetName() };
+              fs::copy_file(fromPath, pStringPath + "\\" + p.GetName());
+          }
+
       }
     }
-    writeToFile << "<QuestionSkillAssignments>";
-    for (Question q : questions) {
-        writeToFile << "<TriggerQuestion Id=\"" << q.GetQuestionId() << "\"></TriggerQuestion>";
-    }
-    writeToFile << "</QuestionSkillAssignments></ContentObject>";
-    writeToFile.close();
-
-    //Writing the export xml for the Used Taxonomy
-    writeToFile.open(questionpoolFolder + "\\Services\\Taxonomy\\set_1\\export.xml", ios_base::out);
-    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Generated by ILIAS XmlWriter--><exp:Export InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" Entity=\"tax\" SchemaVersion=\"4.3.0\" TargetRelease=\"5.4.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:exp=\"http://www.ilias.de/Services/Export/exp/4_1\" xsi:schemaLocation=\"http://www.ilias.de/Services/Export/exp/4_1 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_export_4_1.xsd http://www.ilias.de/Services/Taxonomy/tax/4_3 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_tax_4_3.xsd http://www.ilias.de/Services/DataSet/ds/4_3 https://eassessment.rz.uni-leipzig.de/eklausuren/xml/ilias_ds_4_3.xsd\" xmlns=\"http://www.ilias.de/Services/Taxonomy/tax/4_3\" xmlns:ds=\"http://www.ilias.de/Services/DataSet/ds/4_3\">"
-        << "<exp:ExportItem Id = \"" << taxId << "\"><ds:DataSet InstallationId=\"0\" InstallationUrl=\"https://eassessment.rz.uni-leipzig.de/eklausuren\" TopEntity=\"tax\">";
-    //Tax Toplevel
-    writeToFile << "<ds:Rec Entity=\"tax\"><Tax><Id>" << taxId << "</Id><Title>" << taxTitle << "</Title><Description></Description><SortingMode>0</SortingMode></Tax></ds:Rec>";
-    //TaxTree Toplevel
-    writeToFile << "<ds:Rec Entity=\"tax_tree\"><TaxTree><TaxId>" << taxId << "</TaxId><Child>"<< parentId <<"</Child><Parent>0</Parent><Depth>1</Depth><Type></Type><Title>Root node for taxonomy "<< taxId << "</Title><OrderNr>0</OrderNr></TaxTree></ds:Rec>";
-
-    //For each level in taxonomy levels add a node to the tree
-    //temp is just the Order which each node is in. each new taxonomy level is one node, under each node do the question et created
-    int temp = 10;
-    for (string t : taxonomyLevels) {
-        writeToFile << "<ds:Rec Entity=\"tax_tree\"><TaxTree><TaxId>" << taxId << "</TaxId><Child>"
-            << childId << "</Child><Parent>" << parentId << "</Parent><Depth>2</Depth><Type>taxn</Type><Title>"
-            << t << "</Title><OrderNr>" << temp << "</OrderNr></TaxTree></ds:Rec>";
-        for (Question q : questions) {
-            if (q.GetTaxonomy() == t) {
-                writeToFile << "<ds:Rec Entity=\"tax_node_assignment\"><TaxNodeAssignment><NodeId>" << childId
-                    << "</NodeId><Component>qpl</Component><ItemType>quest</ItemType><ItemId>" << q.GetQuestionId() << "</ItemId></TaxNodeAssignment></ds:Rec>";
-            }
-        }
-        ++childId;
-        temp += 10;
-    }
-    writeToFile << "<ds:Rec Entity=\"tax_usage\"><TaxUsage><TaxId>" << taxId << "</TaxId><ObjId>" << questionPoolId << "</ObjId></TaxUsage></ds:Rec></ds:DataSet></exp:ExportItem></exp:Export>";
-    writeToFile.close();
 
 
-    if (!pictures.empty()) {
-        //general path for pictures, needed when pictures arent empty.
-        fs::path picturePath{ questionpoolFolder + "\\objects" };
-        fs::create_directory(picturePath);
-
-        //Pictures that are in vector, create folder structure for it.
-        for (Picture p : pictures) {
-            // creating a path for the picture based on the id
-            string pStringPath = questionpoolFolder + "\\objects" + "\\il_0_mob_" + to_string(p.GetId());
-            fs::path pPath{ pStringPath };
-            fs::create_directory(pPath);
-            // copy the picture from inputPictured in the newly created folder
-            string fromPath{ pictureInputpath + "\\" + p.GetName() };
-            fs::copy_file(fromPath, pStringPath + "\\" + p.GetName());
-        }
-
+    if(mode2==2){
+      ofstream writeToFile;
+      //Creating Moodle Xml with just questions and their answers.
+      writeToFile.open(outputFolder + "\\" + "moodle.xml");
+      writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+          << "<quiz>";
+      for (Question q : questions) {
+          writeToFile << "<question type=\"multichoice\"><name><text>" << q.GetName() << "</text></name>"
+              << "<questiontext format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetTask() << "</p>]]></text></questiontext>"
+              << "<generalfeedback format=\"html\"><text></text></generalfeedback><defaultgrade>1</defaultgrade><penalty>0</penalty><hidden>0</hidden><idnumber></idnumber>"
+              << "<single>true</single><shuffleanswers>true</shuffleanswers><answernumbering>abc</answernumbering><showstandardinstruction>0</showstandardinstruction><shownumcorrect/>"
+              << "<answer fraction=\"100\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetCorrectAnswer() << "</p>]]></text></answer>"
+              << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerOne() << "</p>]]></text></answer>"
+              << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerTwo() << "</p>]]></text></answer>"
+              << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerThree() << "</p>]]></text></answer>"
+              << "</question>"
+              ;
+      }
+      writeToFile << "</quiz>";
+      writeToFile.close();
     }
 
-    //Creating Moodle Xml with just questions and their answers.
-    writeToFile.open(outputFolder + "\\" + "moodle.xml");
-    writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        << "<quiz>";
-    for (Question q : questions) {
-        writeToFile << "<question type=\"multichoice\"><name><text>" << q.GetName() << "</text></name>"
-            << "<questiontext format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetTask() << "</p>]]></text></questiontext>"
-            << "<generalfeedback format=\"html\"><text></text></generalfeedback><defaultgrade>1</defaultgrade><penalty>0</penalty><hidden>0</hidden><idnumber></idnumber>"
-            << "<single>true</single><shuffleanswers>true</shuffleanswers><answernumbering>abc</answernumbering><showstandardinstruction>0</showstandardinstruction><shownumcorrect/>"
-            << "<answer fraction=\"100\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetCorrectAnswer() << "</p>]]></text></answer>"
-            << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerOne() << "</p>]]></text></answer>"
-            << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerTwo() << "</p>]]></text></answer>"
-            << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerThree() << "</p>]]></text></answer>"
-            << "</question>"
-            ;
-    }
-    writeToFile << "</quiz>";
-    writeToFile.close();
 
 
     cout << "Number of questions created: " << currentQuestionId - 1 << endl;

@@ -1,0 +1,33 @@
+@NAME
+XMLStuff
+@AUTHOR
+Nico Willert
+@DESCRIPTION
+Faktenfrage, leicht
+@TAXONOMY
+5
+@CODE
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	int a=55;
+	int *i =&a;
+} 
+@ADDITIONALTEXT
+This is some Additional Text
+@TASK
+In 1935 Alan Turing published his famous paper Und : & , String : "hallo Welt "; $b Fett $/b; $nl Neue Zeile in $c Codefont $/c Unfortunately this machine cannot be built in reality. What is a valid reason?
+@TRUE
+The machine would require an endless tape.
+It could take endless time to process a tape.
+@FALSE
+The entirety of all computable functions is not known.
+Some numbers cannot be computed, for example, irrational numbers.
+The speed of light imposes a fundamental bareer for its construction.
+Because of its simple construction, in many cases the algorithms would become too complex.
+Its design and construction would be too expensive.
+It cannot be sufficiently miniaturized.
+@EXCLUSIONS
+c1 excludes w2
