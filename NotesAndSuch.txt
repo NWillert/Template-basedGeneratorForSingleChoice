@@ -1,0 +1,25 @@
+
+<	&lt;	
+>	&gt;
+&	&amp;
+"	&quot;
+'	&apos;
+
+alles wird in p gepackt direkt
+
+$nl - &lt;/p&gt;&lt;p&gt;
+$b - &lt;strong&gt;	$/b	&lt;/strong&gt;
+$i - &lt;em&gt;		$/i	&lt;/em&gt;
+$u - &lt;u&gt;		$/u 	&lt;/u&gt;
+$c - &lt;code&gt;	$/c  	&lt;/code&gt;
+$p - &lt;pre&gt;	$/p     &lt;/pre&gt;
+
+New Lines have to be in <p></p>		&lt;p&gt;	&lt;/p&gt;
+Fett <strong></strong>			&lt;strong&gt;	&lt;/strong&gt;
+Kursiv <em></em>			&lt;em&gt;	&lt;/em&gt;
+Unterstrichen <u></u>			&lt;u&gt;	&lt;/u&gt;
+Code <code></code>			&lt;code&gt;	&lt;/code&gt;
+Rohdaten <pre></pre>			&lt;pre&gt;	&lt;/pre&gt;
+
+
+
