@@ -347,7 +347,7 @@ int main() {
                             parameterName = temp;
                             temp = "";
 
-                            while (is.peek() != '$') {
+                            do {
                                 while (is.peek() > 32) {
                                     temp += is.get();
                                 }
@@ -355,7 +355,7 @@ int main() {
                                 if (is.peek() != '$') {
                                     temp += whitespace;
                                 }
-                            }
+                            } while (is.peek() != '$');
                             parameterValue = temp;
                             temp = "";
 
@@ -771,6 +771,8 @@ int main() {
             taxonomyLevels.push_back(taxonomy);
         }
     }
+
+    // Checking in Questions, so that only one question exists where everything but currentQuestionId is the same
 
 
     //Creating Output Structure

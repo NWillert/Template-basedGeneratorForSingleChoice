@@ -1,0 +1,33 @@
+@NAME
+Recursive Parameters
+@AUTHOR
+Nico Willert
+@DESCRIPTION
+Nothing
+@PARAMETER
+$TEST
+$ERE
+$NARE
+$TYPE
+$NAME
+$VALUE
+@VALUERANGE
+$ERE # $NARE
+1 # 2
+z # w
+int # double
+a # b # c
+42 # 99 # "Hi, there" # "Good "s + "point"
+@INTERACTION
+$TEST $ERE $NAME a
+$TEST $NARE $NAME b
+$TEST $NARE $VALUE 42
+@TASK
+How do you define the variable $NAME of type $TYPE and initialize it with value $VALUE? What is the correct statement?
+@TRUE
+$TYPE $NAME { $VALUE };
+@FALSE
+$TYPE $NAME; $NAME = $VALUE;
+$NAME as $TYPE = $VALUE;
+$TYPE $NAME { }; $NAME = $VALUE;
+@EXCLUSIONS
