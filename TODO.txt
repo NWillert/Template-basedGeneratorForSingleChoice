@@ -15,6 +15,9 @@ Parsing the file
 	- sending error messages for false inputs?
 	- specifying errors when a parameter has no value range. 
 
+@EXCLUSION is needed in each template as the last section. wether it has content or not
+Change it future me!
+
 
 
 
