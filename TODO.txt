@@ -19,6 +19,9 @@ Parsing the file
 Change it future me!
 
 
+@Exclusions
+exclusionen basierend auf Parametern? 
 
+Paramter mit mehreren Wertebereichen? 
 
 				

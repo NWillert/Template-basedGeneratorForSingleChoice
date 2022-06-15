@@ -454,6 +454,7 @@ int main() {
             }
             readFromFile.close();
         }
+        cout << "Parsed " << filename << endl;
 
         //Combinatorics, just building all combinations for correct and false answers
         vector<tuple<int,int,int,int>> possibleCombinations;
@@ -564,6 +565,7 @@ int main() {
             }
 
         }
+
 
 
 
@@ -771,6 +773,8 @@ int main() {
             taxonomyLevels.push_back(taxonomy);
         }
     }
+        
+    cout << "Created All Questions for the previously mentioned file" << endl;
 
     // Checking in Questions, so that only one question exists where everything but currentQuestionId is the same
 
