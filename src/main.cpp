@@ -781,7 +781,7 @@ int main() {
         if (!isInVector(taxonomyLevels, taxonomy)) {
             taxonomyLevels.push_back(taxonomy);
         }
-        cout << "Created Questions for the previously mentioned file" << endl;
+        cout << "Created Questions for "<< filename << endl << "There now exist "<< currentQuestionId-1 << " questions" << endl;
     }
 
 
