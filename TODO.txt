@@ -25,4 +25,7 @@ exclusionen basierend auf Parametern?
 
 Parameter mit mehreren Wertebereichen? 
 
+
+Configurationsliste mit namen der dateien/Fragen die gelesen werden sollen? 
+	so dass man generativ sich pools auf fragen basierend ausprägen kann
 		

@@ -125,7 +125,7 @@ int main() {
     replacementsForXmlIlias.push_back(make_pair("$p", "<pre>"));
     replacementsForXmlIlias.push_back(make_pair("$/p", "</pre>"));
     replacementsForXmlIlias.push_back(make_pair("&lt;br/&gt;", "<br/>"));
-    replacementsForXmlIlias.push_back(make_pair("$w", " "));
+    replacementsForXmlIlias.push_back(make_pair("$w", ""));
 
     vector<pair<string, string>> replacementsForXmlIliasSpecialCode{};
     replacementsForXmlIliasSpecialCode.push_back(make_pair("&", "&amp;amp;"));
@@ -134,7 +134,7 @@ int main() {
     replacementsForXmlIliasSpecialCode.push_back(make_pair("\"", "&amp;quot;"));
     replacementsForXmlIliasSpecialCode.push_back(make_pair("\'", "&amp;apos;"));
     replacementsForXmlIliasSpecialCode.push_back(make_pair("&amp;lt;br/&amp;gt;", "<br/>"));
-    replacementsForXmlIliasSpecialCode.push_back(make_pair("$w", " "));
+    replacementsForXmlIliasSpecialCode.push_back(make_pair("$w", ""));
 
     vector<pair<string, string>> replacementsForXmlIliasSpecialAdditionalText{};
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("&", "&amp;amp;"));
@@ -149,7 +149,7 @@ int main() {
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/u", "</Important>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$c", "<Code>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/c", "</Code>"));
-    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$w", " "));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$w", ""));
 
 
     vector<pair<string, string>> replacementsForXmlMoodle{};
@@ -164,7 +164,7 @@ int main() {
     replacementsForXmlMoodle.push_back(make_pair("$/c", "</code>"));
     replacementsForXmlMoodle.push_back(make_pair("$p", "<pre>"));
     replacementsForXmlMoodle.push_back(make_pair("$/p", "</pre>"));
-    replacementsForXmlMoodle.push_back(make_pair("$w", " "));
+    replacementsForXmlMoodle.push_back(make_pair("$w", ""));
     //End Replacements for xml generations
 
     string questionPoolId{};
