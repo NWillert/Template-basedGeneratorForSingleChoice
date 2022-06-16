@@ -43,3 +43,12 @@ together with a number for which answer starting with 1
 example: 
 c1 excludes w3 
 -> This means the correct Answer 1 excludes the wrong answer 3
+
+Special Characters: Can be used in Task, Answers and Additional text and Parameters(ValueRange and Interactions)
+$nl -		New Line  
+$b - $/b	Start and end bold
+$i - $/i	Start and end italics
+$u - $/u 	Start and end underlined
+$c - $/c	Start and end code
+$p - $/p	Start and end pre
+$w			Inputs a whitespace (Useful for empty parameter Values)

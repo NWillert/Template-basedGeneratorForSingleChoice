@@ -1,0 +1,57 @@
+@NAME
+Conditional Compilation
+@AUTHOR
+Janik Eriksson
+@DATE
+15.06.2022
+@VERSION
+1
+@DESCRIPTION
+Conditional Compilation
+@TAXONOMY
+13
+@CODE
+#include <iostream>
+using namespace std;
+
+#define $CONSTANT
+
+int main()
+{
+#ifdef UNIX
+    cout << "We are on Unix";
+#elifdef WINDOWS
+    cout << "We are on Windows"
+#else
+    cout << "Unknown operating system" << endl;
+#endif
+}
+@PARAMETER
+$CONSTANT
+$RESULTCORRECT
+$RESULTWRONG1
+$RESULTWRONG2
+@VALUERANGE
+UNIX # DOS # WINDOWS
+We are on Unix # We are on Windows # Unknown operating system
+We are on Unix # We are on Windows # Unknown operating system
+We are on Unix # We are on Windows # Unknown operating system
+@INTERACTION
+$CONSTANT UNIX $RESULTCORRECT We are on Unix
+$CONSTANT UNIX $RESULTWRONG1 We are on Windows
+$CONSTANT UNIX $RESULTWRONG2 Unknown operating system
+$CONSTANT WINDOWS $RESULTCORRECT We are on Windows
+$CONSTANT WINDOWS $RESULTWRONG1 We are on Unix
+$CONSTANT WINDOWS $RESULTWRONG2 Unknown operating system
+$CONSTANT DOS $RESULTCORRECT Unknown operating system
+$CONSTANT DOS $RESULTWRONG1 We are on Unix
+$CONSTANT DOS $RESULTWRONG2 We are on Windows
+@TASK
+What is the output of the program?
+@TRUE
+$RESULTCORRECT
+@FALSE
+$RESULTWRONG1
+$RESULTWRONG2
+The program does not compile because it is not allowed to use the character '#' in the source code.
+@EXCLUSIONS

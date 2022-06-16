@@ -1,0 +1,27 @@
+@NAME
+Functiontemplates
+@AUTHOR
+Nico Willert
+@DATE
+13.06.2022
+@VERSION
+1
+@DESCRIPTION
+Templates
+@TAXONOMY
+6
+@ADDITIONALTEXT
+Given is the following code-fragment.
+@CODE
+template <class T> void func(T& t);
+template <class T1,class T2> void func(T1& t1,T2& t2);
+template <> void func<int>(int& t);
+@TASK
+Which of the following statements is correct?
+@TRUE
+The function template in line 3 is a complete specialization of the function template in line 1.
+@FALSE
+The function template in line 1 is a partial specialization of the function template in line 2.
+The function template in line 2 specializes the function template in line 1.
+The function template in line 3 overloads the function template in line 1.
+@EXCLUSIONS

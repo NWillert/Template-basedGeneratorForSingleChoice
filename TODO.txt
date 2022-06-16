@@ -12,16 +12,17 @@ Parsing the file
 		Recursive Parameters?
 			Check questions for exakt duplikates? and filter them so that only one exists
 		Check for the use of paramaters still in the files and write them out till no parameters are in there?
-	- sending error messages for false inputs?
+	- sending error messages for false inputs?		
+		Parameter, Value Range and Interaction - check for errors
+			especially if interaction values are in value range of that parameter
 	- specifying errors when a parameter has no value range. 
 
 @EXCLUSION is needed in each template as the last section. wether it has content or not
 Change it future me!
 
-
 @Exclusions
 exclusionen basierend auf Parametern? 
 
-Paramter mit mehreren Wertebereichen? 
+Parameter mit mehreren Wertebereichen? 
 
-				
+		

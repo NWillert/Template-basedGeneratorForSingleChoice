@@ -1,0 +1,34 @@
+@NAME
+CodeInsertion
+@AUTHOR
+Nico Willert
+@DATE
+13.06.2022
+@VERSION
+1
+@DESCRIPTION
+Insert Code Fragement.
+@TAXONOMY
+2
+@CODE
+// Insert Code Here
+class A {
+    C *c;
+};
+
+class C {
+};
+
+int main() {
+    A a;
+}
+@TASK
+Which code fragment must line 1 be replaced with in the above program so that the program can be compiled and executed?
+@TRUE
+class C;
+@FALSE
+C{}
+template<C>
+typedef class C{}
+include C
+@EXCLUSIONS

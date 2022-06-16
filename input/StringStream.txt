@@ -1,0 +1,21 @@
+@NAME
+Stringstream
+@AUTHOR
+Nico Willert
+@DATE
+13.06.2022
+@VERSION
+1
+@DESCRIPTION
+Stringstream
+@TAXONOMY
+8
+@TASK
+What is a string stream?
+@TRUE
+A special stream that allows inputs and outputs in main memory.
+@FALSE
+A string of any length.
+A file that contains only strings.
+A stream that contains only characters.
+@EXCLUSIONS

@@ -1,0 +1,27 @@
+@NAME
+Containers
+@AUTHOR
+Nico Willert
+@DATE
+13.06.2022
+@VERSION
+1
+@DESCRIPTION
+Containers
+@TAXONOMY
+9
+@TASK
+Which of the following statements is $bwrong$/b
+@TRUE
+A vector is an unordered container with key-value pairs.
+The memory in an array is dynamically allocated when a new element is inserted.
+A set contains key-value pairs that are sorted by their values.
+A set is sorted externally.
+@FALSE
+A vector is sorted externally.
+A list is a container that saves its elements in sequence.
+A stack is a container adaptor which follows the last-in-first-out principle.
+A map is a collection of key-value pairs, sorted by their unique keys.
+Deque, vector and forward_list are seqence containers.
+Set, map and multiset are associative containers.
+@EXCLUSIONS

@@ -1,0 +1,21 @@
+@NAME
+Namspaces
+@AUTHOR
+Nico Willert
+@DATE
+13.06.2022
+@VERSION
+1
+@DESCRIPTION
+Namespace alias
+@TAXONOMY
+5
+@TASK
+The statement $cnamespace m = n::o::p;$/c is syntactically correct. Which statement is true for it?
+@TRUE
+For the nested namespace n::o::p, the alias m is agreed upon.
+@FALSE
+All identifiers p (variables, type names and all overloads of functions of this name) of the namespace n::o are imported into the namespace m.
+The alias m is declared for the variable n::o::p.
+For the nested member type n::o::p, the alias m is agreed upon.
+@EXCLUSIONS

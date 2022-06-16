@@ -1,0 +1,24 @@
+@NAME
+Statements
+@AUTHOR
+Nico Willert
+@DATE
+13.06.2022
+@VERSION
+1
+@DESCRIPTION
+Different Statements with containers, tuple and other
+@TAXONOMY
+10
+@TASK
+Which of the following statements is $bwrong$/b
+@TRUE
+Instantiating a pair with two different datatypes like pair<int, string> results in a compiler error.
+Vectors cannot be nested.
+@FALSE
+std::tuple is a generalization of std::pair.
+The toupper function converts a given character to uppercase.
+Elements in a pair can be addressed separetely.
+The code $cusing container_t = vector<pair<string,string>>;$/c enables the programmer to use container_t instead of the vector<pair<string,string>>
+When applying the $c[[nodiscard]]$/c attribute to a function, the compiler might issue a warning when the result of the function is discarded.
+@EXCLUSIONS

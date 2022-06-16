@@ -1,0 +1,31 @@
+@NAME
+Implicit Requirements
+@AUTHOR
+Nico Willert
+@DATE
+13.06.2022
+@VERSION
+1
+@DESCRIPTION
+Implicit Requirements of templates
+@CODE
+template <typename T>
+void doSomething(T& a , T& b)
+{
+	T temp = a + b;
+	a = b;
+	T othertemp {b};
+}
+@TAXONOMY
+4
+@TASK
+Which of the following is $bnot$/b implicitly or explicitly required for the usage of the template?
+@TRUE
+Negation Operator
+Inheritance Operator
+@FALSE
+Copy Constructor
+Assignment Operator
+Destructor
+Addition Operator
+@EXCLUSIONS

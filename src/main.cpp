@@ -113,18 +113,19 @@ int main() {
     replacementsForXmlIlias.push_back(make_pair("\"", "&quot;"));
     replacementsForXmlIlias.push_back(make_pair("\'", "&apos;"));
 
-    replacementsForXmlIlias.push_back(make_pair("$nl", "&lt;/p&gt;&lt;p&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$b", "&lt;strong&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$/b", "&lt;/strong&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$i", "&lt;em&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$/i", "&lt;/em&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$u", "&lt;u&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$/u", "&lt;/u&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$c", "&lt;code&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$/c", "&lt;/code&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$p", "&lt;pre&gt;"));
-    replacementsForXmlIlias.push_back(make_pair("$/p", "&lt;/pre&gt;"));
+    replacementsForXmlIlias.push_back(make_pair("$nl", "</p><p>"));
+    replacementsForXmlIlias.push_back(make_pair("$b", "<strong>"));
+    replacementsForXmlIlias.push_back(make_pair("$/b", "</strong>"));
+    replacementsForXmlIlias.push_back(make_pair("$i", "<em>"));
+    replacementsForXmlIlias.push_back(make_pair("$/i", "</em>"));
+    replacementsForXmlIlias.push_back(make_pair("$u", "<u>;"));
+    replacementsForXmlIlias.push_back(make_pair("$/u", "</u>"));
+    replacementsForXmlIlias.push_back(make_pair("$c", "<code>"));
+    replacementsForXmlIlias.push_back(make_pair("$/c", "</code>"));
+    replacementsForXmlIlias.push_back(make_pair("$p", "<pre>"));
+    replacementsForXmlIlias.push_back(make_pair("$/p", "</pre>"));
     replacementsForXmlIlias.push_back(make_pair("&lt;br/&gt;", "<br/>"));
+    replacementsForXmlIlias.push_back(make_pair("$w", " "));
 
     vector<pair<string, string>> replacementsForXmlIliasSpecialCode{};
     replacementsForXmlIliasSpecialCode.push_back(make_pair("&", "&amp;amp;"));
@@ -133,6 +134,7 @@ int main() {
     replacementsForXmlIliasSpecialCode.push_back(make_pair("\"", "&amp;quot;"));
     replacementsForXmlIliasSpecialCode.push_back(make_pair("\'", "&amp;apos;"));
     replacementsForXmlIliasSpecialCode.push_back(make_pair("&amp;lt;br/&amp;gt;", "<br/>"));
+    replacementsForXmlIliasSpecialCode.push_back(make_pair("$w", " "));
 
     vector<pair<string, string>> replacementsForXmlIliasSpecialAdditionalText{};
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("&", "&amp;amp;"));
@@ -147,6 +149,7 @@ int main() {
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/u", "</Important>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$c", "<Code>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/c", "</Code>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$w", " "));
     
 
     vector<pair<string, string>> replacementsForXmlMoodle{};
@@ -161,6 +164,7 @@ int main() {
     replacementsForXmlMoodle.push_back(make_pair("$/c", "</code>"));
     replacementsForXmlMoodle.push_back(make_pair("$p", "<pre>"));
     replacementsForXmlMoodle.push_back(make_pair("$/p", "</pre>"));
+    replacementsForXmlMoodle.push_back(make_pair("$w", " "));
     //End Replacements for xml generations
 
     string questionPoolId{};
@@ -835,12 +839,12 @@ int main() {
               << "<qtimetadatafield><fieldlabel>AUTHOR</fieldlabel><fieldentry>" << q.GetAuthor() << "</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>additional_cont_edit_mode</fieldlabel><fieldentry>default</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>thumb_size</fieldlabel><fieldentry/></qtimetadatafield>"
               << "<qtimetadatafield><fieldlabel>feedback_setting</fieldlabel><fieldentry>2</fieldentry></qtimetadatafield><qtimetadatafield><fieldlabel>singleline</fieldlabel><fieldentry>0</fieldentry></qtimetadatafield></qtimetadata></itemmetadata>"
               << "<presentation label=\""<< q.GetName() << "\"><flow>"
-              << "<material><mattext texttype=\"text/xhtml\">&lt;p&gt;" << q.GetTask() <<"&lt;/p&gt;</mattext></material>"
+              << "<material><mattext texttype=\"text/xhtml\"><![CDATA[<p>" << q.GetTask() <<"</p>]]></mattext></material>"
               << "<response_lid ident=\"MCSR\" rcardinality=\"Single\"><render_choice shuffle=\"Yes\">"
-              << "<response_label ident=\"0\"><material><mattext texttype=\"text/xhtml\">&lt;p&gt;"<< q.GetCorrectAnswer() <<"&lt;/p&gt;</mattext></material></response_label>"
-              << "<response_label ident=\"1\"><material><mattext texttype=\"text/xhtml\">&lt;p&gt;" << q.GetWrongAnswerOne() << "&lt;/p&gt;</mattext></material></response_label>"
-              << "<response_label ident=\"2\"><material><mattext texttype=\"text/xhtml\">&lt;p&gt;" << q.GetWrongAnswerTwo() << "&lt;/p&gt;</mattext></material></response_label>"
-              << "<response_label ident=\"3\"><material><mattext texttype=\"text/xhtml\">&lt;p&gt;" << q.GetWrongAnswerThree() << "&lt;/p&gt;</mattext></material></response_label>"
+              << "<response_label ident=\"0\"><material><mattext texttype=\"text/xhtml\"><![CDATA[<p>"<< q.GetCorrectAnswer() <<"</p>]]></mattext></material></response_label>"
+              << "<response_label ident=\"1\"><material><mattext texttype=\"text/xhtml\"><![CDATA[<p>" << q.GetWrongAnswerOne() << "</p>]]></mattext></material></response_label>"
+              << "<response_label ident=\"2\"><material><mattext texttype=\"text/xhtml\"><![CDATA[<p>" << q.GetWrongAnswerTwo() << "</p>]]></mattext></material></response_label>"
+              << "<response_label ident=\"3\"><material><mattext texttype=\"text/xhtml\"><![CDATA[<p>" << q.GetWrongAnswerThree() << "</p>]]></mattext></material></response_label>"
               << "</render_choice></response_lid></flow></presentation><resprocessing><outcomes><decvar></decvar></outcomes><respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">0</varequal></conditionvar><setvar action=\"Add\">1</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_0\"/></respcondition>"
               << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">1</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_1\"/></respcondition>"
               << "<respcondition continue=\"Yes\"><conditionvar><varequal respident=\"MCSR\">2</varequal></conditionvar><setvar action=\"Add\">0</setvar><displayfeedback feedbacktype=\"Response\" linkrefid=\"response_2\"/></respcondition>"

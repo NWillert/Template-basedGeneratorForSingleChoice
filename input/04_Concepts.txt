@@ -1,0 +1,21 @@
+@NAME
+Concepts
+@AUTHOR
+Janik Eriksson
+@DATE
+15.06.2022
+@VERSION
+14
+@TAXONOMY
+14
+@TASK
+Which of the following statements regarding concepts is $ccorrect$/c?
+@TRUE
+Concepts are a means of making template parameter requirements explicit.
+@FALSE
+Concepts are used mainly to nest templates inside of each other.
+Concepts should never be used with class templates.
+If a function template uses a concept, it must not be overloaded.
+Concepts are an alternative to templates.
+There must never be more than one concept in a program.
+@EXCLUSIONS

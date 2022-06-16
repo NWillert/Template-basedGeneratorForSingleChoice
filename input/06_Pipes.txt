@@ -1,0 +1,19 @@
+@NAME
+Named Pipes
+@AUTHOR
+Janik Eriksson
+@DATE
+16.06.2022
+@VERSION
+1
+@TAXONOMY
+16
+@TASK
+Which of the following statements about named pipes is correct?
+@TRUE
+Named pipes are a means to enable communication between programs.
+@FALSE
+Named pipes are programs that pass input and output between other programs.
+Named pipes should only be used with C++ programs.
+Named pipes are a special way to execute other programs.
+@EXCLUSIONS

@@ -1,0 +1,34 @@
+@NAME
+Template Overloading
+@AUTHOR
+Nico Willert
+@DATE
+13.06.2022
+@VERSION
+1
+@DESCRIPTION
+Template Overloading
+@TAXONOMY
+7
+@CODE
+#include <iostream>
+using namespace std;
+
+template <typename T>
+void f(T t) {
+    cout << "T" << endl;
+}
+
+template<typename T>
+void f(T * t) {
+    cout << "P" << endl;
+}
+@TASK
+Which statement about the above code fragment is true?
+@TRUE
+The function templates are overloaded.
+@FALSE
+The second function template is a complete specialization of the first function template.
+It contains syntactical errors.
+The second function template is a partial specialization of the first function template.
+@EXCLUSIONS

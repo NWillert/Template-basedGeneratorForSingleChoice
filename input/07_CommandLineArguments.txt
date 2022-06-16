@@ -1,0 +1,61 @@
+@NAME
+Command Line Arguments
+@AUTHOR
+Janik Eriksson
+@DATE
+16.06.2022
+@VERSION
+1
+@TAXONOMY
+17
+@CODE
+#include <iostream>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+    switch (argc)
+    {
+    case 2:
+        cout << argv[0] << endl;
+        cout << argv[1] << endl;
+        break;
+    case 3:
+        cout << argv[0] << endl;
+        cout << argv[1] << endl;
+        cout << argv[2] << endl;
+    default:
+        cout << "Missing arguments" << endl;
+        break;
+    }
+    return 0;
+}
+@PARAMETER
+$CALL
+$CORRECT
+$WRONG1
+$WRONG2
+@VALUERANGE
+hello world # hello # $w
+$c./program$nlhello$nlworld$/c # $c./program$nlhello$/c # $cMissing arguments/c
+$c./program$nlhello$nlworld$/c # $c./program$nlhello$/c # $cMissing arguments/c
+$c./program$nlhello$nlworld$/c # $c./program$nlhello$/c # $cMissing arguments/c
+@INTERACTION
+$CALL hello world $CORRECT $c./program$nlhello$nlworld$/c
+$CALL hello world $WRONG1 $c./program$nlhello$/c
+$CALL hello world $WRONG2 $c./program$/c
+$CALL hello $CORRECT $c./program$nlhello$/c
+$CALL hello $WRONG1 $c./program$nlhello$nlworld$/c
+$CALL hello $WRONG2 $c./program$/c
+$CALL $w $CORRECT $c./program$/c
+$CALL $w $WRONG1 $c./program$nlhello$nlworld$/c
+$CALL $w $WRONG1 $c./program$nlhello$/c
+@TASK
+The given program is compiled to the executable file $cprogram$/c. What is the output of the program if it is executed with the command $c./program $CALL$/c?
+@TRUE
+$CORRECT
+@FALSE
+$WRONG1
+$WRONG2
+The progam outputs nothing
+@EXCLUSIONS
