@@ -150,7 +150,7 @@ int main() {
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$c", "<Code>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/c", "</Code>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$w", " "));
-    
+
 
     vector<pair<string, string>> replacementsForXmlMoodle{};
     replacementsForXmlMoodle.push_back(make_pair("$nl", "</p><p>"));
@@ -204,7 +204,14 @@ int main() {
 
         cout << "Please input the Taxonomy Title: ";
         cin >> taxTitle;
-    } 
+    }
+    if (mode2 == 3) {
+        questionPoolId = "asd";
+
+            qpTitle = "asd";
+
+            taxTitle = "asd";
+    }
 
     cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
     cin >> mode;
@@ -241,7 +248,7 @@ int main() {
 
         string filename= entry.path().string() ;
         readFromFile.open(filename, ios_base::in);
-
+        cout << "Trying to read " << filename << endl;
         if (readFromFile.is_open()) {
             while (readFromFile.good()) {
                 char c = readFromFile.peek();
@@ -572,10 +579,10 @@ int main() {
 
 
 
-
         if (mode == 1) {
             //Randomising the all Parameters vector
             std::shuffle(validParameterPairs.begin(), validParameterPairs.end(), gen);
+
 
             //Create Number of Questions and Replace potential Parameters
             //Based on the shuffled vecotrs of questions and parameters
@@ -596,7 +603,6 @@ int main() {
                 taskToSet = task;
                 codeToSet = code;
                 additionalTextToSet = additionalText;
-
                 //if Parameters exist
                 if (!parameters.empty())
                 {
@@ -613,9 +619,8 @@ int main() {
                         replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                     }
                 }
-
                 //Based on the mode replacing certain characters  mode2==2 = Moodle other is Ilias
-                if (mode2 == 2) {                
+                if (mode2 == 2) {
                     for (pair n : replacementsForXmlMoodle) {
                         replaceAll(correctAnswer, get<0>(n), get<1>(n));
                         replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
@@ -631,7 +636,7 @@ int main() {
                         replaceAll(correctAnswer, get<0>(n), get<1>(n));
                         replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
                         replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
-                        replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));                       
+                        replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
                         replaceAll(taskToSet, get<0>(n), get<1>(n));
                         //replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                     }
@@ -744,7 +749,7 @@ int main() {
                             replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
                             replaceAll(codeToSet, get<0>(n), get<1>(n));
                             replaceAll(taskToSet, get<0>(n), get<1>(n));
-                            replaceAll(additionalTextToSet, get<0>(n), get<1>(n));                          
+                            replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                         }
                     }
                     else {
@@ -776,9 +781,10 @@ int main() {
         if (!isInVector(taxonomyLevels, taxonomy)) {
             taxonomyLevels.push_back(taxonomy);
         }
+        cout << "Created Questions for the previously mentioned file" << endl;
     }
-        
-    cout << "Created All Questions for the previously mentioned file" << endl;
+
+
 
     // Checking in Questions, so that only one question exists where everything but currentQuestionId is the same
 

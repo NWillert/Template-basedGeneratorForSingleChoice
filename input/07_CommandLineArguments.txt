@@ -43,13 +43,13 @@ $c./program$nlhello$nlworld$/c # $c./program$nlhello$/c # $cMissing arguments/c
 @INTERACTION
 $CALL hello world $CORRECT $c./program$nlhello$nlworld$/c
 $CALL hello world $WRONG1 $c./program$nlhello$/c
-$CALL hello world $WRONG2 $c./program$/c
-$CALL hello $CORRECT $c./program$nlhello$/c
-$CALL hello $WRONG1 $c./program$nlhello$nlworld$/c
-$CALL hello $WRONG2 $c./program$/c
-$CALL $w $CORRECT $c./program$/c
-$CALL $w $WRONG1 $c./program$nlhello$nlworld$/c
+$CALL hello world $WRONG2 $cMissing arguments/c
+$CALL hello $CORRECT $c./program$nlhello$nlworld$/c
+$CALL hello $WRONG1 $c./program$nlhello$/c
+$CALL hello $WRONG2 $cMissing arguments/c
+$CALL $w $CORRECT $cMissing arguments/c
 $CALL $w $WRONG1 $c./program$nlhello$/c
+$CALL $w $WRONG2 $c./program$nlhello$nlworld$/c
 @TASK
 The given program is compiled to the executable file $cprogram$/c. What is the output of the program if it is executed with the command $c./program $CALL$/c?
 @TRUE
