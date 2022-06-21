@@ -27,13 +27,13 @@ int main ()
 @TASK
 The program above does not compile. Which of the following statements is $bcorrect$/b?
 @TRUE
-The program does not compile because the immediate function doubleMe is called with the non-const variable three.
+The program does not compile because the immediate function doubleMe() is called with the non-const variable three.
 The program would compile if line 9 would be changed to $cconstexpr int three = 3$/c
 The program would compile if $cconsteval$/c in line 4 would be changed to $cconstexpr$/c.
 @FALSE
 The program does not compile because C++ has no consteval specifier.
 The program does not compile because a value of type 'consteval int' cannot be output with cout.
-The program does not compile because the compiler detects that it is generally impossible to call the function doubleMe due to the consteval specifier.
+The program does not compile because the compiler detects that it is generally impossible to call the function doubleMe() due to the consteval specifier.
 The program would compile if line 13 would be changed to $cconstexpr cout << doubleMe(three) << endl;$/c.
 The program would compile if line 13 would be changed to $ccout << constexpr doubleMe(three) << endl;$/c.
 @EXCLUSIONS

@@ -20,14 +20,14 @@ void f(){};
 @TASK
 Which statement regarding the code above is $bcorrect$/b?
 @TRUE
-The function template $cf$/c is parameterized by a type template parameter and a template template parameter.
+The function template $cf<>()$/c is parameterized by a type template parameter and a template template parameter.
 The template parameter C is a template template parameter.
 $cf<int, MyContainer>()$/c is a valid usage of the function template.
 @FALSE
-The template class C is nested inside of the function template f.
+The template class C is nested inside of the function template f<>().
 The code example does not compile, because it is not allowed to define a template inside of the angle brackets that belong to another template. (Line 4)
-The template parameter C of the function template f is a non-type template parameter.
-The function template f has 3 template parameters.
+The template parameter C of the function template f<>() is a non-type template parameter.
+The function template f<>() has 3 template parameters.
 $cf<int, MyContainer<int>>$/c is a valid usage of the function template.
 @EXCLUSIONS
 c1 excludes w5

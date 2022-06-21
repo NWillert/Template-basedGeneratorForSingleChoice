@@ -35,11 +35,11 @@ int main ()
 @TASK
 Which statement regarding the program is $ccorrect$/c?
 @TRUE
-Because of the statement in line 19, the function template makePair gets instantiated for string.
+Because of the statement in line 19, the function template makePair<>() gets instantiated for string.
 The statement in line 18 results in the instantiation of the function template for int.
 @FALSE
-Because of the statement in line 17, the function template makePair gets instantiated for int.
-The statement in line 19 causes the program to fail at runtime, because there is no function called makePair that takes a string as parameter.
+Because of the statement in line 17, the function template makePair<>() gets instantiated for int.
+The statement in line 19 causes the program to fail at runtime, because there is no function called makePair() that takes a string as parameter.
 The program does not compile because there is no type specified in the angle brackets in line 18.
-The statement in line 18 results in a call to the function makePair because the compiler detects that the instantiation of the function template is not necessary.
+The statement in line 18 results in a call to the function makePair() because the compiler detects that the instantiation of the function template is not necessary.
 @EXCLUSIONS
