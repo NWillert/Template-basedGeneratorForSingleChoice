@@ -44,8 +44,8 @@ $c./program$nlhello$nlworld$/c # $c./program$nlhello$/c # $cMissing arguments$/c
 $CALL hello world $CORRECT $c./program$nlhello$nlworld$/c
 $CALL hello world $WRONG1 $c./program$nlhello$/c
 $CALL hello world $WRONG2 $cMissing arguments$/c
-$CALL hello $CORRECT $c./program$nlhello$nlworld$/c
-$CALL hello $WRONG1 $c./program$nlhello$/c
+$CALL hello $CORRECT $c./program$nlhello$/c
+$CALL hello $WRONG1 $c./program$nlhello world$/c
 $CALL hello $WRONG2 $cMissing arguments$/c
 $CALL $w $CORRECT $cMissing arguments$/c
 $CALL $w $WRONG1 $c./program$nlhello$/c
