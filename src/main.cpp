@@ -39,7 +39,6 @@ string folderMarking = "1644584918__0__";
 const string qpl = "qpl_";
 const string qti = "qti_";
 
-
 //replaces all occurances of a given string search with a string replace in another bigger string
 void replaceAll(string& s, const string& search, const string& replace) {
     for (size_t pos = 0; ; pos += replace.length()) {
@@ -100,6 +99,38 @@ bool checkValidParameter(vector<pair<string, string>> v, vector<tuple<string, st
         }
     }
     return true;
+}
+
+bool questionExists(Question q, vector <Question> questions) {
+    for (Question t : questions)
+    {
+        if ((q.GetName()==t.GetName()) && (q.GetCode() == t.GetCode()) && (q.GetAdditionalText() == t.GetAdditionalText()) &&
+            (q.GetTask() == t.GetTask()) && (q.GetCorrectAnswer() == t.GetCorrectAnswer())&& (q.GetWrongAnswerOne() == t.GetWrongAnswerOne())&&
+            (q.GetWrongAnswerTwo() == t.GetWrongAnswerTwo())&& (q.GetWrongAnswerThree() == t.GetWrongAnswerThree())&&
+            (q.GetPicture().GetName() == t.GetPicture().GetName())
+            )
+        {
+            return true;
+        }
+    }  
+    return false;
+}
+
+bool stillParametersInTexts(vector<Parameter> parametersVector,string correctAnswer, string wrongAnswerOne, string wrongAnswerTwo, string wrongAnswerThree, string codeToSet, string taskToSet, string additionalTextToSet) {
+    /*
+    parametersVector,string correctAnswer, string wrongAnswerOne, 
+    string wrongAnswerTwo, string wrongAnswerThree, string codeToSet, 
+    string taskToSet, string additionalTextToSet
+    */
+    for (Parameter p : parametersVector) {
+        if ((correctAnswer.find(p.GetName())!=std::string::npos)|| (wrongAnswerOne.find(p.GetName()) != std::string::npos) || (wrongAnswerTwo.find(p.GetName()) != std::string::npos) ||
+            (wrongAnswerThree.find(p.GetName()) != std::string::npos) || (codeToSet.find(p.GetName()) != std::string::npos) || (taskToSet.find(p.GetName()) != std::string::npos) || (additionalTextToSet.find(p.GetName()) != std::string::npos)
+            ) 
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -618,6 +649,21 @@ int main() {
                         replaceAll(taskToSet, get<0>(n), get<1>(n));
                         replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                     }
+
+                    if (stillParametersInTexts(parameters, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, codeToSet, taskToSet, additionalTextToSet)) {                     
+                        do {
+                            for (pair n : validParameterPairs.at(parametersToTake)) {
+                                replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                                replaceAll(codeToSet, get<0>(n), get<1>(n));
+                                replaceAll(taskToSet, get<0>(n), get<1>(n));
+                                replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                            }
+                        } while (stillParametersInTexts(parameters, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, codeToSet, taskToSet, additionalTextToSet));
+                    }
+
                 }
                 //Based on the mode replacing certain characters  mode2==2 = Moodle other is Ilias
                 if (mode2 == 2) {
@@ -650,8 +696,10 @@ int main() {
 
 
                 Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
-                ++currentQuestionId;
-                questions.push_back(q);
+                if (!questionExists(q, questions)) {
+                    ++currentQuestionId;
+                    questions.push_back(q);
+                }
                 ++parametersToTake;
                 ++questionToTake;
                 if (questionToTake >= validCombinations.size()) {
@@ -691,7 +739,19 @@ int main() {
                             replaceAll(taskToSet, get<0>(n), get<1>(n));
                             replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                         }
-
+                        if (stillParametersInTexts(parameters, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, codeToSet, taskToSet, additionalTextToSet)) {
+                        do{
+                            for (pair n : v_validParam) {
+                                replaceAll(correctAnswer, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
+                                replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                                replaceAll(codeToSet, get<0>(n), get<1>(n));
+                                replaceAll(taskToSet, get<0>(n), get<1>(n));
+                                replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                            }
+                        } while (stillParametersInTexts(parameters, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, codeToSet, taskToSet, additionalTextToSet));
+                        }
 
                         //Based on the mode replacing certain characters  mode2==2 = Moodle other is Ilias
                         if (mode2 == 2) {
@@ -724,8 +784,10 @@ int main() {
                         }
 
                         Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
-                        ++currentQuestionId;
-                        questions.push_back(q);
+                        if (!questionExists(q, questions)) {
+                            ++currentQuestionId;
+                            questions.push_back(q);
+                        }
                     }
                 }
                 else {
@@ -770,9 +832,11 @@ int main() {
                         }
                     }
 
-                    Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
-                    ++currentQuestionId;
-                    questions.push_back(q);
+                    Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);                   
+                    if (!questionExists(q, questions)) {
+                        ++currentQuestionId;
+                        questions.push_back(q);
+                    }
                 }
             }
         }
