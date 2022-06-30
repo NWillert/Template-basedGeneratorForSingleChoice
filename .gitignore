@@ -1,5 +1,6 @@
 *.exe
 .vs/
-/vs/
-/output/
-/input/
+/output/*
+/input/*
+/obj/*
+/inputPictures/*
