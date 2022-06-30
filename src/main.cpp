@@ -110,6 +110,7 @@ bool questionExists(Question q, vector <Question> questions) {
             (q.GetPicture().GetName() == t.GetPicture().GetName())
             )
         {
+            cout << "\tDid not take : " << q.GetTask() << endl;
             return true;
         }
     }  
@@ -127,6 +128,7 @@ bool stillParametersInTexts(vector<Parameter> parametersVector,string correctAns
             (wrongAnswerThree.find(p.GetName()) != std::string::npos) || (codeToSet.find(p.GetName()) != std::string::npos) || (taskToSet.find(p.GetName()) != std::string::npos) || (additionalTextToSet.find(p.GetName()) != std::string::npos)
             ) 
         {
+            cout << "Recursive Use of Parameter: " << p.GetName() << endl;
             return true;
         }
     }
@@ -607,7 +609,6 @@ int main() {
             }
 
         }
-
 
 
         if (mode == 1) {
