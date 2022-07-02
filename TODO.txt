@@ -8,9 +8,6 @@ Random amount of questions for the questions stops per question when all possibl
 
 
 Parsing the file 
-	- sending error messages for false inputs?		
-		Parameter, Value Range and Interaction - check for errors
-			especially if interaction values are in value range of that parameter
 	- specifying errors when a parameter has no value range. 
 
 

@@ -2,6 +2,7 @@
 #include <vector>
 #include <tuple>
 #include "picture.h"
+#include "parameter.h"
 #include "vectorHelperFunctions.h"
 
 
@@ -33,6 +34,16 @@ bool isInVector(vector<string> duplicateVector, string number) {
     else
         return false;
 }
+//As we save all Parameter Objects in a vector, we might want to check for errors in Interactions
+bool isInVector(vector<Parameter> paraVector, string name) {
+    bool isIn = false;
+    for (int i = 0; i < paraVector.size(); ++i) {
+        if (paraVector[i].GetName() == name) {
+            isIn = true;
+        }
+    }
+    return isIn;
+}
 
 //Return the first string at tuple position 0, where postion 2 is name
 string nameOfZeroForTwo(vector<tuple<string, string, string, string>> interactions, string name){
@@ -54,4 +65,17 @@ bool isPairInVectorTupleZeroOne(pair<string, string> p_pair, vector<tuple<string
         }
     }
     return false;
+}
+
+//Check if the given string is a value for a given Parameter
+bool isValueForParameter(vector<Parameter> paraVector, string parameter, string value) {
+    bool isIn = false;
+    for (int i = 0; i < paraVector.size(); ++i) {
+        if (paraVector[i].GetName() == parameter) {
+            if (isInVector(paraVector[i].GetValueRangeVector(), value)) {
+                isIn = true;
+            }            
+        }
+    }
+    return isIn;
 }

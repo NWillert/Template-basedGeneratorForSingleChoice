@@ -110,7 +110,7 @@ bool questionExists(Question q, vector <Question> questions) {
             (q.GetPicture().GetName() == t.GetPicture().GetName())
             )
         {
-            cout << "\tDid not take : " << q.GetTask() << endl;
+            cout << "\tExactly Duplicated question was ignored: " << q.GetTask() << endl;
             return true;
         }
     }  
@@ -331,7 +331,7 @@ int main() {
                     else if (txtFromFile == "@PARAMETER") {
                         while (readFromFile.peek() == '$') {
                             string parameterString;
-                            getline(readFromFile, parameterString);
+                            getline(readFromFile, parameterString);                          
                             Parameter p(parameterString);
                             parameters.push_back(p);
                         }
@@ -341,35 +341,43 @@ int main() {
                         string tempLine{};
                         string temp{};
                         while (readFromFile.peek() != '@' && readFromFile.good()){
-                          istringstream is;
-                          getline(readFromFile,tempLine);
-                          if (!tempLine.empty()) {
-                              is.str(tempLine);
-                              while (is) {
-                                  string whitespace = " ";
-                                  while (is.peek() > 32) {
-                                      temp += is.get();
-                                  }
-                                  is.get();
-                                  if (is.peek() == '#')
-                                  {
-                                      parameters[position].push_backValueRange(temp);
-                                      is.get();
-                                      temp = "";
-                                  }
-                                  else if (!temp.empty() && is.peek() != EOF)
-                                  {
-                                      temp += whitespace;
-                                  }
-                                  if (is.peek() == '@' || is.peek() == EOF) {
-                                      if (temp != "") {
-                                          parameters[position].push_backValueRange(temp);
-                                          temp = "";
-                                      }
-                                  }
-                              }
-                              ++position;
-                          }
+                            getline(readFromFile, tempLine);
+                            //check if the ValueRange has a appropriate Parameter for it. 
+                            if (position < parameters.size()) {
+                                istringstream is;                                
+                                if (!tempLine.empty()) {
+                                    is.str(tempLine);
+                                    while (is) {
+                                        string whitespace = " ";
+                                        while (is.peek() > 32) {
+                                            temp += is.get();
+                                        }
+                                        is.get();
+                                        if (is.peek() == '#')
+                                        {
+                                            parameters[position].push_backValueRange(temp);
+                                            is.get();
+                                            temp = "";
+                                        }
+                                        else if (!temp.empty() && is.peek() != EOF)
+                                        {
+                                            temp += whitespace;
+                                        }
+                                        if (is.peek() == '@' || is.peek() == EOF) {
+                                            if (temp != "") {
+                                                parameters[position].push_backValueRange(temp);
+                                                temp = "";
+                                            }
+                                        }
+                                    }
+                                    ++position;
+                                }
+                            }
+                            else {
+                                if (!tempLine.empty()) {
+                                    cout << "\tThere is no Parameter for the Value Range: " << tempLine << endl;
+                                }
+                            }                         
                         }
                     }
                     else if (txtFromFile == "@INTERACTION") {
@@ -390,52 +398,84 @@ int main() {
                             is.get();
                             parameterName = temp;
                             temp = "";
-
-                            do {
-                                while (is.peek() > 32) {
-                                    temp += is.get();
-                                }
-                                is.get();
-                                if (is.peek() != '$') {
-                                    temp += whitespace;
-                                }
-                            } while (is.peek() != '$');
-                            parameterValue = temp;
-                            temp = "";
-
-                            while (is.peek() > 32) {
-                                temp += is.get();
-                            }
-                            is.get();
-                            parameterTwoName = temp;
-                            temp = "";
-                            while (is) {
-                                while (is.peek() > 32) {
-                                    temp += is.get();
-                                }
-                                is.get();
-                                if (is.peek() == '#' || is.peek() < 32) {
-                                    //make pair pushback into vector
+                            //Check if parameter name exists
+                            if (isInVector(parameters, parameterName)) {
+                                do {
+                                    while (is.peek() > 32) {
+                                        temp += is.get();
+                                    }
                                     is.get();
-                                    parameterTwoValue = temp;
-                                    interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
-                                    ++position;
-                                    temp = "";
-                                }
-                                else if (!temp.empty())
-                                {
-                                    temp += whitespace;
-                                }
-                            }
-                            if (temp != "") {
-                                //make pair pushback vector
-                                parameterTwoValue = temp;
-                                interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
+                                    if (is.peek() != '$') {
+                                        temp += whitespace;
+                                    }
+                                } while (is.peek() != '$');
+                                parameterValue = temp;
                                 temp = "";
+                                //Check if parameter Value is in Value Range
+                                if (isValueForParameter(parameters, parameterName, parameterValue)) {
+                                    while (is.peek() > 32) {
+                                        temp += is.get();
+                                    }
+                                    is.get();
+                                    parameterTwoName = temp;
+                                    temp = "";
+                                    //Check if Parameter Two exists and is not Parameter One
+                                    if (isInVector(parameters, parameterTwoName) && (parameterName != parameterTwoName)) {
+                                        while (is) {
+                                            while (is.peek() > 32) {
+                                                temp += is.get();
+                                            }
+                                            is.get();
+                                            if (is.peek() == '#' || is.peek() < 32) {
+                                                //make pair pushback into vector
+                                                is.get();
+                                                parameterTwoValue = temp;
+                                                if (isValueForParameter(parameters, parameterTwoName, parameterTwoValue)) {
+                                                    interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
+                                                    ++position;
+                                                }
+                                                else {
+                                                    cout << "\tIn the Interaction number: " << line + 1 << " the used dependent ParameterValue: " << parameterTwoValue << " was not defined for the Parameter: " << parameterTwoName << ". The InteractionValue was skipped" << endl;
+                                                }
+                                                temp = "";
+                                            }
+                                            else if (!temp.empty())
+                                            {
+                                                temp += whitespace;
+                                            }
+                                        }
+                                        if (temp != "") {
+                                            //make pair pushback vector
+                                            parameterTwoValue = temp;
+                                            if (isValueForParameter(parameters, parameterTwoName, parameterTwoValue)) {
+                                                interactions.push_back(make_tuple(parameterName, parameterValue, parameterTwoName, parameterTwoValue));
+                                            }
+                                            else {
+                                                cout << "\tIn the Interaction number: " << line + 1 << " the used dependent ParameterValue: " << parameterTwoValue << " was not defined for the Parameter: " << parameterTwoName << ". The InteractionValue was skipped" << endl;
+                                            }
+                                            temp = "";
+                                        }
+                                    }  
+                                    else if(parameterName == parameterTwoName)
+                                    {
+                                        cout << "\tIn the Interaction number: " << line + 1 << " the dependent Parameter: " << parameterTwoName << " is the same as the influencing Parameter: " << parameterName << ". The Interaction was skipped" << endl;
+                                    }
+                                    else {
+                                        cout << "\tIn the Interaction number: " << line + 1 << " the dependent Parameter: " << parameterTwoName << " was not defined. The Interaction was skipped" << endl;
+                                    }
+                                }
+                                else //Error Value is not in Value Range for the parameter
+                                {
+                                    cout << "\tIn the Interaction number: " << line + 1 << " the used influencing ParameterValue: " << parameterValue << " was not defined for the Parameter: "<< parameterName << ". The Interaction was skipped" << endl;
+                                }
                             }
-                            ++line;
+                            else //Error ParameterOne is not in parameters
+                            {
+                                cout << "\tIn the Interaction number: " << line + 1 << " the used influencing Parameter: " << parameterName << " was not defined. The Interaction was skipped" << endl;
+                            }
+                            
                         }
-
+                        ++line;
                       }
                     }
                     else if (txtFromFile == "@TASK") {

@@ -1,0 +1,52 @@
+Which Mode is to start? Enter 1 for Random and 2 for All: 2
+Trying to read .\input\test.txt
+Parsed .\input\test.txt
+Created Questions for .\input\test.txt
+There now exist 30 questions
+Trying to read .\input\test2.txt
+Parsed .\input\test2.txt
+Created Questions for .\input\test2.txt
+There now exist 330 questions
+Trying to read .\input\test3.txt
+Parsed .\input\test3.txt
+Created Questions for .\input\test3.txt
+There now exist 456 questions
+Trying to read .\input\Xml.txt
+Parsed .\input\Xml.txt
+Created Questions for .\input\Xml.txt
+There now exist 486 questions
+Trying to read .\input\zzz.txt
+Parsed .\input\zzz.txt
+        Did not take : How do you define the variable a of type int and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value 99? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value &quot;Hi, there&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value &quot;Good &quot;s + &quot;point&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value 99? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value &quot;Hi, there&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value &quot;Good &quot;s + &quot;point&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value 99? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value &quot;Hi, there&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value &quot;Good &quot;s + &quot;point&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value 99? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value &quot;Hi, there&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value &quot;Good &quot;s + &quot;point&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value 99? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value &quot;Hi, there&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type int and initialize it with value &quot;Good &quot;s + &quot;point&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value 99? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value &quot;Hi, there&quot;? What is the correct statement?
+        Did not take : How do you define the variable a of type double and initialize it with value &quot;Good &quot;s + &quot;point&quot;? What is the correct statement?
+        Did not take : How do you define the variable b of type int and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable b of type double and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable b of type int and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable b of type double and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable b of type int and initialize it with value 42? What is the correct statement?
+        Did not take : How do you define the variable b of type double and initialize it with value 42? What is the correct statement?
+Created Questions for .\input\zzz.txt
+There now exist 496 questions
+Number of questions created: 496
