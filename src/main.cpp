@@ -308,7 +308,7 @@ int main() {
                     }
                     else if (txtFromFile == "@CODE") {
                       string tempLine{};
-                        while(readFromFile.peek() != '@'){
+                        while(readFromFile.peek() != '@' && readFromFile.good()){
                           getline(readFromFile, tempLine);
                           code +=tempLine;
                           code += "<br/>";
@@ -340,7 +340,7 @@ int main() {
                         int position=0;
                         string tempLine{};
                         string temp{};
-                        while (readFromFile.peek() != '@'){
+                        while (readFromFile.peek() != '@' && readFromFile.good()){
                           istringstream is;
                           getline(readFromFile,tempLine);
                           if (!tempLine.empty()) {
@@ -378,7 +378,7 @@ int main() {
                       string tempLine{};
                       string temp{};
                       string parameterName{}, parameterValue{}, parameterTwoName{}, parameterTwoValue{};
-                      while (readFromFile.peek() != '@'){
+                      while (readFromFile.peek() != '@' && readFromFile.good()){
                         istringstream is;
                         getline(readFromFile,tempLine);
                         if (!tempLine.empty()) {
@@ -442,17 +442,22 @@ int main() {
                         getline(readFromFile, task);
                     }
                     else if (txtFromFile == "@TRUE") {
-                        while (readFromFile.peek() != '@') {
+                        while (readFromFile.peek() != '@' && readFromFile.good()) {
                             string correctAnswerString;
                             getline(readFromFile, correctAnswerString);
-                            correctAnswers.push_back(correctAnswerString);
+                            if (!correctAnswerString.empty())
+                            {
+                                correctAnswers.push_back(correctAnswerString);
+                            }
                         }
                     }
                     else if (txtFromFile == "@FALSE") {
-                        while (readFromFile.peek() != '@') {
+                        while (readFromFile.peek() != '@' && readFromFile.good()) {
                             string wrongAnswerString;
                             getline(readFromFile, wrongAnswerString);
-                            wrongAnswers.push_back(wrongAnswerString);
+                            if (!wrongAnswerString.empty()) {
+                                wrongAnswers.push_back(wrongAnswerString);
+                            }
                         }
                     }
                     else if (txtFromFile == "@EXCLUSIONS") {
@@ -488,11 +493,12 @@ int main() {
                         }
                     }
                     else {
-                        cout << "There is something wrong with the Config" << endl;
+                        cout << "\tThere is something wrong with the Config" << endl;
+                        cout << "\tSection: " << txtFromFile << " was not specialised by the generator." << endl;                       
                     }
                 }
                 else {
-                    getline(readFromFile, txtFromFile);
+                    getline(readFromFile, txtFromFile);                    
                 }
 
             }
