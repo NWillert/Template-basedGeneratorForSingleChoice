@@ -155,9 +155,10 @@ int main() {
     replacementsForXmlIlias.push_back(make_pair("$/u", "</u>"));
     replacementsForXmlIlias.push_back(make_pair("$c", "<code>"));
     replacementsForXmlIlias.push_back(make_pair("$/c", "</code>"));
-    replacementsForXmlIlias.push_back(make_pair("$p", "<pre>"));
+    replacementsForXmlIlias.push_back(make_pair("$p", "<pre style=\"display: inline-block; \">"));
     replacementsForXmlIlias.push_back(make_pair("$/p", "</pre>"));
     replacementsForXmlIlias.push_back(make_pair("&lt;br/&gt;", "<br/>"));
+    replacementsForXmlIlias.push_back(make_pair("$lc", "<br/>"));
     replacementsForXmlIlias.push_back(make_pair("$w", ""));
 
     vector<pair<string, string>> replacementsForXmlIliasSpecialCode{};

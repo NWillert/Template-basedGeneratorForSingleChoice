@@ -20,3 +20,12 @@ Parameter mit mehreren Wertebereichen?
 Configurationsliste mit namen der dateien/Fragen die gelesen werden sollen? 
 	so dass man generativ sich pools auf fragen basierend ausprägen kann
 		
+
+@DESCRIPTION
+	cannot take special characters bsp. &
+	so make that it can
+
+
+Feature Ausprägung 
+sodass ne Multiple choice klausur mit allen correctne und falschen ausgeprägt wird
+um quality control zu machen und zu schauen ob alles korrekt formattiert ist. 
