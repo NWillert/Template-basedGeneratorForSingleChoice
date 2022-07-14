@@ -113,20 +113,20 @@ bool questionExists(Question q, vector <Question> questions) {
             cout << "\tExactly Duplicated question was ignored: " << q.GetTask() << endl;
             return true;
         }
-    }  
+    }
     return false;
 }
 
 bool stillParametersInTexts(vector<Parameter> parametersVector,string correctAnswer, string wrongAnswerOne, string wrongAnswerTwo, string wrongAnswerThree, string codeToSet, string taskToSet, string additionalTextToSet) {
     /*
-    parametersVector,string correctAnswer, string wrongAnswerOne, 
-    string wrongAnswerTwo, string wrongAnswerThree, string codeToSet, 
+    parametersVector,string correctAnswer, string wrongAnswerOne,
+    string wrongAnswerTwo, string wrongAnswerThree, string codeToSet,
     string taskToSet, string additionalTextToSet
     */
     for (Parameter p : parametersVector) {
         if ((correctAnswer.find(p.GetName())!=std::string::npos)|| (wrongAnswerOne.find(p.GetName()) != std::string::npos) || (wrongAnswerTwo.find(p.GetName()) != std::string::npos) ||
             (wrongAnswerThree.find(p.GetName()) != std::string::npos) || (codeToSet.find(p.GetName()) != std::string::npos) || (taskToSet.find(p.GetName()) != std::string::npos) || (additionalTextToSet.find(p.GetName()) != std::string::npos)
-            ) 
+            )
         {
             cout << "Recursive Use of Parameter: " << p.GetName() << endl;
             return true;
@@ -332,7 +332,7 @@ int main() {
                     else if (txtFromFile == "@PARAMETER") {
                         while (readFromFile.peek() == '$') {
                             string parameterString;
-                            getline(readFromFile, parameterString);                          
+                            getline(readFromFile, parameterString);
                             Parameter p(parameterString);
                             parameters.push_back(p);
                         }
@@ -343,9 +343,9 @@ int main() {
                         string temp{};
                         while (readFromFile.peek() != '@' && readFromFile.good()){
                             getline(readFromFile, tempLine);
-                            //check if the ValueRange has a appropriate Parameter for it. 
+                            //check if the ValueRange has a appropriate Parameter for it.
                             if (position < parameters.size()) {
-                                istringstream is;                                
+                                istringstream is;
                                 if (!tempLine.empty()) {
                                     is.str(tempLine);
                                     while (is) {
@@ -378,7 +378,7 @@ int main() {
                                 if (!tempLine.empty()) {
                                     cout << "\tThere is no Parameter for the Value Range: " << tempLine << endl;
                                 }
-                            }                         
+                            }
                         }
                     }
                     else if (txtFromFile == "@INTERACTION") {
@@ -456,7 +456,7 @@ int main() {
                                             }
                                             temp = "";
                                         }
-                                    }  
+                                    }
                                     else if(parameterName == parameterTwoName)
                                     {
                                         cout << "\tIn the Interaction number: " << line + 1 << " the dependent Parameter: " << parameterTwoName << " is the same as the influencing Parameter: " << parameterName << ". The Interaction was skipped" << endl;
@@ -474,7 +474,7 @@ int main() {
                             {
                                 cout << "\tIn the Interaction number: " << line + 1 << " the used influencing Parameter: " << parameterName << " was not defined. The Interaction was skipped" << endl;
                             }
-                            
+
                         }
                         ++line;
                       }
@@ -535,11 +535,11 @@ int main() {
                     }
                     else {
                         cout << "\tThere is something wrong with the Config" << endl;
-                        cout << "\tSection: " << txtFromFile << " was not specialised by the generator." << endl;                       
+                        cout << "\tSection: " << txtFromFile << " was not specialised by the generator." << endl;
                     }
                 }
                 else {
-                    getline(readFromFile, txtFromFile);                    
+                    getline(readFromFile, txtFromFile);
                 }
 
             }
@@ -582,17 +582,17 @@ int main() {
             string secondInPair(1,n.second[1]);
               if(n.first[0] == 'c'){
                 possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
-                  return (get<0>(n) == stoi(firstInPair) && stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n));
+                  return (get<0>(n) == stoi(firstInPair) && (stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n)));
                 }),possibleCombinations.end());
               }else{
                 possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
-                  return (get<1>(n) == stoi(firstInPair) && stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n));
+                  return (get<1>(n) == stoi(firstInPair) && (stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n)));
                 }),possibleCombinations.end());
                 possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
-                  return (get<2>(n) == stoi(firstInPair) && stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n));
+                  return (get<2>(n) == stoi(firstInPair) && (stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n)));
                 }),possibleCombinations.end());
                 possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
-                  return (get<3>(n) == stoi(firstInPair) && stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n));
+                  return (get<3>(n) == stoi(firstInPair) && (stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n)));
                 }),possibleCombinations.end());
               }
             }
@@ -698,7 +698,7 @@ int main() {
                         replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                     }
 
-                    if (stillParametersInTexts(parameters, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, codeToSet, taskToSet, additionalTextToSet)) {                     
+                    if (stillParametersInTexts(parameters, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, codeToSet, taskToSet, additionalTextToSet)) {
                         do {
                             for (pair n : validParameterPairs.at(parametersToTake)) {
                                 replaceAll(correctAnswer, get<0>(n), get<1>(n));
@@ -880,7 +880,7 @@ int main() {
                         }
                     }
 
-                    Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);                   
+                    Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
                     if (!questionExists(q, questions)) {
                         ++currentQuestionId;
                         questions.push_back(q);
