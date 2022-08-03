@@ -580,7 +580,7 @@ int main() {
           for (pair n : exclusions) {
             string firstInPair (1,n.first[1]);
             string secondInPair(1,n.second[1]);
-              if(n.first[0] == 'c'){
+              if(n.first[0] == 'c' || n.first[0] == 't'){
                 possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[firstInPair, secondInPair](const tuple<int,int,int,int>& n) -> bool{
                   return (get<0>(n) == stoi(firstInPair) && (stoi(secondInPair)==get<1>(n) || stoi(secondInPair)==get<2>(n) || stoi(secondInPair)==get<3>(n)));
                 }),possibleCombinations.end());

@@ -10,6 +10,7 @@ Random amount of questions for the questions stops per question when all possibl
 Parsing the file 
 	- specifying errors when a parameter has no value range. 
 
+	- Task mehrzeilig mit automatischen einfügen von zeilenumbrüchen?
 
 @Exclusions
 exclusionen basierend auf Parametern? 
