@@ -1,6 +1,6 @@
 *.exe
 .vs/
 /output/*
-/input/*
+
 /obj/*
 /inputPictures/*

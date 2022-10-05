@@ -1,0 +1,25 @@
+@NAME
+Definition of a Variable
+@AUTHOR
+Max Mustermann
+@DATE
+17.5.2022
+@VERSION
+1.0
+@DESCRIPTION
+Easy Question for Variables
+@TASK
+How do you define the variable $NAME of type $TYPE 
+and initialize it with value $VALUE? 
+What is the correct statement?
+@TRUE
+$TYPE $NAME { $VALUE };
+$TYPE $NAME = $VALUE;
+@FALSE
+$TYPE $NAME; $NAME = $VALUE;
+$NAME as $TYPE = $VALUE;
+$NAME = $TYPE($VALUE);
+auto $NAME = new $TYPE($VALUE);
+@EXCLUSIONS
+t2 excludes f3
+
