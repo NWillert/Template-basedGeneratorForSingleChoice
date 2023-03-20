@@ -7,7 +7,8 @@ Each question has to be in its own file, in the input folder.
 Pictures can be present for the question and need to be in the inputPicture Folder.
 
 Building the Program either using make (compiles and executes the program),
-or just compiling the main.cpp with an adequate compiler currently everything was tested with g++ -std=c++2a.
+or just compiling the .cpp-Files with an adequate compiler. 
+Currently everything was tested with g++ -std=c++2a.
 
 There are two modi when using the generator.
 Randomised generation, so that you can specify how many instantiations you want for each question. -
