@@ -8,7 +8,7 @@ class QuestionTextVariants
 {
 public:
     QuestionTextVariants(int Id, std::string q_name, std::string q_author, std::string q_description, std::string q_additionalText, std::string q_code, std::string q_task,
-        std::vector<std::string> q_correctAnswers, std::vector<std::string> q_wrongAnswers);
+        std::vector<std::string> q_correctAnswers, std::vector<std::string> q_wrongAnswers,std::string filename, std::vector<std::string> exclusions);
 
     int GetQuestionId();
     std::string GetName();
@@ -17,8 +17,10 @@ public:
     std::string GetCode();
     std::string GetAdditionalText();
     std::string GetTask();
+    std::string GetFileName();
     std::vector<std::string> GetCorrectAnswers();
     std::vector<std::string> GetWrongAnswers();
+    std::vector<std::string> GetExclusionHolder();
     bool IsCodeEmpty();
     bool IsAdditionalTextEmpty();
 private:
@@ -26,6 +28,8 @@ private:
     std::string name{}, author{}, description{}, code{}, additionalText{}, task{};
     std::vector<std::string> correctAnswers;
     std::vector<std::string> wrongAnswers;
+    std::string filename{};
+    std::vector<std::string> exclusions{};
 };
 
 #endif 

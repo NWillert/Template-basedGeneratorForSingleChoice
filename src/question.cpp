@@ -5,8 +5,8 @@
 using namespace std;
 //Class for instantiating a question, with all necessary values. so that all questions can be stored at creation, and be later used to write the corresponding xmls
 
-    Question::Question(int Id, string q_name, string q_author, string q_description, string q_additionalText, string q_code, string q_taxonomy, string q_task,
-        string q_correctAnswer, string q_wrongAnswerOne, string q_wrongAnswerTwo, string q_wrongAnswerThree, Picture q_picture) {
+    Question::Question(const int& Id, const std::string& q_name, const std::string& q_author, const std::string& q_description, const std::string& q_additionalText, const std::string& q_code, const std::string& q_taxonomy, const std::string& q_task,
+        const std::string& q_correctAnswer, const std::string& q_wrongAnswerOne, const std::string& q_wrongAnswerTwo, const std::string& q_wrongAnswerThree, const Picture& q_picture) {
         questionId = Id;
         name = q_name;
         author = q_author;

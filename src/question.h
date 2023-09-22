@@ -7,8 +7,8 @@
 class Question
 {
 public:
-    Question(int Id, std::string q_name, std::string q_author, std::string q_description, std::string q_additionalText, std::string q_code, std::string q_taxonomy, std::string q_task,
-        std::string q_correctAnswer, std::string q_wrongAnswerOne, std::string q_wrongAnswerTwo, std::string q_wrongAnswerThree, Picture q_picture);
+    Question(const int& Id, const std::string& q_name, const std::string& q_author, const std::string& q_description, const std::string& q_additionalText, const std::string& q_code, const std::string& q_taxonomy, const std::string& q_task,
+        const std::string& q_correctAnswer, const std::string& q_wrongAnswerOne, const std::string& q_wrongAnswerTwo, const std::string& q_wrongAnswerThree, const Picture& q_picture);
 
     int GetQuestionId();
     std::string GetName();

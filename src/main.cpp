@@ -19,6 +19,15 @@ Created By Nico Willert, April 2022
 #include <iterator>
 #include <regex>
 
+/*  //if needed for checking performance of a given code. 
+#include <chrono>
+using namespace std::chrono;
+        auto start = high_resolution_clock::now();
+        auto stop = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(stop - start);
+        cout << duration.count() << endl; 
+        */
+
 //Header Files of the different classes and pulled out Functions
 #include "picture.h"
 #include "parameter.h"
@@ -111,7 +120,7 @@ bool questionExists(Question q, vector <Question> questions) {
             (q.GetPicture().GetName() == t.GetPicture().GetName())
             )
         {
-            cout << "\tExactly Duplicated question was ignored: " << q.GetTask() << endl;
+            cout << "\tExact Duplicated question found and ignored: " << q.GetTask() << endl;
             return true;
         }
     }
@@ -148,6 +157,7 @@ int main() {
     replacementsForXmlIlias.push_back(make_pair("\'", "&apos;"));
 
     replacementsForXmlIlias.push_back(make_pair("$nl", "</p><p>"));
+    replacementsForXmlIlias.push_back(make_pair("$n", "</p><p>"));
     replacementsForXmlIlias.push_back(make_pair("$b", "<strong>"));
     replacementsForXmlIlias.push_back(make_pair("$/b", "</strong>"));
     replacementsForXmlIlias.push_back(make_pair("$i", "<em>"));
@@ -158,8 +168,19 @@ int main() {
     replacementsForXmlIlias.push_back(make_pair("$/c", "</code>"));
     replacementsForXmlIlias.push_back(make_pair("$p", "<pre style=\"display: inline-block; \">"));
     replacementsForXmlIlias.push_back(make_pair("$/p", "</pre>"));
+    replacementsForXmlIlias.push_back(make_pair("$B", "<strong>"));
+    replacementsForXmlIlias.push_back(make_pair("$/B", "</strong>"));
+    replacementsForXmlIlias.push_back(make_pair("$I", "<em>"));
+    replacementsForXmlIlias.push_back(make_pair("$/I", "</em>"));
+    replacementsForXmlIlias.push_back(make_pair("$U", "<u>"));
+    replacementsForXmlIlias.push_back(make_pair("$/U", "</u>"));
+    replacementsForXmlIlias.push_back(make_pair("$C", "<code>"));
+    replacementsForXmlIlias.push_back(make_pair("$/C", "</code>"));
+    replacementsForXmlIlias.push_back(make_pair("$P", "<pre style=\"display: inline-block; \">"));
+    replacementsForXmlIlias.push_back(make_pair("$/P", "</pre>"));
     replacementsForXmlIlias.push_back(make_pair("&lt;br/&gt;", "<br/>"));
     replacementsForXmlIlias.push_back(make_pair("$lc", "<br/>"));
+    replacementsForXmlIlias.push_back(make_pair("$LC", "<br/>"));
     replacementsForXmlIlias.push_back(make_pair("$w", ""));
 
     vector<pair<string, string>> replacementsForXmlIliasSpecialCode{};
@@ -176,19 +197,29 @@ int main() {
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("<", "&amp;lt;"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair(">", "&amp;gt;"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$nl", "<br/>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$n", "<br/>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$b", "<Strong>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/b", "</Strong>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$B", "<Strong>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/B", "</Strong>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$i", "<Emph>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/i", "</Emph>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$I", "<Emph>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/I", "</Emph>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$u", "<Important>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/u", "</Important>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$U", "<Important>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/U", "</Important>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$c", "<Code>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/c", "</Code>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$C", "<Code>"));
+    replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$/C", "</Code>"));
     replacementsForXmlIliasSpecialAdditionalText.push_back(make_pair("$w", ""));
 
 
     vector<pair<string, string>> replacementsForXmlMoodle{};
     replacementsForXmlMoodle.push_back(make_pair("$nl", "</p><p>"));
+    replacementsForXmlMoodle.push_back(make_pair("$n", "</p><p>"));
     replacementsForXmlMoodle.push_back(make_pair("$b", "<strong>"));
     replacementsForXmlMoodle.push_back(make_pair("$/b", "</strong>"));
     replacementsForXmlMoodle.push_back(make_pair("$i", "<em>"));
@@ -225,11 +256,12 @@ int main() {
     vector <string> taxonomyLevels;
     //Each Question Variant with all correct and wrong answers
     vector <QuestionTextVariants> questionTextVariantsForChecking;
+    
 
     int mode{};
     int mode2{};
 
-    cout << "Which Output is be generated? Enter 1 for IliasXml and 2 for MoodleXml: ";
+    cout << "Which Output is be generated? Enter 1 for IliasXml and 2 for MoodleXml, 3 for Quality Check Html: ";
     cin >> mode2;
 
     if (mode2 == 1) {
@@ -250,8 +282,10 @@ int main() {
             taxTitle = "asd";
     }
 
-    cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
+    if(mode2!=3){
+        cout << "Which Mode is to start? Enter 1 for Random and 2 for All: ";
     cin >> mode;
+    }
 
     if (mode == 1) {
         cout << "Please input, how many versions should be generated: ";
@@ -279,6 +313,8 @@ int main() {
         vector<tuple<string, string, string, string>> interactions{};
         vector<pair<string, string>> exclusions{};
         Picture picture{};
+        //For the variants saving the exlusions
+        vector <string> exclusionHolderForQualityCheck;
 
         string txtFromFile = "";
 
@@ -292,6 +328,7 @@ int main() {
                 if (c == '@')
                 {
                     getline(readFromFile, txtFromFile);
+                    replaceAll(txtFromFile," ", "");
                     if (txtFromFile == "@NAME") {
                         getline(readFromFile, name);
                     }
@@ -305,10 +342,25 @@ int main() {
                         getline(readFromFile, version);
                     }
                     else if (txtFromFile == "@DESCRIPTION") {
-                        getline(readFromFile, description);
+                        //getline(readFromFile, description);
+                        string tempLine{};
+                        while(readFromFile.peek() != '@' && readFromFile.good()){
+                          getline(readFromFile, tempLine);
+                          description +=tempLine;
+                          if(readFromFile.peek() != '@'){
+                            description += " ";
+                          }
+                        }
                     }
                     else if (txtFromFile == "@ADDITIONALTEXT") {
-                        getline(readFromFile, additionalText);
+                        string tempLine{};
+                        while(readFromFile.peek() != '@' && readFromFile.good()){
+                          getline(readFromFile, tempLine);
+                          additionalText +=tempLine;
+                          if(readFromFile.peek() != '@'){
+                            additionalText += "$nl";
+                          }
+                        }
                     }
                     else if (txtFromFile == "@CODE") {
                       string tempLine{};
@@ -483,7 +535,15 @@ int main() {
                       }
                     }
                     else if (txtFromFile == "@TASK") {
-                        getline(readFromFile, task);
+                        //getline(readFromFile, task);
+                        string tempLine{};
+                        while(readFromFile.peek() != '@' && readFromFile.good()){
+                          getline(readFromFile, tempLine);
+                          task +=tempLine;
+                          if(readFromFile.peek() != '@'){
+                            task += " ";
+                          }
+                        }
                     }
                     else if (txtFromFile == "@TRUE") {
                         while (readFromFile.peek() != '@' && readFromFile.good()) {
@@ -511,6 +571,7 @@ int main() {
                           string tempOne{},tempTwo{};
                           istringstream is;
                           getline(readFromFile,tempLine);
+                          exclusionHolderForQualityCheck.push_back(tempLine);
                           is.str(tempLine);
                           if (!tempLine.empty()){
                             while(is){
@@ -550,18 +611,22 @@ int main() {
         }
         cout << "Parsed " << filename << endl;
 
+
         //Combinatorics, just building all combinations for correct and false answers
-        vector<tuple<int,int,int,int>> possibleCombinations;
+        vector<tuple<int,int,int,int>> possibleCombinations{};
+        if(mode2!=3){
         for(int i =0;i<correctAnswers.size();++i){
           for(int j=0;j<wrongAnswers.size();++j){
             for(int k=0;k<wrongAnswers.size();++k){
               for(int l=0;l<wrongAnswers.size();++l){
-                possibleCombinations.push_back(make_tuple(i, j, k, l));
+                if(j<k && k <l){
+                    possibleCombinations.push_back(make_tuple(i, j, k, l));
+                }
               }
             }
           }
         }
-
+        /*
         //Delete Where same answers
         possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(),[](const tuple<int,int,int,int>& n) -> bool{
           return get<1>(n) == get<2>(n);
@@ -574,9 +639,9 @@ int main() {
         possibleCombinations.erase(std::remove_if(possibleCombinations.begin(), possibleCombinations.end(), [](const tuple<int, int, int, int>& n) -> bool {
             return get<2>(n) == get<3>(n);
         }), possibleCombinations.end());
-
-
-
+        */
+        }
+        
 
         //Delete based on Exclusions criteria from @EXCLUSION Part of the question template
         if(exclusions.size() != 0){
@@ -599,7 +664,8 @@ int main() {
                 }),possibleCombinations.end());
               }
             }
-          }
+        }
+
 
         //Vector for the positions of duplicates
         vector<int> duplicates;
@@ -629,6 +695,7 @@ int main() {
                 validCombinations.push_back(possibleCombinations[i]);
             }
         }
+
 
         //Shuffle the validCombinations
         std::random_device rd;
@@ -698,12 +765,15 @@ int main() {
                     }
                 }
             }
-            QuestionTextVariants q(currentQuestionId, name, author, description, additionalTextForThisScope, codeForThisScope, taskForThisScope, correctAnswersForThisScope, wrongAnswersForThisScope);
+            string tempFileName {filename};
+            replaceAll(tempFileName,".\\input\\","");
+            replaceAll(tempFileName,".txt","");
+            QuestionTextVariants q(currentQuestionId, name, author, description, additionalTextForThisScope, codeForThisScope, taskForThisScope, correctAnswersForThisScope, wrongAnswersForThisScope,tempFileName,exclusionHolderForQualityCheck);
             questionTextVariantsForChecking.push_back(q);
         }
 
 
-        if (mode == 1) {
+        if (mode == 1 && mode2 !=3) {
             //Randomising the all Parameters vector
             std::shuffle(validParameterPairs.begin(), validParameterPairs.end(), gen);
 
@@ -714,7 +784,7 @@ int main() {
             for (int i = 0; i < numberOfExams; ++i) {
 
                 string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
-                int correct{}, first{}, second{}, third{};
+                
 
 
                 correctAnswer = correctAnswers[get<0>(validCombinations[questionToTake])];
@@ -803,12 +873,12 @@ int main() {
                 }
             }
         }
-        else if (mode == 2) {
-            for (tuple t : validCombinations) {
-                if (!parameters.empty()) {
+        else if (mode == 2 && mode2 !=3) {      
+            if (!parameters.empty()) {
+                for (tuple t : validCombinations) {
                     for (vector v_validParam: validParameterPairs) {
                         string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
-                        int correct{}, first{}, second{}, third{};
+                        
 
                         correctAnswer = correctAnswers[get<0>(t)];
                         wrongAnswerOne = wrongAnswers[get<1>(t)];
@@ -866,7 +936,7 @@ int main() {
                                 replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
                                 //replaceAll(codeToSet, get<0>(n), get<1>(n));
                                 replaceAll(taskToSet, get<0>(n), get<1>(n));
-                               // replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
+                                // replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                             }
                             for (pair n : replacementsForXmlIliasSpecialCode) {
                                 replaceAll(codeToSet, get<0>(n), get<1>(n));
@@ -883,14 +953,9 @@ int main() {
                         }
                     }
                 }
-                else {
-                    string correctAnswer{}, wrongAnswerOne{}, wrongAnswerTwo{}, wrongAnswerThree{};
-                    int correct{}, first{}, second{}, third{};
-
-                    correctAnswer = correctAnswers[get<0>(t)];
-                    wrongAnswerOne = wrongAnswers[get<1>(t)];
-                    wrongAnswerTwo = wrongAnswers[get<2>(t)];
-                    wrongAnswerThree = wrongAnswers[get<3>(t)];
+            }
+            else {
+                    //cout << "Ersetzung der Markings" << endl;
                     taskToSet = task;
                     codeToSet = code;
                     additionalTextToSet = additionalText;
@@ -898,21 +963,19 @@ int main() {
                     //Based on the mode replacing certain characters  mode2==2 = Moodle other is Ilias
                     if (mode2 == 2) {
                         for (pair n : replacementsForXmlMoodle) {
-                            replaceAll(correctAnswer, get<0>(n), get<1>(n));
-                            replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
-                            replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
-                            replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                            for(auto& c:correctAnswers){replaceAll(c, get<0>(n), get<1>(n));}
+                            for(auto& w:wrongAnswers){replaceAll(w, get<0>(n), get<1>(n));}                                            
                             replaceAll(codeToSet, get<0>(n), get<1>(n));
                             replaceAll(taskToSet, get<0>(n), get<1>(n));
                             replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                         }
                     }
                     else {
+                        //cout << "Test" << endl;
                         for (pair n : replacementsForXmlIlias) {
-                            replaceAll(correctAnswer, get<0>(n), get<1>(n));
-                            replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
-                            replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
-                            replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
+                            for(auto& c:correctAnswers){
+                                replaceAll(c, get<0>(n), get<1>(n));} 
+                            for(auto& w:wrongAnswers){replaceAll(w, get<0>(n), get<1>(n));}
                             //replaceAll(codeToSet, get<0>(n), get<1>(n));
                             replaceAll(taskToSet, get<0>(n), get<1>(n));
                             //replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
@@ -924,15 +987,19 @@ int main() {
                             replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                         }
                     }
-
-                    Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswer, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, picture);
+                //cout << "Ende - Ersetzung der Markings" << endl;
+                for (tuple t : validCombinations) {
+                    
+                    Question q(currentQuestionId, name, author, description, additionalTextToSet, codeToSet, taxonomy, taskToSet, correctAnswers[get<0>(t)], wrongAnswers[get<1>(t)], wrongAnswers[get<2>(t)], wrongAnswers[get<3>(t)], picture);
                     if (!questionExists(q, questions)) {
                         ++currentQuestionId;
                         questions.push_back(q);
                     }
                 }
             }
+            
         }
+  
 
         //Once per question template, it is checked wheter the current taxonomy is allready existing for the generating process
         if (!isInVector(taxonomyLevels, taxonomy)) {
@@ -1155,6 +1222,9 @@ int main() {
       }
       writeToFile << "</questestinterop>";
       writeToFile.close();
+      
+
+      //End
     }
 
 
@@ -1178,6 +1248,89 @@ int main() {
       }
       writeToFile << "</quiz>";
       writeToFile.close();
+    }
+
+    if(mode2==3){
+        //HTML MC Export for easier Quality checks. 
+        string HtmlFolder = outputFolder + "\\" + "HTML_Files";
+        fs::path HtmlPath{ HtmlFolder };
+        fs::create_directory(HtmlPath);
+
+      for (QuestionTextVariants q : questionTextVariantsForChecking) {
+        ofstream writeToFile;
+        cout << q.GetFileName()<< endl;
+        writeToFile.open(HtmlFolder + "\\"  + q.GetFileName() +".html");
+        writeToFile << "<!DOCTYPE html><html><head><title>" << q.GetName() << "</title></head><body>" << endl;;
+
+          writeToFile <<  "<h2>Question Name</h2>" << endl 
+          << "<p>"<<q.GetName()<<"</p>" << endl;
+
+          writeToFile <<  "<h2>Description</h2>" << endl
+          << "<p>"<<q.GetDescription()<<"</p>" << endl;
+
+            string tempAdditionalText{q.GetAdditionalText()};
+            replaceAll(tempAdditionalText,"&amp;amp;","&");
+            replaceAll(tempAdditionalText,"&amp;lt;","&#60;");
+            replaceAll(tempAdditionalText,"&amp;gt;","&#62;");
+
+          writeToFile <<  "<h2>Additional Text</h2>" << endl 
+          //<< "<p><pre style=\"display: inline-block;\">"<< tempAdditionalText <<"</pre></p>" << endl;
+            << "<p>"<< tempAdditionalText <<"</p>" << endl;
+
+
+            string tempCode{q.GetCode()};
+            replaceAll(tempCode,"&amp;amp;","&");
+            replaceAll(tempCode,"&amp;lt;","&#60;");
+            replaceAll(tempCode,"&amp;gt;","&#62;");
+            replaceAll(tempCode,"&amp;quot;","\"");
+            replaceAll(tempCode,"&amp;apos;","\'");
+
+          writeToFile <<  "<h2>Code</h2>" << endl 
+          << "<p><pre style=\"display: inline-block;\">"<< tempCode <<"</pre></p>" << endl;
+
+
+            string tempTask{q.GetTask()};
+            replaceAll(tempTask,"<code>","<mark>");
+            replaceAll(tempTask,"</code>","</mark>");
+            replaceAll(tempTask,"&amp;amp;","&");
+            replaceAll(tempTask,"&amp;lt;","&#60;");
+            replaceAll(tempTask,"&amp;gt;","&#62;");
+          writeToFile <<  "<h2>Task</h2>" << endl 
+          << "<p>"<<tempTask<<"</p>" << endl;
+
+          int temp = 1;
+          for (string s : q.GetCorrectAnswers()) {
+            string tempTrue{s};
+            replaceAll(tempTrue,"<code>","<mark>");
+            replaceAll(tempTrue,"</code>","</mark>");
+            replaceAll(tempTrue,"&amp;amp;","&");
+            replaceAll(tempTrue,"&amp;lt;","&#60;");
+            replaceAll(tempTrue,"&amp;gt;","&#62;");
+              writeToFile << "<h2>True " << temp << "</h2>" << endl
+              << "<p>"<< tempTrue <<"</p>" << endl;
+              ++temp;
+          }
+          temp = 1;
+          for (string s : q.GetWrongAnswers()) {
+            string tempFalse{s};
+            replaceAll(tempFalse,"<code>","<mark>");
+            replaceAll(tempFalse,"</code>","</mark>");
+            replaceAll(tempFalse,"&amp;amp;","&");
+            replaceAll(tempFalse,"&amp;lt;","&#60;");
+            replaceAll(tempFalse,"&amp;gt;","&#62;");
+              writeToFile << "<h2>False " << temp << "</h2>" << endl
+              << "<p>"<< tempFalse <<"</p>" << endl;
+              ++temp;
+          }
+
+          writeToFile << "<h1>Exclusions</h1>" << endl;
+          for(string s:q.GetExclusionHolder()){
+            writeToFile << "<p>"<< s <<"</p>" << endl;
+          }
+                                
+        writeToFile << endl <<"</body></html>";
+        writeToFile.close();
+      }
     }
 
 
