@@ -1,14 +1,38 @@
-gen:
-	g++ -std=c++2a -o obj/picture.o -c src/picture.cpp 
-	g++ -std=c++2a -o obj/parameter.o -c src/parameter.cpp 
-	g++ -std=c++2a -o obj/randomNumberFunction.o -c src/randomNumberFunction.cpp 
-	g++ -std=c++2a -o obj/question.o -c src/question.cpp
-	g++ -std=c++2a -o obj/questionTextVariants.o -c src/questionTextVariants.cpp
-	g++ -std=c++2a -o obj/vectorHelperFunctions.o -c src/vectorHelperFunctions.cpp 
-	g++ -std=c++2a -o obj/main.o -c src/main.cpp 
-	g++ -std=c++2a -o gen obj/main.o obj/picture.o obj/parameter.o obj/randomNumberFunction.o obj/question.o obj/vectorHelperFunctions.o obj/questionTextVariants.o
-	./gen.exe
+# Define the compiler and flags
+CXX = g++
+CXXFLAGS = -std=c++2a
 
-clean: 
-	rm -f obj/*
-	rm -rf output/*
+# Define the source and object files
+SRCS = src/picture.cpp src/parameter.cpp src/randomNumberFunction.cpp src/question.cpp src/questionTextVariants.cpp src/vectorHelperFunctions.cpp src/main.cpp
+OBJS = $(SRCS:src/%.cpp=obj/%.o)
+
+# Determine the executable extension based on the OS
+ifeq ($(OS), Windows_NT)
+	EXE = gen.exe
+	RM = del /Q
+	RMDIR = rmdir /S /Q
+	RUN = $(EXE)
+else
+	EXE = gen
+	RM = rm -f
+	RMDIR = rm -rf
+	RUN = ./$(EXE)
+endif
+
+# Default target
+gen: $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS)
+	$(RUN)
+
+# Compile object files
+obj/%.o: src/%.cpp
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+# Clean target
+clean:
+	$(RM) obj/*
+	$(RMDIR) output/*
+
+# Create the obj directory if it doesn't exist
+$(shell mkdir -p obj)
+
