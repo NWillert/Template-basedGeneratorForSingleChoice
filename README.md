@@ -1,7 +1,5 @@
 Generator to create single choice questions and question pools based on templates.
 
-The path structure is currently only tested on Windows, and would probaby need some customization and further developement.
-
 Questions have to be created as stated in the TemplateSpecification.txt
 Each question has to be in its own file, in the input folder.
 Pictures can be present for the question and need to be in the inputPicture Folder.
