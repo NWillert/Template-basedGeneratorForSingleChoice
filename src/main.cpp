@@ -35,6 +35,7 @@ using namespace std::chrono;
 #include "question.h"
 #include "vectorHelperFunctions.h"
 #include "questionTextVariants.h"
+#include "base64.h"
 
 #ifdef _WIN64
    #define PATHLINE "\\"
@@ -241,6 +242,10 @@ int main() {
 
 
     vector<pair<string, string>> replacementsForXmlMoodle{};
+    replacementsForXmlMoodle.push_back(make_pair("&", "&amp;"));
+    replacementsForXmlMoodle.push_back(make_pair("<", "&lt;"));
+    replacementsForXmlMoodle.push_back(make_pair(">", "&gt;"));
+    replacementsForXmlMoodle.push_back(make_pair("\"", "&quot;"));
     replacementsForXmlMoodle.push_back(make_pair("$nl", "</p><p>"));
     replacementsForXmlMoodle.push_back(make_pair("$n", "</p><p>"));
     replacementsForXmlMoodle.push_back(make_pair("$b", "<strong>"));
@@ -390,7 +395,13 @@ int main() {
                         while(readFromFile.peek() != '@' && readFromFile.good()){
                           getline(readFromFile, tempLine);
                           code +=tempLine;
-                          code += "<br/>";
+                          if(mode2==1){
+                            code += "<br/>";
+                          }
+                          else{
+                            code += "\n";
+                          }
+                          
                         }
                     }
                     else if (txtFromFile == "@PICTURE") {
@@ -858,7 +869,7 @@ int main() {
                         replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
                         replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
                         replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
-                        replaceAll(codeToSet, get<0>(n), get<1>(n));
+                        //replaceAll(codeToSet, get<0>(n), get<1>(n));
                         replaceAll(taskToSet, get<0>(n), get<1>(n));
                         replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                     }
@@ -946,7 +957,7 @@ int main() {
                                 replaceAll(wrongAnswerOne, get<0>(n), get<1>(n));
                                 replaceAll(wrongAnswerTwo, get<0>(n), get<1>(n));
                                 replaceAll(wrongAnswerThree, get<0>(n), get<1>(n));
-                                replaceAll(codeToSet, get<0>(n), get<1>(n));
+                                //replaceAll(codeToSet, get<0>(n), get<1>(n));
                                 replaceAll(taskToSet, get<0>(n), get<1>(n));
                                 replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                             }
@@ -988,7 +999,7 @@ int main() {
                         for (pair n : replacementsForXmlMoodle) {
                             for(auto& c:correctAnswers){replaceAll(c, get<0>(n), get<1>(n));}
                             for(auto& w:wrongAnswers){replaceAll(w, get<0>(n), get<1>(n));}                                            
-                            replaceAll(codeToSet, get<0>(n), get<1>(n));
+                            //replaceAll(codeToSet, get<0>(n), get<1>(n));
                             replaceAll(taskToSet, get<0>(n), get<1>(n));
                             replaceAll(additionalTextToSet, get<0>(n), get<1>(n));
                         }
@@ -1255,12 +1266,87 @@ int main() {
       ofstream writeToFile;
       //Creating Moodle Xml with just questions and their answers.
       writeToFile.open(outputFolder + replacePathSeparator("\\") + "moodle.xml");
-      writeToFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-          << "<quiz>";
+      writeToFile << "<quiz>";
+
+      writeToFile << "<question type=\"category\">"
+          << "<category>"
+          << "<text>$course$/top/Default for TKWINFSE</text>"
+          << "</category>"
+          << "<info format=\"moodle_auto_format\">"
+          << "<text>"
+          << ""
+          << "</text>"
+          << "</info>"
+          << "<idnumber/>"
+          << "</question>";
+
       for (Question q : questions) {
-          writeToFile << "<question type=\"multichoice\"><name><text>" << q.GetName() << "</text></name>"
-              << "<questiontext format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetTask() << "</p>]]></text></questiontext>"
-              << "<generalfeedback format=\"html\"><text></text></generalfeedback><defaultgrade>1</defaultgrade><penalty>0</penalty><hidden>0</hidden><idnumber></idnumber>"
+        writeToFile << "<question type=\"category\">"
+            << "<category>"
+            << "<text>$course$/top/Default for TKWINFSE/" << q.GetTaxonomy() << "</text>"
+            << "</category>"
+            << "<info format=\"moodle_auto_format\">"
+            << "<text>"
+            << "The default category for questions shared in context 'TKWINFSE'."
+            << "</text>"
+            << "</info>"
+            << "<idnumber/>"
+            << "</question>";
+
+          writeToFile << "<question type=\"multichoice\"><name><text>" << q.GetName() << "</text></name>";
+
+
+           writeToFile << "<questiontext format=\"html\"><text>";
+    
+            if(q.GetAdditionalText() != ""){
+            writeToFile << "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetAdditionalText() << "</p>]]>";
+            }
+
+            if(q.GetCode() != ""){
+            writeToFile << "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << "<img src=\"@@PLUGINFILE@@/image.png\">" << "</p>]]>";
+            }
+           
+           writeToFile << "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" <<  q.GetTask() << "</p>]]>";
+
+            writeToFile << "</text>";
+
+            if(q.GetCode() != ""){
+            
+                std::string testCode {q.GetCode()};
+
+                std::ofstream outputFile("testcode.cpp");
+                if (!outputFile) {
+                    std::cerr << "Error: Could not open test.txt for writing" << std::endl;
+                    return 1;
+                }
+                outputFile << testCode;
+                outputFile.close();
+
+                std::system("silicon --no-window-controls --no-round-corner --background \"#ffffff\" --theme \"1337\" --pad-horiz 0 --pad-vert 0 --output testcode.png testcode.cpp");
+
+                std::ifstream inputFile("testcode.png", std::ios::binary);
+                if (!inputFile) {
+                    std::cerr << "Error: Could not open testcode.png " << std::endl;
+                    return 1;
+                }
+
+                // Read the file into a vector of bytes
+                std::vector<unsigned char> buffer((std::istreambuf_iterator<char>(inputFile)),
+                                                std::istreambuf_iterator<char>());
+                inputFile.close();
+
+                std::string encoded = base64_encode(buffer.data(), buffer.size(), false);
+
+                writeToFile << "<file name=\"image.png\" path=\"/\" encoding=\"base64\">" << encoded << "</file>";
+
+                std::system("rm testcode.png");
+                std::system("rm testcode.cpp");
+            }
+            
+            writeToFile << "</questiontext>";
+
+
+            writeToFile << "<generalfeedback format=\"html\"><text></text></generalfeedback><defaultgrade>1</defaultgrade><penalty>0</penalty><hidden>0</hidden><idnumber></idnumber>"
               << "<single>true</single><shuffleanswers>true</shuffleanswers><answernumbering>abc</answernumbering><showstandardinstruction>0</showstandardinstruction><shownumcorrect/>"
               << "<answer fraction=\"100\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetCorrectAnswer() << "</p>]]></text></answer>"
               << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerOne() << "</p>]]></text></answer>"
