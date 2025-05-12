@@ -17,4 +17,6 @@ All - generates all possible instantiation for each question.
 
 
 The Generator supports the export format for ILIAS-Questionpool Imports when the created folder for ILIAS is zipped.
-In Addition to this a simple Moodle-XML is supported, were ONLY the questions and answers can be imported!
+
+Moodle Xml export uses https://github.com/Aloxaf/silicon to generate images that get encoded using https://github.com/ReneNyffenegger/cpp-base64
+
