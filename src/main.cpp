@@ -259,6 +259,9 @@ int main() {
     replacementsForXmlMoodle.push_back(make_pair("$p", "<pre>"));
     replacementsForXmlMoodle.push_back(make_pair("$/p", "</pre>"));
     replacementsForXmlMoodle.push_back(make_pair("$w", ""));
+    replacementsForXmlMoodle.push_back(make_pair("&lt;br/&gt;", "<br/>"));
+    replacementsForXmlMoodle.push_back(make_pair("$lc", "<br/>"));
+    replacementsForXmlMoodle.push_back(make_pair("$LC", "<br/>"));
     //End Replacements for xml generations
 
     string questionPoolId{};
@@ -308,6 +311,13 @@ int main() {
             qpTitle = "asd";
 
             taxTitle = "asd";
+    }
+
+    string subCategoryForMoodle{};
+
+    if(mode2 == 2){
+        cout << "Please input the subcategory for Moodle: ";
+        cin >> subCategoryForMoodle;
     }
 
     if(mode2!=3){
@@ -401,7 +411,6 @@ int main() {
                           else{
                             code += "\n";
                           }
-                          
                         }
                     }
                     else if (txtFromFile == "@PICTURE") {
@@ -644,6 +653,41 @@ int main() {
             readFromFile.close();
         }
         cout << "Parsed " << filename << endl;
+
+        //Code Conversion to Base64 Encoded Picture if for moodle 
+        if(mode2==2)
+        {
+            std::string testCode {code};
+
+            std::ofstream outputFile("testcode.cpp");
+            if (!outputFile) {
+                std::cerr << "Error: Could not open test.txt for writing" << std::endl;
+                return 1;
+            }
+            outputFile << testCode;
+            outputFile.close();
+
+            std::system("silicon --no-window-controls --no-round-corner --background \"#ffffff\" --theme \"1337\" --pad-horiz 0 --pad-vert 0 --output testcode.png testcode.cpp");
+
+            std::ifstream inputFile("testcode.png", std::ios::binary);
+            if (!inputFile) {
+                std::cerr << "Error: Could not open testcode.png " << std::endl;
+                return 1;
+            }
+
+            // Read the file into a vector of bytes
+            std::vector<unsigned char> buffer((std::istreambuf_iterator<char>(inputFile)),
+                std::istreambuf_iterator<char>());
+            inputFile.close();
+
+            std::string encoded = base64_encode(buffer.data(), buffer.size(), false);
+
+            code = encoded;
+
+            std::system("rm testcode.png");
+            std::system("rm testcode.cpp");     
+        }
+
 
 
         //Combinatorics, just building all combinations for correct and false answers
@@ -1283,11 +1327,11 @@ int main() {
       for (Question q : questions) {
         writeToFile << "<question type=\"category\">"
             << "<category>"
-            << "<text>$course$/top/Default for TKWINFSE/" << q.GetTaxonomy() << "</text>"
+            << "<text>$course$/top/Default for TKWINFSE/"<< subCategoryForMoodle <<"/" << q.GetTaxonomy() << "</text>"
             << "</category>"
             << "<info format=\"moodle_auto_format\">"
             << "<text>"
-            << "The default category for questions shared in context 'TKWINFSE'."
+            << ""
             << "</text>"
             << "</info>"
             << "<idnumber/>"
@@ -1302,9 +1346,16 @@ int main() {
             writeToFile << "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetAdditionalText() << "</p>]]>";
             }
 
+            if(q.GetPicture().GetName() != ""){
+            
+            writeToFile << "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << "<img src=\"@@PLUGINFILE@@/" << q.GetPicture().GetName() << "\">" << "</p>]]>";
+            
+            }
+
             if(q.GetCode() != ""){
             writeToFile << "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << "<img src=\"@@PLUGINFILE@@/image.png\">" << "</p>]]>";
             }
+
            
            writeToFile << "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" <<  q.GetTask() << "</p>]]>";
 
@@ -1312,21 +1363,17 @@ int main() {
 
             if(q.GetCode() != ""){
             
-                std::string testCode {q.GetCode()};
+                
 
-                std::ofstream outputFile("testcode.cpp");
-                if (!outputFile) {
-                    std::cerr << "Error: Could not open test.txt for writing" << std::endl;
-                    return 1;
-                }
-                outputFile << testCode;
-                outputFile.close();
+                writeToFile << "<file name=\"image.png\" path=\"/\" encoding=\"base64\">" << q.GetCode() << "</file>";
 
-                std::system("silicon --no-window-controls --no-round-corner --background \"#ffffff\" --theme \"1337\" --pad-horiz 0 --pad-vert 0 --output testcode.png testcode.cpp");
+            }
 
-                std::ifstream inputFile("testcode.png", std::ios::binary);
+            if(q.GetPicture().GetName() != ""){
+
+                std::ifstream inputFile("inputPictures/"+q.GetPicture().GetName(), std::ios::binary);
                 if (!inputFile) {
-                    std::cerr << "Error: Could not open testcode.png " << std::endl;
+                    std::cerr << "Error: Could not open Picture " << q.GetPicture().GetName() << std::endl;
                     return 1;
                 }
 
@@ -1337,10 +1384,7 @@ int main() {
 
                 std::string encoded = base64_encode(buffer.data(), buffer.size(), false);
 
-                writeToFile << "<file name=\"image.png\" path=\"/\" encoding=\"base64\">" << encoded << "</file>";
-
-                std::system("rm testcode.png");
-                std::system("rm testcode.cpp");
+                writeToFile << "<file name=\""<< q.GetPicture().GetName() <<"\" path=\"/\" encoding=\"base64\">" << encoded << "</file>";
             }
             
             writeToFile << "</questiontext>";
