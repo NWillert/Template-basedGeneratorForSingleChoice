@@ -170,6 +170,46 @@ bool stillParametersInTexts(vector<Parameter> parametersVector,string correctAns
 }
 
 
+void openFileForMoodleBoilerplateBeginning(std::string fileName) {
+    //Open the file for appending
+    std::ofstream outFile(fileName);
+    if (!outFile) {
+        std::cerr << "Error opening file: " << fileName << std::endl;
+        exit(1);
+    }
+
+    outFile << "<quiz>";
+
+      outFile << "<question type=\"category\">"
+          << "<category>"
+          << "<text>$course$/top/Default for TKWINFSE</text>"
+          << "</category>"
+          << "<info format=\"moodle_auto_format\">"
+          << "<text>"
+          << ""
+          << "</text>"
+          << "</info>"
+          << "<idnumber/>"
+          << "</question>";
+
+    outFile.close();
+
+}
+
+void openFileForMoodleBoilerplateEnding(std::string fileName) {
+    //Open the file for appending
+    std::ofstream outFile(fileName, std::ios::app);
+    if (!outFile) {
+        std::cerr << "Error opening file: " << fileName << std::endl;
+        exit(1);
+    }
+
+    outFile << "</quiz>";
+    outFile.close();
+
+}
+
+
 int main() {
 
     //Replacements for xml generations
@@ -416,8 +456,8 @@ int main() {
                     else if (txtFromFile == "@CODE") {
                       string tempLine{};
                         while(readFromFile.peek() != '@' && readFromFile.good()){
-                          getline(readFromFile, tempLine);
-                          code +=tempLine;
+                          getline(readFromFile, tempLine);                   
+                          code +=tempLine;                       
                           if(mode2==1){
                             code += "<br/>";
                           }
@@ -671,34 +711,35 @@ int main() {
         if(mode2==2)
         {
             std::string testCode {code};
+            if (testCode != "\n" && !testCode.empty() && testCode != " ") {
+                std::ofstream outputFile("testcode.cpp");
+                if (!outputFile) {
+                    std::cerr << "Error: Could not open test.txt for writing" << std::endl;
+                    return 1;
+                }
+                outputFile << testCode;
+                outputFile.close();
 
-            std::ofstream outputFile("testcode.cpp");
-            if (!outputFile) {
-                std::cerr << "Error: Could not open test.txt for writing" << std::endl;
-                return 1;
-            }
-            outputFile << testCode;
-            outputFile.close();
+                std::system("silicon --no-window-controls --no-round-corner --background \"#ffffff\" --theme \"1337\" --pad-horiz 0 --pad-vert 0 --output testcode.png testcode.cpp");
 
-            std::system("silicon --no-window-controls --no-round-corner --background \"#ffffff\" --theme \"1337\" --pad-horiz 0 --pad-vert 0 --output testcode.png testcode.cpp");
+                std::ifstream inputFile("testcode.png", std::ios::binary);
+                if (!inputFile) {
+                    std::cerr << "Error: Could not open testcode.png " << std::endl;
+                    return 1;
+                }
 
-            std::ifstream inputFile("testcode.png", std::ios::binary);
-            if (!inputFile) {
-                std::cerr << "Error: Could not open testcode.png " << std::endl;
-                return 1;
-            }
+                // Read the file into a vector of bytes
+                std::vector<unsigned char> buffer((std::istreambuf_iterator<char>(inputFile)),
+                    std::istreambuf_iterator<char>());
+                inputFile.close();
 
-            // Read the file into a vector of bytes
-            std::vector<unsigned char> buffer((std::istreambuf_iterator<char>(inputFile)),
-                std::istreambuf_iterator<char>());
-            inputFile.close();
+                std::string encoded = base64_encode(buffer.data(), buffer.size(), false);
 
-            std::string encoded = base64_encode(buffer.data(), buffer.size(), false);
+                code = encoded;
 
-            code = encoded;
-
-            std::system("rm testcode.png");
-            std::system("rm testcode.cpp");     
+                std::system("rm testcode.png");
+                std::system("rm testcode.cpp"); 
+            }    
         }
 
 
@@ -1320,24 +1361,20 @@ int main() {
 
 
     if(mode2==2){
-      ofstream writeToFile;
       //Creating Moodle Xml with just questions and their answers.
-      writeToFile.open(outputFolder + replacePathSeparator("\\") + "moodle.xml");
-      writeToFile << "<quiz>";
+      int moodleXmlNumberCounter{};
+      
 
-      writeToFile << "<question type=\"category\">"
-          << "<category>"
-          << "<text>$course$/top/Default for TKWINFSE</text>"
-          << "</category>"
-          << "<info format=\"moodle_auto_format\">"
-          << "<text>"
-          << ""
-          << "</text>"
-          << "</info>"
-          << "<idnumber/>"
-          << "</question>";
+      bool openNewFile{true};
 
       for (Question q : questions) {
+        string fileString { outputFolder + replacePathSeparator("\\") + "moodle" + to_string(moodleXmlNumberCounter) +".xml"};
+        if(openNewFile){
+            openFileForMoodleBoilerplateBeginning(fileString);
+            openNewFile = false;
+        }
+
+        std::ofstream writeToFile(fileString, std::ios::app);
         writeToFile << "<question type=\"category\">"
             << "<category>"
             << "<text>$course$/top/Default for TKWINFSE/"<< subCategoryForMoodle <<"/" << q.GetTaxonomy() << "</text>"
@@ -1365,7 +1402,7 @@ int main() {
             
             }
 
-            if(q.GetCode() != ""){
+            if(q.GetCode() != "\n" && !q.GetCode().empty() && q.GetCode() != " "){
             writeToFile << "<![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << "<img src=\"@@PLUGINFILE@@/image.png\">" << "</p>]]>";
             }
 
@@ -1374,9 +1411,7 @@ int main() {
 
             writeToFile << "</text>";
 
-            if(q.GetCode() != ""){
-            
-                
+            if(q.GetCode() != "\n" && !q.GetCode().empty() && q.GetCode() != " "){
 
                 writeToFile << "<file name=\"image.png\" path=\"/\" encoding=\"base64\">" << q.GetCode() << "</file>";
 
@@ -1411,9 +1446,18 @@ int main() {
               << "<answer fraction=\"0\" format=\"html\"><text><![CDATA[<p dir=\"ltr\" style=\"text-align: left;\">" << q.GetWrongAnswerThree() << "</p>]]></text></answer>"
               << "</question>"
               ;
+        writeToFile.close();
+
+
+        if(fs::file_size(fileString) > 98000000){
+            cout << "File size of " << fileString << " is: " << fs::file_size(fileString) << endl; 
+            openFileForMoodleBoilerplateEnding(fileString);
+            openNewFile = true;
+            ++moodleXmlNumberCounter;
+        }
+
       }
-      writeToFile << "</quiz>";
-      writeToFile.close();
+      
     }
 
     if(mode2==3){
